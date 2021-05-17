@@ -1,0 +1,5 @@
+// Custom cursor
+// --------------------------------------------------
+body {
+cursor: url('/images/cursor.ico'), auto;
+}
