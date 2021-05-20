@@ -1,0 +1,1100 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="https://cdn.jsdelivr.net/gh/acerbot/picbed/favicon-16x16-next.png">
+  <link rel="icon" href="https://cdn.jsdelivr.net/gh/acerbot/picbed/favicon-16x16-next.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="Linux真是个大家庭">
+  <meta name="author" content="zhuweitung">
+  <meta name="keywords" content="">
+  
+  <title>Linux知识分享 - zhuweitung&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.6.0/styles/obsidian.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"blog.zhuweitung.space","root":"/","version":"1.8.10","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#96be66","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":"f2550b082b1ec518a726847e5f27e3c4","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"Rnyy6d3kzXonmFTiXC2DM2wM-gzGzoHsz","app_key":"ItzHQLPR4iIXylU6VCqf1j4f","server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>zhuweitung's blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('https://cdn.jsdelivr.net/gh/acerbot/picbed/20210519201610.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Linux知识分享">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-07-11 13:05" pubdate>
+        2020年7月11日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2.9k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      31
+       分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- LeanCloud 统计文章PV -->
+      <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="leancloud-page-views"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Linux知识分享</h1>
+            
+            <div class="markdown-body">
+              <h1 id="Linux知识分享"><a class="header-anchor" href="#Linux知识分享"></a>Linux知识分享</h1>
+<h2 id="操作系统"><a class="header-anchor" href="#操作系统"></a>操作系统</h2>
+<ol>
+<li>
+<p>什么是操作系统？</p>
+<blockquote>
+<p>操作系统(Operating System，简称OS)是管理计算机硬件资源供需的优先次序、控制输入设备与输出设备、操作网络与管理文件系统等基本事务。操作系统也提供一个让用户与系统交互的操作界面。————摘自百度百科</p>
+</blockquote>
+</li>
+<li>
+<p>操作系统有哪些？</p>
+<p>目前使用比较多的有WINDOWS <img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20200711133947.png" srcset="/img/loading.gif" lazyload style="zoom:5%;" />，LINUX  <img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/200812941912588_2.jpg" srcset="/img/loading.gif" lazyload style="zoom:25%;" />，MAC  <img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20200711134109.png" srcset="/img/loading.gif" lazyload style="zoom:1.5%;" />，UNIX。</p>
+</li>
+<li>
+<p>各操作系统间的关系</p>
+<p>不管是WINDOWS操作系统、LINUX系统还是苹果操作系统，甚至包括操作系统的鼻祖UNIX操作系统，最早都是用C语言编写的。</p>
+<p><img src="http://www.gonet.com.cn/~editor/eweditor/uploadfile/20171027141729471.png" srcset="/img/loading.gif" lazyload alt="区别"></p>
+<p>WINDOWS，LINUX，MAC的诞生都或多或少的借鉴了UNIX。</p>
+<p>UNIX是一种<code>分时操作系统</code>。</p>
+<blockquote>
+<p>说明：分时操作系统使一台计算机可以同时为<code>多个用户</code>服务，连接计算机的终端用户交互式发出命令，操作系统采用时间片轮转的方式处理用户的服务请求并在终端上显示结果（操作系统将CPU的时间划分成若干个片段，称为时间片）。操作系统以时间片为单位，轮流为每个终端用户服务，每次服务一个时间片。</p>
+</blockquote>
+<p>UNIX系统在结构上分为核心程序(<strong>kernel</strong>)和外围程序(<strong>shell</strong>)两部分。</p>
+<p>核心部分承担系统内部的各个模块的功能，即处理机和进程管理、存储管理、设备管理和文件系统。</p>
+<p>外围部分包括系统的用户界面、系统实用程序以及应用程序，用户通过外围程序使用计算机。</p>
+</li>
+<li>
+<p>各操作系统优缺点：</p>
+<table>
+<thead>
+<tr>
+<th>操作系统</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Windows</td>
+<td>啥都有，啥都会</td>
+<td>经常出现你不想要的东西</td>
+</tr>
+<tr>
+<td>Linux</td>
+<td>你让它干嘛，它就能干嘛。</td>
+<td>容易折腾坏</td>
+</tr>
+<tr>
+<td>Mac</td>
+<td>稳定，好看</td>
+<td>得按它的规则来</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ol>
+<h2 id="Linux的诞生"><a class="header-anchor" href="#Linux的诞生"></a>Linux的诞生</h2>
+<p>Linux 内核最初是由李纳斯•托瓦兹（<strong>Linus Torvalds</strong>）在赫尔辛基大学读书时出于个人爱好而编写的，当时他觉得教学用的迷你版 UNIX 操作系统 Minix 太难用了，于是决定自己开发一个操作系统。</p>
+<p>Linus Torvalds没有保留 Linux 源代码的版权，公开了代码，并邀请他人一起完善 Linux。与 Windows 及其他有专利权的操作系统不同，Linux 开放源代码，任何人都可以免费使用它。</p>
+<p>Linux的logo是一只企鹅。</p>
+   <img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/200812941912588_2.jpg" srcset="/img/loading.gif" lazyload style="zoom:100%;" align="left" />
+<p>为什么选择企鹅，坊间流传一种说法：</p>
+<blockquote>
+<p>企鹅是南极洲的标志性动物，根据国际公约，南极洲为全人类共同所有，不属于世界上的任何国家，可国家都无权将南极洲纳入其版图。Linux 选择企鹅图案作为 Logo，其含义是：开放源代码的 Linux 为全人类共同所有，可公司无权将其私有。</p>
+</blockquote>
+<h2 id="Linux系统结构"><a class="header-anchor" href="#Linux系统结构"></a>Linux系统结构</h2>
+<p>Linux系统的结构可以概括为4个部分：内核、shell、文件系统和应用程序。</p>
+<img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20200711142210.png" srcset="/img/loading.gif" lazyload style="zoom:80%;" />
+<p>这个结构与UNIX基本上是一致的，所以UNIX和Linux之间可以说是父子关系。</p>
+<h3 id="内核"><a class="header-anchor" href="#内核"></a>内核</h3>
+<p><strong>内核是操作系统的核心</strong>，具有很多最基本功能，如虚拟内存、多任务、共享库、需求加载、可执行程序和TCP/IP网络功能。Linux内核的模块分为以下几个部分：存储管理、CPU和进程管理、文件系统、设备管理和驱动、网络通信、系统的初始化和系统调用等。</p>
+<h3 id="Shell"><a class="header-anchor" href="#Shell"></a>Shell</h3>
+<p>Shell 层是与用户直接交互的界面。用户可以在提示符下输入命令行，由 Shell 解释执行并输出相应结果或者有关信息，所以我们也把 Shell 称作命令解释器，利用系统提供的丰富命令可以快捷而简便地完成许多工作。</p>
+<h3 id="文件系统"><a class="header-anchor" href="#文件系统"></a>文件系统</h3>
+<p>在Linux中一切皆文件。</p>
+<p>Linux中的文件类型：</p>
+<p>a) 普通文件(-)</p>
+<p>js、class、html等这些文件类型都属于普通文件，Linux用户可以根据访问权限对普通文件进行查看、更改、删除。</p>
+<img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20200711151221.png" srcset="/img/loading.gif" lazyload align="left" />
+<p>b) 目录文件(d)</p>
+<p>目录文件包含了各自目录下的文件名和指向这些文件的指针。</p>
+<img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20200711151331.png" srcset="/img/loading.gif" lazyload align="left" />
+<p>c) 符号链接文件(l)</p>
+<p>类似于windows中的快捷方式，通常称为软连接。</p>
+<img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20200711151412.png" srcset="/img/loading.gif" lazyload align="left"/>
+<p>d) 设备文件(b/c)</p>
+<p>包括块设备文件(b)</p>
+<img src="C:\Users\zhuweitung\AppData\Roaming\Typora\typora-user-images\image-20200711151836544.png" srcset="/img/loading.gif" lazyload alt="image-20200711151836544" align="left" />
+<p>和字符设备文件©</p>
+<img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20200711151746.png" srcset="/img/loading.gif" lazyload align="left" />
+<p>这些设备文件一般都在/dev/目录下。</p>
+<p>e) 管道文件§</p>
+<p>管道文件主要用户进程间的通讯。进程关闭管道文件也会关闭。</p>
+<p>…</p>
+<p>linux中的文件是没有拓展名的，一个文件能不能被执行与它是否可执行的属性有关。</p>
+<img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20200711152800.png" srcset="/img/loading.gif" lazyload align="left" />
+<p>上图中第一位为文件类型，“-”表示此文件为普通文件；</p>
+<p>第一组&quot;rwx&quot;表示文件创建用户的权限，&quot;r&quot;表示有读权限，&quot;w&quot;表示有写权限，“x&quot;表示有执行权限，那一项为”-&quot;表示没有该权限；</p>
+<p>第二组&quot;rwx&quot;表示文件创建用户所属组的权限；</p>
+<p>第三组&quot;rwx&quot;表示其他用户的权限；</p>
+<p><strong>Linux的目录结构：</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20200712143219.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<ul>
+<li>
+<p>bin (binaries)存放二进制可执行文件</p>
+</li>
+<li>
+<p>sbin (super user binaries)存放二进制可执行文件，只有root才能访问</p>
+</li>
+<li>
+<p>etc (etcetera)存放系统配置文件</p>
+</li>
+<li>
+<p>usr (unix shared resources)用于存放共享的系统资源</p>
+</li>
+<li>
+<p>home 存放用户文件的根目录</p>
+</li>
+<li>
+<p>root 超级用户目录</p>
+</li>
+<li>
+<p>dev (devices)用于存放设备文件</p>
+</li>
+<li>
+<p>lib (library)存放跟文件系统中的程序运行所需要的共享库及内核模块</p>
+</li>
+<li>
+<p>mnt (mount)系统管理员安装临时文件系统的安装点</p>
+</li>
+<li>
+<p>boot 存放用于系统引导时使用的各种文件</p>
+</li>
+<li>
+<p>tmp (temporary)用于存放各种临时文件</p>
+</li>
+<li>
+<p>var (variable)用于存放运行时需要改变数据的文件</p>
+</li>
+</ul>
+<h2 id="Linux发行版"><a class="header-anchor" href="#Linux发行版"></a>Linux发行版</h2>
+<p>以Linux内核为中心，再集成搭配各种各样的系统管理软件或应用工具软件组成一套完整的操作系统，如此的组合便称为Linux发行版。</p>
+<p>常见的Linux发行版有Debian、centos、Ubuntu、Fedora、deepin、manjaro、Linux mint等。</p>
+<h3 id="Debian"><a class="header-anchor" href="#Debian"></a>Debian</h3>
+<ul>
+<li>免费，最符合开源精神的发行版，默认不包含如何专有驱动</li>
+<li>软件包通常选择稳定的版本而不是最新的</li>
+<li>系统的开发维护由社区驱动</li>
+<li><strong>apt</strong>包管理</li>
+<li>图形化安装</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20200712135143.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h3 id="Ubuntu"><a class="header-anchor" href="#Ubuntu"></a>Ubuntu</h3>
+<p>比较热门的Linux发行版。</p>
+<ul>
+<li>安装简单</li>
+<li>unity3d图形界面</li>
+<li>有些驱动支持较好，比如显卡驱动</li>
+<li>社区活跃，遇到问题能够很快找到解决方案</li>
+<li>版本更新快</li>
+<li><strong>apt</strong>包管理</li>
+</ul>
+<p>Ubuntu还有一些衍生版，主要是桌面环境不一样。</p>
+<ol>
+<li>
+<p>Ubuntu</p>
+<p>基于Gnome</p>
+<p><img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/Ubuntu-18.04-GNOME-DE.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+<li>
+<p>Kubuntu</p>
+<p>基于KDE</p>
+<p><img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/kubuntu.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+<li>
+<p>Lubuntu</p>
+<p>基于LXDE</p>
+<p><img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20200712135559.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+<li>
+<p>Xubuntu</p>
+<p>基于Xfce</p>
+<p><img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20200712135711.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+</ol>
+<h3 id="Centos"><a class="header-anchor" href="#Centos"></a>Centos</h3>
+<p>是著名的RedHat Linux的社区版。</p>
+<ul>
+<li>相当相当稳定</li>
+<li>版本更新紧跟RedHat</li>
+<li>适合最为服务器操作系统使用</li>
+<li><strong>yum</strong>包管理</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20200712140218.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h3 id="Fedora"><a class="header-anchor" href="#Fedora"></a>Fedora</h3>
+<p>经常和Ubuntu比较的发行版，与Ubuntu最大的不同就是包管理不一样</p>
+<ul>
+<li><strong>yum</strong>包管理</li>
+<li>新技术吸纳较快</li>
+<li>提供多种桌面环境镜像，默认Gnome，可以轻松切换到KDE， XFce， MATE 以及 Cinnamon</li>
+<li>版本更新快</li>
+<li>图形化安装</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20200712140558.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h3 id="Deepin"><a class="header-anchor" href="#Deepin"></a>Deepin</h3>
+<ul>
+<li>国产系统</li>
+<li><strong>dpkg</strong>包管理</li>
+<li>UI好看</li>
+<li>中文社区活跃</li>
+<li>图形化安装</li>
+<li>仓库中软件版本滞后</li>
+<li>驱动支持不完善</li>
+<li>官方文档不更新</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20200712141208.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h3 id="Manjaro"><a class="header-anchor" href="#Manjaro"></a>Manjaro</h3>
+<p>基于 Arch Linux， 它是一个运行快速，容易使用，轻量级的发行版。</p>
+<ul>
+<li><strong>pacman</strong>包管理</li>
+<li>轻量级</li>
+<li>滚动更新</li>
+<li>软件生态差</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/manjaro-linux-kde-15-09-bellatrix-ships-with-the-kde-plasma-5-4-1-desktop-492919-2.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h3 id="Linux-Mint"><a class="header-anchor" href="#Linux-Mint"></a>Linux Mint</h3>
+<p>基于Ubuntu开发，易用且功能强大</p>
+<ul>
+<li>默认使用Cinnamon桌面环境</li>
+<li>与ubuntu相同特点</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20200712142204.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h2 id="连接工具"><a class="header-anchor" href="#连接工具"></a>连接工具</h2>
+<ul>
+<li>Putty
+<ul>
+<li>轻量</li>
+<li>支持ppk，pub格式密码连接</li>
+</ul>
+</li>
+<li>secureCRT
+<ul>
+<li>支持普通密码和pub格式密码，不支持pem密码连接</li>
+<li>可实现文件本地与服务器界面式样的上传下载，双击即可使用</li>
+</ul>
+</li>
+<li>xshell
+<ul>
+<li>个人版免费</li>
+<li>支持pem、pub、ppk多种密钥格式</li>
+<li>自定义配色</li>
+<li>使用xftp进行文件传输</li>
+</ul>
+</li>
+</ul>
+<h2 id="常用命令"><a class="header-anchor" href="#常用命令"></a>常用命令</h2>
+<p>命令格式：命令 -选项 参数 （选项和参数可以为空），如</p>
+<figure class="highlight shell"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs shell">ls -lh /usr<br></code></pre></div></td></tr></table></figure>
+<h3 id="操作文件及目录"><a class="header-anchor" href="#操作文件及目录"></a>操作文件及目录</h3>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>-常用选项</th>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cat</td>
+<td>-n 显示行号</td>
+<td>文件路径</td>
+<td>显示文本内容</td>
+</tr>
+<tr>
+<td>mo=</td>
+<td>-NUM 每次显示NUM行 +NUM 从第NUM行开始 +/String 查找字符串</td>
+<td>文件路径</td>
+<td>分页显示文件内容，空格向后翻，b向前</td>
+</tr>
+<tr>
+<td>head</td>
+<td>-n 显示行数</td>
+<td>文件路径</td>
+<td>查看文本开头部分指定行数</td>
+</tr>
+<tr>
+<td>tail</td>
+<td>-f 循环滚动读取文件动态显示在屏幕上</td>
+<td>文件路径</td>
+<td>查看文本结尾内容</td>
+</tr>
+<tr>
+<td>wc</td>
+<td></td>
+<td>文件路径</td>
+<td>统计文本的行数、字数、字符数</td>
+</tr>
+<tr>
+<td>cd</td>
+<td></td>
+<td>路径</td>
+<td>进入路径</td>
+</tr>
+<tr>
+<td>mv</td>
+<td></td>
+<td>源文件 目标文件</td>
+<td>移动文件或将文件改名</td>
+</tr>
+<tr>
+<td>cp</td>
+<td></td>
+<td>源文件 目标文件</td>
+<td>复制文件或目录</td>
+</tr>
+<tr>
+<td>touch</td>
+<td></td>
+<td>文件名</td>
+<td>创建空文件</td>
+</tr>
+<tr>
+<td>mkdir</td>
+<td>-p 递归创建</td>
+<td>文件夹名</td>
+<td>创建文件夹</td>
+</tr>
+<tr>
+<td>rm</td>
+<td>-rf 递归+强制删除</td>
+<td>文件或目录路径</td>
+<td>删除文件或目录</td>
+</tr>
+</tbody>
+</table>
+<h3 id="系统常用命令"><a class="header-anchor" href="#系统常用命令"></a>系统常用命令</h3>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>-常用选项</th>
+<th>示例</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>top</td>
+<td>-p 指定监控某一进程</td>
+<td>top</td>
+<td>显示系统中各个进程的资源占用状况</td>
+</tr>
+<tr>
+<td>ps</td>
+<td>-ef 显示所有进程+全格式</td>
+<td>ps -ef | grep java</td>
+<td>查看进程</td>
+</tr>
+<tr>
+<td>netstat</td>
+<td>-p 显示进程id和进程名</td>
+<td>netstat  -ap | grep ssh</td>
+<td>查看端口情况</td>
+</tr>
+<tr>
+<td>kill</td>
+<td>-9 强制终止 -15 终止</td>
+<td>kill -9 4563</td>
+<td>杀死进程</td>
+</tr>
+</tbody>
+</table>
+<p>*注：管道符“|”的作用：格式 命令A|命令B，将命令A的正确输出作为命令B的操作对象</p>
+<h3 id="压缩解压缩"><a class="header-anchor" href="#压缩解压缩"></a>压缩解压缩</h3>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>-常用选项</th>
+<th>示例</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>zip</td>
+<td>[参数] [压缩后文件名] [要压缩的目录] -r 将目录压缩</td>
+<td>zip -r test.zip tmp/</td>
+<td>压缩文件或目录</td>
+</tr>
+<tr>
+<td>unzip</td>
+<td>[参数] [待解压缩文件] -d 解压到的路径</td>
+<td>zip -d /opt test.zip</td>
+<td>解压缩文件</td>
+</tr>
+<tr>
+<td>tar</td>
+<td>-zcvf 压缩 -zxvf 解压</td>
+<td>tar -zcvf test.tar.gz tmp/</td>
+<td>解压缩文件或目录</td>
+</tr>
+</tbody>
+</table>
+<h3 id="文件权限操作"><a class="header-anchor" href="#文件权限操作"></a>文件权限操作</h3>
+<img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20200712153414.png" srcset="/img/loading.gif" lazyload align="left" />
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>选项</th>
+<th>示例</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>chmod</td>
+<td>u表示所属用户，g表示所属组，o表示其他用户，a表示所有用户；+表示增加权限，-表示取消权限，=表示唯一设定权限；r表示可读，w表示可写，x表示可执行，也可以三位数表示</td>
+<td>chmod                      a+x <a target="_blank" rel="noopener" href="http://test.sh">test.sh</a></td>
+<td>设置文件或目录的权限</td>
+</tr>
+<tr>
+<td>chown</td>
+<td>-R 递归文件夹</td>
+<td>chown mysql mysql.ini</td>
+<td>改变文件或目录的用户或组</td>
+</tr>
+</tbody>
+</table>
+<h2 id="常用快捷键"><a class="header-anchor" href="#常用快捷键"></a>常用快捷键</h2>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ctrl+c</td>
+<td>停止进程</td>
+</tr>
+<tr>
+<td>ctrl+l</td>
+<td>清屏</td>
+</tr>
+<tr>
+<td>ctrl+r</td>
+<td>搜索历史命令</td>
+</tr>
+<tr>
+<td>ctrl+q</td>
+<td>退出</td>
+</tr>
+<tr>
+<td>tab</td>
+<td>自动补全</td>
+</tr>
+</tbody>
+</table>
+<h2 id="vim编辑器"><a class="header-anchor" href="#vim编辑器"></a>vim编辑器</h2>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>i</td>
+<td>在光标前插入</td>
+</tr>
+<tr>
+<td>I</td>
+<td>在光标当前行开始插入</td>
+</tr>
+<tr>
+<td>a</td>
+<td>在光标后插入</td>
+</tr>
+<tr>
+<td>A</td>
+<td>在光标当前行末尾插入</td>
+</tr>
+<tr>
+<td>o</td>
+<td>在光标当前行的下一行插入新行</td>
+</tr>
+<tr>
+<td>O</td>
+<td>在光标当前行的上一行插入新行</td>
+</tr>
+<tr>
+<td>:set nu</td>
+<td>显示行号</td>
+</tr>
+<tr>
+<td>:set nonu</td>
+<td>取消显示行号</td>
+</tr>
+<tr>
+<td>gg</td>
+<td>跳到行首</td>
+</tr>
+<tr>
+<td>G</td>
+<td>跳到行末</td>
+</tr>
+<tr>
+<td>:n</td>
+<td>跳到第n行</td>
+</tr>
+<tr>
+<td>u</td>
+<td>undo，取消上一步操作</td>
+</tr>
+<tr>
+<td>ctrl+r</td>
+<td>redo，取消到undo之前</td>
+</tr>
+<tr>
+<td>x</td>
+<td>删除光标所在处字符</td>
+</tr>
+<tr>
+<td>dd</td>
+<td>删除光标所在行</td>
+</tr>
+<tr>
+<td>dG</td>
+<td>删除光标所在行到末尾行的所有内容</td>
+</tr>
+<tr>
+<td>D</td>
+<td>删除光标到行尾的内容</td>
+</tr>
+<tr>
+<td>shift+zz</td>
+<td>保存并退出，与:wq作用一样</td>
+</tr>
+</tbody>
+</table>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/linux/">linux</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/linux/">linux</a>
+                    
+                      <a class="hover-with-bg" href="/tags/centos/">centos</a>
+                    
+                      <a class="hover-with-bg" href="/tags/vim/">vim</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/posts/2373592892/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">JVM学习一</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/posts/1545079908/">
+                        <span class="hidden-mobile">MYSQL学习笔记（一）</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function () {
+        new Valine({
+          el: "#valine",
+          app_id: "Rnyy6d3kzXonmFTiXC2DM2wM-gzGzoHsz",
+          app_key: "ItzHQLPR4iIXylU6VCqf1j4f",
+          placeholder: "说点什么",
+          path: window.location.pathname,
+          avatar: "retro",
+          meta: ["nick","mail","link"],
+          pageSize: "10",
+          lang: "zh-CN",
+          highlight: false,
+          recordIP: false,
+          serverURLs: "",
+        });
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+      <div class="col-lg-7 mx-auto nopadding-x-md">
+        <div class="container custom mx-auto">
+          <script type="text/javascript" src="/js/cursor-effects.js"></script> <script color="0,0,0" opacity="0.5" zindex="-1" count="200" src="/js/canvas-nest.min.js"></script>
+        </div>
+      </div>
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.2/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js" ></script>
+
+
+
+
+  <script defer src="/js/leancloud.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?f2550b082b1ec518a726847e5f27e3c4";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"log":false,"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"right","vOffset":-20,"width":150,"height":300},"mobile":{"show":true},"react":{"opacity":1}});</script></body>
+</html>
