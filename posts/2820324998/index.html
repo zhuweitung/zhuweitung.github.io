@@ -189,7 +189,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      670 字
+      813 字
     </span>
   
 
@@ -199,7 +199,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      8
+      10
        分钟
     </span>
   
@@ -259,6 +259,13 @@
 <li>从<code>微软商店</code>搜索<a target="_blank" rel="noopener" href="https://www.microsoft.com/zh-cn/p/powershell/9mz1snwt0n5d?activetab=pivot:overviewtab">PowerShell</a>或<a target="_blank" rel="noopener" href="https://www.microsoft.com/zh-cn/p/powershell-preview/9p95zzktnrn4?activetab=pivot:overviewtab">PowerShell Preview</a>中直接安装；</li>
 </ol>
 </blockquote>
+<h2 id="离线环境下安装"><a class="header-anchor" href="#离线环境下安装"></a>离线环境下安装</h2>
+<ul>
+<li>将下载到的<code>msixbundle</code>文件的后缀改为<code>zip</code>，并解压</li>
+<li>将解压文件夹内文件名为<code>CascadiaPackage_***_x64.msix</code>的文件后缀改为<code>zip</code>，并解压</li>
+<li>将解压文件夹改名为<code>Windows.TerminalPreview</code>（可随意命名）并放到自己软件安装的常用目录，我放到<code>C:\Program Files\</code>下</li>
+<li>将<code>Open Windows Terminal Here</code>添加到右键菜单</li>
+</ul>
 <h2 id="设置"><a class="header-anchor" href="#设置"></a>设置</h2>
 <ul>
 <li>在<code>Windows Terminal</code>&gt;启动中设置<code>PowerShell</code>为默认配置文件；</li>
@@ -298,6 +305,11 @@
 <p>在打开的配置文件中写入</p>
 <figure class="highlight powershell"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs powershell"><span class="hljs-comment"># 导入模块</span><br><span class="hljs-built_in">Import-Module</span> posh<span class="hljs-literal">-git</span><br><span class="hljs-built_in">Import-Module</span> <span class="hljs-built_in">oh</span><span class="hljs-literal">-my</span><span class="hljs-literal">-posh</span><br><span class="hljs-built_in">Import-Module</span> DirColors<br><span class="hljs-built_in">Import-Module</span> git<span class="hljs-literal">-aliases</span> <span class="hljs-literal">-DisableNameChecking</span><br><span class="hljs-comment"># 设置 PowerShell 主题</span><br><span class="hljs-built_in">Set-PoshPrompt</span> <span class="hljs-literal">-Theme</span> zash<br><span class="hljs-comment"># 设置Tab为菜单补全和 Intellisense</span><br><span class="hljs-built_in">Set-PSReadLineKeyHandler</span> <span class="hljs-literal">-Key</span> <span class="hljs-string">&quot;Tab&quot;</span> <span class="hljs-literal">-Function</span> MenuComplete<br><span class="hljs-comment"># 设置 Ctrl+d 为退出 PowerShell</span><br><span class="hljs-built_in">Set-PSReadlineKeyHandler</span> <span class="hljs-literal">-Key</span> <span class="hljs-string">&quot;Ctrl+d&quot;</span> <span class="hljs-literal">-Function</span> ViExit<br><span class="hljs-comment"># 设置 Ctrl+z 为撤销</span><br><span class="hljs-built_in">Set-PSReadLineKeyHandler</span> <span class="hljs-literal">-Key</span> <span class="hljs-string">&quot;Ctrl+z&quot;</span> <span class="hljs-literal">-Function</span> Undo<br><span class="hljs-comment"># 设置向上键为后向搜索历史记录</span><br><span class="hljs-built_in">Set-PSReadLineKeyHandler</span> <span class="hljs-literal">-Key</span> UpArrow <span class="hljs-literal">-Function</span> HistorySearchBackward<br><span class="hljs-comment"># 设置向下键为前向搜索历史纪录</span><br><span class="hljs-built_in">Set-PSReadLineKeyHandler</span> <span class="hljs-literal">-Key</span> DownArrow <span class="hljs-literal">-Function</span> HistorySearchForward<br><span class="hljs-comment"># 设置ll命令显示目录下所有文件</span><br><span class="hljs-built_in">Set-Alias</span> <span class="hljs-literal">-Name</span> ll <span class="hljs-literal">-Value</span> <span class="hljs-built_in">Get-ChildItem</span><br></code></pre></div></td></tr></table></figure>
 <p>保存，重启<code>Windows Terminal</code>。</p>
+<h2 id="离线环境下美化"><a class="header-anchor" href="#离线环境下美化"></a>离线环境下美化</h2>
+<ul>
+<li>由于不能联网，需要在能联网的pc重复上面的美化步骤</li>
+<li>将<code>C:\Users\**\Documents\PowerShell</code>内的文件复制到离线环境下</li>
+</ul>
 <p>到此美化完毕~</p>
 
             </div>
