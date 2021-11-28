@@ -189,7 +189,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      541 字
+      787 字
     </span>
   
 
@@ -199,7 +199,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      5
+      8
        分钟
     </span>
   
@@ -290,12 +290,26 @@
 <p>regex = “xy{1,3}+yz”</p>
 </blockquote>
 <p><img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20211127145338.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<h3 id="写在最后"><a class="header-anchor" href="#写在最后"></a>写在最后</h3>
+<h4 id="TIPS"><a class="header-anchor" href="#TIPS"></a>TIPS</h4>
 <blockquote>
 <p>如果你有一个问题，你想到可以用正则来解决，那么你有两个问题了。</p>
 <p>Some people, when confronted with a problem, think “I know, I’ll use regular expressions.” Now they have two problems.</p>
 <p><em>提醒我们在写正则的时候，一定要思考下回溯问题，避免使用低效的正则，引发线上问题。</em></p>
 </blockquote>
+<h3 id="分组与引用"><a class="header-anchor" href="#分组与引用"></a>分组与引用</h3>
+<h4 id="分组"><a class="header-anchor" href="#分组"></a>分组</h4>
+<p>在正则中使用<code>()</code>来分组，使用括号分组的表达式会保存子组（如果正则中出现了括号，那么我们就认为，这个子表达式在后续可能会再次被引用，会影响性能），每对括号会分配一个编号。</p>
+<p>在括号内使用<code>?:</code>就可以不保存子组（不保存子组可以提高正则的性能），不会被分配编号。</p>
+<p>在分组嵌套的情况下判断分组编号可以<strong>通过各分组左括号的顺序的判断</strong>。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20211128143130.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h4 id="引用"><a class="header-anchor" href="#引用"></a>引用</h4>
+<p>在知道了分组的编号后（number），可以使用<code>\number</code>来对分组进行引用。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20211128143559.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h5 id="使用分组引用来替换"><a class="header-anchor" href="#使用分组引用来替换"></a>使用分组引用来替换</h5>
+<p><img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20211128144140.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java">String date = <span class="hljs-string">&quot;2021-11-28 14:39:18&quot;</span>;<br>date.replaceAll(<span class="hljs-string">&quot;((\\d&#123;4&#125;)-(\\d&#123;2&#125;)-(\\d&#123;2&#125;)) ((\\d&#123;2&#125;):(\\d&#123;2&#125;):(\\d&#123;2&#125;))&quot;</span>,<span class="hljs-string">&quot;日期$1 时间$5   $2年$3月$4日 $6时$7分$8秒&quot;</span>);<br></code></pre></div></td></tr></table></figure>
+<h5 id="使用分组引用来查找"><a class="header-anchor" href="#使用分组引用来查找"></a>使用分组引用来查找</h5>
+<p><img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20211128145101.png" srcset="/img/loading.gif" lazyload alt=""></p>
 
             </div>
             <hr>
