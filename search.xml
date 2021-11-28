@@ -524,37 +524,6 @@
     
     
     <entry>
-      <title>v2ray搭建</title>
-      <link href="posts/2269414442/"/>
-      <url>posts/2269414442/</url>
-      
-        <content type="html"><![CDATA[<h2 id="v2ray搭建"><a class="header-anchor" href="#v2ray搭建"></a>v2ray搭建</h2><blockquote><p>前几天刚白嫖了免费一年的谷歌云和亚马逊云的轻量服务器，然后鼓捣着搭了个vps来科学上网。</p><p>经过我这几天的使用，我发现亚马逊云比谷歌云差太多，尤其是亚马逊云的控制台，加载都需要好久，体验非常差，而谷歌云访问起来就非常顺畅。</p><p>谷歌云的服务器是按流量计费的，也就是说他送的300美元用于支付流量费用的话，大概可以使用<code>1T</code>，这对于轻度的冲浪可能够了，但对于经常逛youtube等视频网站的用户来说还是有点少。</p><p>所以考虑了一下后决定不再白嫖！</p></blockquote><h3 id="1-服务器"><a class="header-anchor" href="#1-服务器"></a>1.服务器</h3><p>服务器的选择其实还挺多的，比如<code>搬瓦工</code>，<code>谷歌云</code>，<code>vultr</code>等老牌大厂。</p><p>一开始我是想用国际版阿里云的香港节点的，但是发现注册国际版阿里云还需要香港的手机号，于是就放弃了。</p><p>最后用了国内阿里云的轻量服务器香港节点（￥24/月）。</p><h3 id="2-域名"><a class="header-anchor" href="#2-域名"></a>2.域名</h3><p>购买一个域名，并解析到服务器的公网ip，推荐使用二级域名来解析。</p><p>我这里使用<code>dnspod</code>来解析我的域名。</p><p>域名解析大概需要几分钟时间，耐心等待之后，用ping命令ping一下，如果通了且显示的是你服务器的公网ip，那就表示解析成功了。</p><h3 id="3-开始搭建"><a class="header-anchor" href="#3-开始搭建"></a>3.开始搭建</h3><p>我的服务器用的是centos7。</p><p>开启BBR加速：</p><figure class="highlight shell"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs shell">wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh &amp;&amp; chmod +x bbr.sh &amp;&amp; ./bbr.sh<br></code></pre></div></td></tr></table></figure><p>使用一键安装代码：</p><figure class="highlight shell"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs shell">bash &lt;(curl -L -s https://raw.githubusercontent.com/wulabing/V2Ray_ws-tls_bash_onekey/master/install.sh) | tee v2ray_ins.log<br></code></pre></div></td></tr></table></figure><p>选择v2ray+ws+tls+nginx安装</p><p>安装过程中输入自己刚才解析的域名，其余默认即可。</p><p>耐心等待安装完成。</p>]]></content>
-      
-      
-      <categories>
-          
-          <category> 服务器 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> vps </tag>
-            
-            <tag> v2ray </tag>
-            
-            <tag> nginx </tag>
-            
-            <tag> centos7 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>中级软考知识点六</title>
       <link href="posts/4243927841/"/>
       <url>posts/4243927841/</url>
