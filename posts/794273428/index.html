@@ -189,7 +189,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      787 字
+      1.1k 字
     </span>
   
 
@@ -199,7 +199,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      8
+      12
        分钟
     </span>
   
@@ -310,6 +310,39 @@
 <figure class="highlight java"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs java">String date = <span class="hljs-string">&quot;2021-11-28 14:39:18&quot;</span>;<br>date.replaceAll(<span class="hljs-string">&quot;((\\d&#123;4&#125;)-(\\d&#123;2&#125;)-(\\d&#123;2&#125;)) ((\\d&#123;2&#125;):(\\d&#123;2&#125;):(\\d&#123;2&#125;))&quot;</span>,<span class="hljs-string">&quot;日期$1 时间$5   $2年$3月$4日 $6时$7分$8秒&quot;</span>);<br></code></pre></div></td></tr></table></figure>
 <h5 id="使用分组引用来查找"><a class="header-anchor" href="#使用分组引用来查找"></a>使用分组引用来查找</h5>
 <p><img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20211128145101.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h3 id="匹配模式"><a class="header-anchor" href="#匹配模式"></a>匹配模式</h3>
+<p>所谓匹配模式，指的是正则中一些<strong>改变元字符匹配行为</strong>的方式，比如匹配时不区分英文字母大小写。常见的匹配模式有 4 种，分别是不区分大小写模式、点号通配模式、多行模式和注释模式。</p>
+<p>将模式修饰符放在正则表达式的前面就表示是此模式。模式修饰符是通过<code>(? 模式标识)</code> 的方式来表示的。</p>
+<h4 id="不区分大小写模式（Case-Insensitive）"><a class="header-anchor" href="#不区分大小写模式（Case-Insensitive）"></a>不区分大小写模式（Case-Insensitive）</h4>
+<p>不区分大小写的模式修饰符是<code>(?i)</code>。</p>
+<blockquote>
+<p>例，不区分大小写匹配dog</p>
+<p>(?i)dog</p>
+</blockquote>
+<p>注意，如果模式修饰符在括号内，则作用范围是这个括号内的正则，而不是整个正则。</p>
+<h4 id="点号通配模式（Dot-All）"><a class="header-anchor" href="#点号通配模式（Dot-All）"></a>点号通配模式（Dot All）</h4>
+<p>点号通配模式的作用是可以让英文的<code>.</code>可以匹配任意字符。</p>
+<p>模式修饰符是<code>(?s)</code>。</p>
+<blockquote>
+<p>例</p>
+<p>(?s).+</p>
+</blockquote>
+<h4 id="多行匹配模式（Multiline）"><a class="header-anchor" href="#多行匹配模式（Multiline）"></a>多行匹配模式（Multiline）</h4>
+<p>通常情况下，^匹配整个字符串的开头，$ 匹配整个字符串的结尾。多行匹配模式改变的就是 ^ 和 $ 的匹配行为。</p>
+<p>模式修饰符为<code>(?m)</code>。</p>
+<blockquote>
+<p>例，匹配所有以the开头，以dog结尾的行</p>
+<p>(?m)^the|dog$</p>
+</blockquote>
+<h4 id="注释模式（Comment）"><a class="header-anchor" href="#注释模式（Comment）"></a>注释模式（Comment）</h4>
+<p>用于对正则进行注释说明。</p>
+<p>模式修饰符为<code>(?#comment)</code>，comment为注释内容。</p>
+<blockquote>
+<p>例</p>
+<p>(\w+)(?#word) \1(?#word repeat again)</p>
+</blockquote>
+<h4 id="总结"><a class="header-anchor" href="#总结"></a>总结</h4>
+<p><img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20211204153658.png" srcset="/img/loading.gif" lazyload alt="image-20211204153658362"></p>
 
             </div>
             <hr>
