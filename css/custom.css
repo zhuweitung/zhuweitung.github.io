@@ -21,3 +21,6 @@ body {
 ::-webkit-scrollbar-corner {
     background-color: transparent
 }
+.markdown-body p > img, .markdown-body p > a > img{
+    margin: 1.5rem 0;
+}
