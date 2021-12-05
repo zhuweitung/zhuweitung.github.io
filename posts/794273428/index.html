@@ -189,7 +189,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.1k 字
+      1.4k 字
     </span>
   
 
@@ -199,7 +199,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      12
+      15
        分钟
     </span>
   
@@ -259,16 +259,16 @@
 <li>断言</li>
 </ul>
 <h4 id="特殊单字符"><a class="header-anchor" href="#特殊单字符"></a>特殊单字符</h4>
-<p><img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20211127142601.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20211205144203.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h4 id="空白符"><a class="header-anchor" href="#空白符"></a>空白符</h4>
-<p><img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20211127142632.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20211205144108.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h4 id="量词"><a class="header-anchor" href="#量词"></a>量词</h4>
-<p><img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20211127142703.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20211205144518.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h4 id="范围"><a class="header-anchor" href="#范围"></a>范围</h4>
-<p><img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20211127143026.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20211205144743.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h3 id="量词与贪婪"><a class="header-anchor" href="#量词与贪婪"></a>量词与贪婪</h3>
 <p>在正则中，表示次数的量词默认是<code>贪婪</code>的，在贪婪模式下，会尝试尽可能最大长度去匹配。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20211127150152.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20211205145221.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h4 id="独占模式"><a class="header-anchor" href="#独占模式"></a>独占模式</h4>
 <p>不管是贪婪模式，还是非贪婪模式，都需要发生回溯才能完成相应的功能。但是在一些场景下，我们不需要回溯，匹配不上返回失败就好了，因此正则中还有另外一种模式，独占模式，<strong>它类似贪婪匹配，也会尽可能多的匹配，但匹配过程不会发生回溯，匹配不上就会返回失败，因此在一些场合下性能会更好。</strong></p>
 <p>例.</p>
@@ -342,7 +342,57 @@
 <p>(\w+)(?#word) \1(?#word repeat again)</p>
 </blockquote>
 <h4 id="总结"><a class="header-anchor" href="#总结"></a>总结</h4>
-<p><img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20211204153658.png" srcset="/img/loading.gif" lazyload alt="image-20211204153658362"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20211205145309.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h3 id="断言"><a class="header-anchor" href="#断言"></a>断言</h3>
+<p>断言的定义为只用于匹配位置，而不是文本内容本身。</p>
+<p>常见的断言有三种：单词边界、行的开始或结束以及环视。</p>
+<h4 id="单词边界"><a class="header-anchor" href="#单词边界"></a>单词边界</h4>
+<p>在正则中使用<code>\b</code>来表示单词的边界</p>
+<blockquote>
+<p>例，匹配句子中的单词tom</p>
+<p>tom  tomorrow.</p>
+<p>正则写法：\btom\b</p>
+<p>表示匹配以tom开头，以tom结束的单词</p>
+</blockquote>
+<h4 id="行的开始或结束"><a class="header-anchor" href="#行的开始或结束"></a>行的开始或结束</h4>
+<p>在正则中使用<code>^</code>表示文本行的开始，<code>$</code>表示文本行的结束，配合前面讲到的多行模式<code>(?m)</code>可以实现多行匹配。</p>
+<h4 id="环视"><a class="header-anchor" href="#环视"></a>环视</h4>
+<p>环视就是要求匹配部分的前面或后面要满足（或不满足）某种规则。</p>
+<table>
+<thead>
+<tr>
+<th>正则</th>
+<th>名称</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(?&lt;=Y)</td>
+<td>肯定逆序环视</td>
+<td>左边是Y</td>
+</tr>
+<tr>
+<td>(?&lt;!Y)</td>
+<td>否定逆序环视</td>
+<td>左边不是Y</td>
+</tr>
+<tr>
+<td>(?=Y)</td>
+<td>肯定顺序环视</td>
+<td>右边是Y</td>
+</tr>
+<tr>
+<td>(?!Y)</td>
+<td>否定顺序环视</td>
+<td>右边不是Y</td>
+</tr>
+</tbody>
+</table>
+<p><em>左尖括号代表看左边，没有尖括号是看右边，感叹号是非的意思。</em></p>
+<p>注：环视正则表达式中的括号不会被视为子组。</p>
+<h4 id="总结-v2"><a class="header-anchor" href="#总结-v2"></a>总结</h4>
+<p><img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20211205151554.png" srcset="/img/loading.gif" lazyload alt=""></p>
 
             </div>
             <hr>
