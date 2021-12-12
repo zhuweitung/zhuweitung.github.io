@@ -189,7 +189,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.7k 字
+      1.9k 字
     </span>
   
 
@@ -199,7 +199,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      18
+      21
        分钟
     </span>
   
@@ -241,7 +241,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年12月11日 下午
+                  本文最后更新于：2021年12月12日 下午
                 
               </p>
             
@@ -442,6 +442,29 @@
 <p>方括号中的其他元字符不再具有特殊含义，仅代表字符本身。</p>
 <h4 id="总结-v3"><a class="header-anchor" href="#总结-v3"></a>总结</h4>
 <p><img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20211211160309.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h3 id="正则表达式流派"><a class="header-anchor" href="#正则表达式流派"></a>正则表达式流派</h3>
+<p>由于各种历史原因导致正则表达式有很多种流派，其中<code>POSIX 流派</code>与<code>PCRE 流派</code>是目前正则表达式流派中的两大最主要的流派。</p>
+<h4 id="POSIX流派"><a class="header-anchor" href="#POSIX流派"></a>POSIX流派</h4>
+<p>Unix 系统或类 Unix 系统上的大部分工具，如 grep、sed、awk 等，均遵循该标准。</p>
+<p>POSIX 规范定义了正则表达式的两种标准：</p>
+<ul>
+<li>BRE 标准（Basic Regular Expression 基本正则表达式）</li>
+<li>ERE 标准（Extended Regular Expression 扩展正则表达式）</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20211212153215.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><strong>linux下的一些命令默认使用BRE标准，可以使用参数来使用ERE标准或PCRE标准。</strong></p>
+<h5 id="POSIX字符组"><a class="header-anchor" href="#POSIX字符组"></a>POSIX字符组</h5>
+<p>与一般的正则表达式不一样的是，POSIX定义了自己的字符组。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20211212153327.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h4 id="PCRE流派"><a class="header-anchor" href="#PCRE流派"></a>PCRE流派</h4>
+<p>目前绝大部分常用编程语言所采用的正则引擎，基本都属于 PCRE 流派。</p>
+<p>但是不同的编程语言还有兼容问题。</p>
+<ul>
+<li>直接兼容：perl、php、preg、pcre库等perl系</li>
+<li>间接兼容：java系、python系，JavaScript系、.net系等</li>
+</ul>
+<h4 id="总结-v4"><a class="header-anchor" href="#总结-v4"></a>总结</h4>
+<p><img src="https://cdn.jsdelivr.net/gh/acerbot/picbed/20211212154551.png" srcset="/img/loading.gif" lazyload alt=""></p>
 
             </div>
             <hr>
