@@ -586,8 +586,9 @@ sup > a::before,
 .pagination .space {
   align-self: flex-end;
 }
-.pagination a,
-.pagination .current {
+.pagination .page-number,
+.pagination .current,
+.pagination .extend {
   outline: 0;
   border: 0;
   background-color: transparent;
@@ -595,10 +596,13 @@ sup > a::before,
   padding: 0.5rem 0.75rem;
   line-height: 1.25;
   border-radius: 0.125rem;
-  transition: background-color 0.2s ease-in-out;
 }
-.pagination a:hover,
+.pagination .page-number {
+  margin: 0 0.05rem;
+}
+.pagination .page-number:hover,
 .pagination .current {
+  transition: background-color 0.2s ease-in-out;
   background-color: var(--link-hover-bg-color);
 }
 .qr-trigger {
@@ -840,7 +844,7 @@ i.iconfont {
   --scrollbar-hover-color: #a6a6a6;
   --button-bg-color: transparent;
   --button-hover-bg-color: #f2f3f5;
-  --highlight-bg-color: #f8f8f8;
+  --highlight-bg-color: #f6f8fa;
   --inlinecode-bg-color: rgba(175,184,193,0.2);
 }
 @media (prefers-color-scheme: dark) {
@@ -865,7 +869,7 @@ i.iconfont {
     --scrollbar-hover-color: #9da8b3;
     --button-bg-color: transparent;
     --button-hover-bg-color: #46647e;
-    --highlight-bg-color: #282b2e;
+    --highlight-bg-color: #2d333b;
     --inlinecode-bg-color: rgba(99,110,123,0.4);
   }
   :root:not([data-user-color-scheme]) img {
@@ -900,7 +904,7 @@ i.iconfont {
   --scrollbar-hover-color: #9da8b3;
   --button-bg-color: transparent;
   --button-hover-bg-color: #46647e;
-  --highlight-bg-color: #282b2e;
+  --highlight-bg-color: #2d333b;
   --inlinecode-bg-color: rgba(99,110,123,0.4);
 }
 [data-user-color-scheme="dark"] img {
@@ -1245,6 +1249,7 @@ i.iconfont {
   padding-top: 1.45rem;
   padding-bottom: 1.45rem;
   padding-right: 1rem;
+  line-height: 1.5;
 }
 .markdown-body .code-wrapper {
   position: relative;

@@ -78,7 +78,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"blog.zhuweitung.space","root":"/","version":"1.9.0","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#96be66","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":"f2550b082b1ec518a726847e5f27e3c4","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"Rnyy6d3kzXonmFTiXC2DM2wM-gzGzoHsz","app_key":"ItzHQLPR4iIXylU6VCqf1j4f","server_url":"https://rnyy6d3k.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"blog.zhuweitung.space","root":"/","version":"1.9.1","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#96be66","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":"f2550b082b1ec518a726847e5f27e3c4","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"Rnyy6d3kzXonmFTiXC2DM2wM-gzGzoHsz","app_key":"ItzHQLPR4iIXylU6VCqf1j4f","server_url":"https://rnyy6d3k.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -89,7 +89,7 @@
   <script  src="/js/color-schema.js" ></script>
 
   
-<meta name="generator" content="Hexo 5.4.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body>
@@ -310,22 +310,22 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">vim /etc/passwd<br></code></pre></td></tr></table></figure>
 <p>在文件最后找到<code>git</code>行，将<code>/bin/bash</code>替换为<code>/usr/bin/git-shell</code></p>
 <p>创建空仓库</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> /home/git<br>mkdir repos<br><span class="hljs-built_in">cd</span> repos<br>git init --bare blog.git<br></code></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> /home/git<br><span class="hljs-built_in">mkdir</span> repos<br><span class="hljs-built_in">cd</span> repos<br>git init --bare blog.git<br></code></pre></td></tr></table></figure>
 <p>创建网站根目录，之后hexo生成的静态文件会部署到这里</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> /home/git<br>mkdir -p projects/blog<br></code></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> /home/git<br><span class="hljs-built_in">mkdir</span> -p projects/blog<br></code></pre></td></tr></table></figure>
 <p>本地生成<code>ssh key</code>:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">ssh-keygen -t rsa -C <span class="hljs-string">&quot;你的邮箱&quot;</span><br></code></pre></td></tr></table></figure>
 <p>生成的<code>ssh key</code>在<code>C:\Users\你的用户名\.ssh</code>文件夹下，名为<code>id_rsa.pub</code></p>
 <p>复制<code>id_rsa.pub</code>文件内的内容，将内容加到git用户的authorized_keys文件中</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> /home/git/.ssh<br>touch authorized_keys<br>vim authorized_keys<br></code></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> /home/git/.ssh<br><span class="hljs-built_in">touch</span> authorized_keys<br>vim authorized_keys<br></code></pre></td></tr></table></figure>
 <p>配置hooks钩子，保证收到push请求后执行命令将提交的文件部署到网站根目录下：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">vim /home/git/repos/blog.git/hooks/post-receive<br></code></pre></td></tr></table></figure>
 <p>将下面的脚本复制到文件内：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-meta">#!/bin/sh</span><br>git --work-tree=/home/git/projects/blog --git-dir=/home/git/repos/blog.git checkout -f<br></code></pre></td></tr></table></figure>
 <p>并给git用户添加可执行权限：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">chmod +x post-receive<br></code></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">chmod</span> +x post-receive<br></code></pre></td></tr></table></figure>
 <p>网站的根目录也需要给git权限：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo chown -R git:git /home/git/repos/blog.git<br>sudo chown -R git:git /home/git/projects/blog<br></code></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo <span class="hljs-built_in">chown</span> -R git:git /home/git/repos/blog.git<br>sudo <span class="hljs-built_in">chown</span> -R git:git /home/git/projects/blog<br></code></pre></td></tr></table></figure>
 <h3 id="hexo配置"><a class="header-anchor" href="#hexo配置"></a>hexo配置</h3>
 <p>修改博客根目录下的<code>_config.yml</code>，将仓库添加到deploy配置中：</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">deploy:</span><br>    <span class="hljs-attr">type:</span> <span class="hljs-string">git</span><br>    <span class="hljs-attr">repo:</span> <span class="hljs-string">git@blog.zhuweitung.space:/home/git/repos/blog.git</span><br>    <span class="hljs-attr">branch:</span> <span class="hljs-string">master</span><br></code></pre></td></tr></table></figure>

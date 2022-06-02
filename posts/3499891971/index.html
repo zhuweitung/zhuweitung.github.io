@@ -76,7 +76,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"blog.zhuweitung.space","root":"/","version":"1.9.0","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#96be66","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":"f2550b082b1ec518a726847e5f27e3c4","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"Rnyy6d3kzXonmFTiXC2DM2wM-gzGzoHsz","app_key":"ItzHQLPR4iIXylU6VCqf1j4f","server_url":"https://rnyy6d3k.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"blog.zhuweitung.space","root":"/","version":"1.9.1","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#96be66","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":"f2550b082b1ec518a726847e5f27e3c4","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"Rnyy6d3kzXonmFTiXC2DM2wM-gzGzoHsz","app_key":"ItzHQLPR4iIXylU6VCqf1j4f","server_url":"https://rnyy6d3k.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -87,7 +87,7 @@
   <script  src="/js/color-schema.js" ></script>
 
   
-<meta name="generator" content="Hexo 5.4.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body>
@@ -339,7 +339,7 @@
 <li>
 <p>若安装的Navicat Premium版本小于<code>12.0.24</code>，</p>
 <p>需要使用<code>openssl</code>生成<code>rpk</code>公钥文件：</p>
-<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">$ openssl genrsa -out <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">RegPrivateKey</span>.</span></span>pem <span class="hljs-number">2048</span><br>$ openssl rsa -<span class="hljs-keyword">in</span> <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">RegPrivateKey</span>.</span></span>pem -pubout -out rpk<br></code></pre></td></tr></table></figure>
+<figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs crystal"><span class="hljs-variable">$ </span>openssl genrsa -<span class="hljs-keyword">out</span> RegPrivateKey.pem <span class="hljs-number">2048</span><br><span class="hljs-variable">$ </span>openssl rsa -in RegPrivateKey.pem -pubout -<span class="hljs-keyword">out</span> rpk<br></code></pre></td></tr></table></figure>
 <p>再将<code>rpk</code>文件放到<code>/Applications/Navicat Premium.app/Contents/Resources/</code>目录下</p>
 </li>
 </ul>
@@ -355,7 +355,7 @@
 <p>语言根据安装的版本选择，如安装英文版选择0，中文版选择1；</p>
 <p>版本号选择12；</p>
 <p>之后终端上会显示系列号：</p>
-<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">Serial</span> number:<br><span class="hljs-attribute">NAVG</span>-Z<span class="hljs-number">5</span>H<span class="hljs-number">9</span>-NK<span class="hljs-number">2</span>L-MAZJ<br></code></pre></td></tr></table></figure>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs applescript">Serial <span class="hljs-built_in">number</span>:<br>NAVG-Z5H9-NK2L-MAZJ<br></code></pre></td></tr></table></figure>
 <p>继续在终端上输入<code>name</code>和<code>organization</code>；</p>
 <p>不要关闭终端，关闭网络连接，打开navicat premium，点击注册，输入刚才生成的序列号，点击激活，点击手动激活，复制请求码在终端中粘贴，敲两次回车；</p>
 <p>复制生成的激活码，粘贴到navicat premium中并确定；</p>
