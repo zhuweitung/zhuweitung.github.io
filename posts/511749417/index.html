@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="https://cdn.jsdelivr.net/gh/zhuweitung/picbed/favicon-16x16-next.png">
-  <link rel="icon" href="https://cdn.jsdelivr.net/gh/zhuweitung/picbed/favicon-16x16-next.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="https://img.kedr.cc/picbed/favicon-16x16-next.png">
+  <link rel="icon" href="https://img.kedr.cc/picbed/favicon-16x16-next.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -23,14 +23,14 @@
 <meta property="og:site_name" content="zhuweitung&#39;s blog">
 <meta property="og:description" content="常用设计模式 设计模式六大原则  开闭原则：对拓展开放，对修改关闭。（接口和抽象类） 里氏替换原则：任何基类可以出现的地方，子类一定可以出现。 依赖倒转原则：面向接口编程，依赖于抽象而不依赖与具体。 接口隔离原则：使用多个隔离的接口比使用单个接口要好，降低类之间的耦合。 迪米特原则（最少知识原则）：一个软件实体应当尽可能少的与其他实体发生相互作用。 合成复用原则：尽量采用合成&#x2F;聚合的方式，而不是使">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/zhuweitung/picbed/20210516162747.png">
+<meta property="og:image" content="https://img.kedr.cc/picbed/20210516162747.png">
 <meta property="article:published_time" content="2020-09-10T11:26:33.000Z">
-<meta property="article:modified_time" content="2022-06-18T03:13:41.127Z">
+<meta property="article:modified_time" content="2022-06-19T06:11:46.303Z">
 <meta property="article:author" content="zhuweitung">
 <meta property="article:tag" content="java">
 <meta property="article:tag" content="设计模式">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/zhuweitung/picbed/20210516162747.png">
+<meta name="twitter:image" content="https://img.kedr.cc/picbed/20210516162747.png">
   
   
   
@@ -227,7 +227,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('https://fastly.jsdelivr.net/gh/zhuweitung/bing-wallpaper/wallpaper/day1_1080.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('https://img.kedr.cc/bing-wallpaper/wallpaper/day1_1080.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -318,7 +318,7 @@
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2022年6月18日 上午
+                    本文最后更新于：2022年6月19日 下午
                   
                 
               </p>
@@ -354,7 +354,7 @@
 <p>实现创建者和调用者分离。</p>
 <h4 id="简单工厂模式"><a class="header-anchor" href="#简单工厂模式"></a>简单工厂模式</h4>
 <p>该模式对对象创建管理方式最为简单，因为其仅仅简单的对不同类对象的创建进行了一层薄薄的封装。该模式通过向工厂传递类型来指定要创建的对象，其UML类图如下：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/zhuweitung/picbed/20200910204908.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://img.kedr.cc/picbed/20200910204908.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>以下通过火箭发射案例来说明该模式：</p>
 <p><strong>火箭抽象类</strong>：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AbstractRocket</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">IFight</span> &#123;<br><br>    <span class="hljs-meta">@MetaData(name = &quot;名称&quot;, desc = &quot;&quot;)</span><br>    <span class="hljs-keyword">private</span> String name;<br>    <span class="hljs-meta">@MetaData(name = &quot;型号&quot;, desc = &quot;&quot;)</span><br>    <span class="hljs-keyword">private</span> String model;<br>    <span class="hljs-meta">@MetaData(name = &quot;高度&quot;, desc = &quot;&quot;)</span><br>    <span class="hljs-keyword">private</span> Double height;<br>    <span class="hljs-meta">@MetaData(name = &quot;重量&quot;, desc = &quot;&quot;)</span><br>    <span class="hljs-keyword">private</span> Double weight;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">fly</span><span class="hljs-params">()</span> &#123;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
@@ -368,7 +368,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>    <span class="hljs-type">RocketLaunchSimpleFactory</span> <span class="hljs-variable">rocketSimpleFactory</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">RocketLaunchSimpleFactory</span>();<br>    rocketSimpleFactory.launch(RocketLaunchSimpleFactory.ROCKET_TYPE_SZ);<br>    rocketSimpleFactory.launch(RocketLaunchSimpleFactory.ROCKET_TYPE_CZ);<br>&#125;<br></code></pre></td></tr></table></figure>
 <h4 id="工厂方法模式"><a class="header-anchor" href="#工厂方法模式"></a>工厂方法模式</h4>
 <p>和简单工厂模式中工厂负责生产所有产品相比，工厂方法模式将生成具体产品的任务分发给具体的产品工厂，其UML类图如下：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/zhuweitung/picbed/20200910205400.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://img.kedr.cc/picbed/20200910205400.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p><strong>火箭创建抽象工厂类</strong>：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AbstractRocketCreateFactory</span> &#123;<br><br>    <span class="hljs-keyword">public</span> AbstractRocket <span class="hljs-title function_">create</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 <p><strong>神舟火箭创建工厂类</strong>：</p>
@@ -379,10 +379,10 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>    <span class="hljs-type">AbstractRocketCreateFactory</span> <span class="hljs-variable">szFactory</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">SZRocketCreateFactory</span>();<br>    <span class="hljs-type">AbstractRocketCreateFactory</span> <span class="hljs-variable">czFactory</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">CZRocketCreateFactory</span>();<br>    szFactory.create().fly();<br>    czFactory.create().fly();<br>&#125;<br></code></pre></td></tr></table></figure>
 <h4 id="抽象工厂模式"><a class="header-anchor" href="#抽象工厂模式"></a>抽象工厂模式</h4>
 <p>抽象工厂模式通过在AbstarctFactory中增加创建产品的接口，并在具体子工厂中实现新加产品的创建。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/zhuweitung/picbed/20200910210930.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://img.kedr.cc/picbed/20200910210930.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h3 id="代理模式"><a class="header-anchor" href="#代理模式"></a>代理模式</h3>
 <p>代理模式给某一个对象提供一个代理对象，并由代理对象控制对原对象的引用。通俗的来讲代理模式就是我们生活中常见的中介。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/zhuweitung/picbed/20200911191949.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://img.kedr.cc/picbed/20200911191949.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>SpringAOP基于代理模式实现（JDK动态代理和CGLIB代理）。</p>
 <h4 id="静态代理"><a class="header-anchor" href="#静态代理"></a>静态代理</h4>
 <p>需要自己写代理类。在程序运行之前，代理类.class文件就已经被创建了。</p>
