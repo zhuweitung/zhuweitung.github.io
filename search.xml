@@ -4,6 +4,37 @@
   
     
     <entry>
+      <title>rclone+onedrive备份服务器</title>
+      <link href="/posts/4034988835/"/>
+      <url>/posts/4034988835/</url>
+      
+        <content type="html"><![CDATA[<h2 id="前言"><a class="header-anchor" href="#前言"></a>前言</h2><p>rclone可以将文件备份到云存储，onedrive是可靠云存储空间，两者结合可以实现服务器上重要文件的备份。</p><h2 id="rclone安装"><a class="header-anchor" href="#rclone安装"></a>rclone安装</h2><blockquote><p>参考官方文档 <a href="https://rclone.org/install/">Install (rclone.org)</a></p></blockquote><p>使用一键安装脚本快速安装</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">bash &lt;(curl -Ls https://rclone.org/install.sh)<br></code></pre></td></tr></table></figure><p>检查是否安装正确</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">rclone version<br></code></pre></td></tr></table></figure><h2 id="获取onedrive客户端Id和密钥"><a class="header-anchor" href="#获取onedrive客户端Id和密钥"></a>获取onedrive客户端Id和密钥</h2><blockquote><p>参考官方文档 <a href="https://rclone.org/onedrive/#getting-your-own-client-id-and-key">Microsoft OneDrive (rclone.org)</a></p></blockquote><h3 id="在azure上注册新应用"><a class="header-anchor" href="#在azure上注册新应用"></a>在azure上注册新应用</h3><p>访问 <a href="https://portal.azure.com/#blade/Microsoft_AAD_RegisteredApps/ApplicationsListBlade">azure 注册应用</a>，点击<strong>新注册</strong></p><p><img src="https://img.kedr.cc/picbed/202206221920461.png" alt=""></p><p>输入<strong>应用名称</strong>，选择<strong>任何组织目录(任何 Azure AD 目录 - 多租户)中的帐户和个人 Microsoft 帐户(例如，Skype、Xbox)</strong>，重定向URI选择<strong>Web</strong>，并填入<strong><a href="http://localhost:53682/">http://localhost:53682/</a></strong>，点击注册</p><p><img src="https://img.kedr.cc/picbed/202206221923487.png" alt=""></p><p>注册成功后，点击概述，复制客户端ID备用</p><p><img src="https://img.kedr.cc/picbed/202206221929038.png" alt=""></p><h3 id="创建客户端密码"><a class="header-anchor" href="#创建客户端密码"></a>创建客户端密码</h3><p>依次点击<strong>证书和密码</strong>、<strong>新客户端密码</strong>，添加客户端密码，截止期限最多24个月，点击<strong>添加</strong></p><p><img src="https://img.kedr.cc/picbed/202206221933056.png" alt=""></p><p><img src="https://img.kedr.cc/picbed/202206221935693.png" alt=""></p><p>复制密钥值备用！刚创建时才能看到密钥值，如果看不到了，就删掉重新创建试试吧。</p><h3 id="设置API权限"><a class="header-anchor" href="#设置API权限"></a>设置API权限</h3><p>依次点击<strong>API权限</strong>、<strong>添加权限</strong>、<strong>Microsoft Graph</strong>、<strong>委托的权限</strong>，将以下权限全部勾选上 Files.Read, Files.ReadWrite, Files.Read.All, Files.ReadWrite.All, offline_access, User.Read, Sites.Read.All</p><p><img src="https://img.kedr.cc/picbed/202206221940284.png" alt=""></p><p>最终的权限列表</p><p><img src="https://img.kedr.cc/picbed/202206221944446.png" alt=""></p><h2 id="获取token"><a class="header-anchor" href="#获取token"></a>获取token</h2><h3 id="在windows上安装rclone"><a class="header-anchor" href="#在windows上安装rclone"></a>在windows上安装rclone</h3><p>在 <a href="https://rclone.org/downloads/">官方</a>下载windows版本并解压</p><h3 id="接收许可获取token"><a class="header-anchor" href="#接收许可获取token"></a>接收许可获取token</h3><p>在rclone解压目录下运行命令行，输入以下命令</p><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmd">.\rclone.exe authorize onedrive &quot;应用程序(客户端)ID&quot; &quot;客户端密钥值&quot;<br></code></pre></td></tr></table></figure><p>在弹出的浏览器中选择接受，回到命令行窗口，<code>access_token</code>已经打印屏幕上，复制token备用</p><h2 id="配置rclone"><a class="header-anchor" href="#配置rclone"></a>配置rclone</h2><p>回到linux服务器上，输入</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs bash">rclone config<br><span class="hljs-comment"># 输入 n</span><br><span class="hljs-comment"># 输入自定义名称 remote</span><br><span class="hljs-comment"># 输入 28</span><br><span class="hljs-comment"># 粘贴客户端id</span><br><span class="hljs-comment"># 粘贴客户端密钥值</span><br><span class="hljs-comment"># 根据自已服务器的位置选择区域 1</span><br><span class="hljs-comment"># 输入 n</span><br><span class="hljs-comment"># 输入 n</span><br><span class="hljs-comment"># 粘贴access_token</span><br><span class="hljs-comment"># 输入 1</span><br><span class="hljs-comment"># 此时会列出你的onedrive地址，正确就输入 y</span><br><span class="hljs-comment"># 输入 y</span><br><span class="hljs-comment"># 输入 q 结束</span><br></code></pre></td></tr></table></figure><p>检查是否配置成功</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">rclone lsd remote:<br></code></pre></td></tr></table></figure><p>如果列出onedrive上的文件夹就说明配置成功了</p><h2 id="备份重要文件到onedirve"><a class="header-anchor" href="#备份重要文件到onedirve"></a>备份重要文件到onedirve</h2><p>备份的话一般是两种方式</p><ul><li>将文件压缩后，用日期命名，备份到云端，本地备份文件保留一个周期</li><li>将本地文件镜像备份到云端</li></ul><p>我个人比较倾向于第二种</p><p>使用<code>rclone sync</code>来进行镜像备份，更详细地说明可以查看 <a href="https://rclone.org/commands/rclone_sync/">官方文档</a></p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">rclone <span class="hljs-built_in">sync</span> -i 本地文件目录 remote:云端目标文件夹<br></code></pre></td></tr></table></figure><p>剩下的就是编写备份脚本，设置定时运行了，本篇文章就不再赘述。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> backup </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> vps </tag>
+            
+            <tag> backup </tag>
+            
+            <tag> rclone </tag>
+            
+            <tag> onedrive </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>k8s集群搭建</title>
       <link href="/posts/331375146/"/>
       <url>/posts/331375146/</url>
