@@ -16,25 +16,25 @@
   <meta name="author" content="zhuweitung">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Java IO 也称为IO流，IO &#x3D; 流，它的核心就是对文件的操作，对于 字节 、字符类型的输入和输出流。">
+    <meta name="description" content="主要学习记录了抽象工厂模式">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java I&#x2F;O学习笔记">
-<meta property="og:url" content="https://blog.zhuweitung.space/posts/1061884183/index.html">
+<meta property="og:title" content="图说设计模式笔记#2">
+<meta property="og:url" content="https://blog.zhuweitung.space/posts/1939664859/index.html">
 <meta property="og:site_name" content="zhuweitung&#39;s blog">
-<meta property="og:description" content="Java IO 也称为IO流，IO &#x3D; 流，它的核心就是对文件的操作，对于 字节 、字符类型的输入和输出流。">
+<meta property="og:description" content="主要学习记录了抽象工厂模式">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://img.kedr.cc/picbed/20210516160247.png">
-<meta property="article:published_time" content="2019-07-13T06:23:11.000Z">
-<meta property="article:modified_time" content="2022-06-19T06:11:46.304Z">
+<meta property="og:image" content="https://img.kedr.cc/picbed/202206271911955.png">
+<meta property="article:published_time" content="2022-06-27T11:09:37.000Z">
+<meta property="article:modified_time" content="2022-06-27T11:56:14.832Z">
 <meta property="article:author" content="zhuweitung">
-<meta property="article:tag" content="java">
-<meta property="article:tag" content="I&#x2F;O">
+<meta property="article:tag" content="笔记">
+<meta property="article:tag" content="设计模式">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://img.kedr.cc/picbed/20210516160247.png">
+<meta name="twitter:image" content="https://img.kedr.cc/picbed/202206271911955.png">
   
   
   
-  <title>Java I/O学习笔记 - zhuweitung&#39;s blog</title>
+  <title>图说设计模式笔记#2 - zhuweitung&#39;s blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -233,7 +233,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Java I/O学习笔记"></span>
+            <span id="subtitle" data-typed-text="图说设计模式笔记#2"></span>
           
         </div>
 
@@ -244,8 +244,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2019-07-13 14:23" pubdate>
-          2019年7月13日 下午
+        <time datetime="2022-06-27 19:09" pubdate>
+          2022年6月27日 晚上
         </time>
       </span>
     
@@ -256,7 +256,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.3k 字
+          2.2k 字
         
       </span>
     
@@ -267,7 +267,7 @@
         
         
         
-          11 分钟
+          19 分钟
         
       </span>
     
@@ -313,12 +313,12 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Java I/O学习笔记</h1>
+            <h1 style="display: none">图说设计模式笔记#2</h1>
             
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2022年6月19日 下午
+                    本文最后更新于：2022年6月27日 晚上
                   
                 
               </p>
@@ -326,98 +326,80 @@
             
               <div class="markdown-body">
                 
-                <h1 id="Java-I-O学习笔记"><a class="header-anchor" href="#Java-I-O学习笔记"></a>Java I/O学习笔记</h1>
-<h2 id="1-Java-I-O中常用的类"><a class="header-anchor" href="#1-Java-I-O中常用的类"></a>1.Java I/O中常用的类</h2>
-<p>在java源码的io包中常用的类为File、OutputStream、Inputstream、Writer、Reader、RandomAccessFile。</p>
-<table>
-<thead>
-<tr>
-<th>类</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>File</td>
-<td>文件类</td>
-</tr>
-<tr>
-<td>OutputStream</td>
-<td>字节输出流</td>
-</tr>
-<tr>
-<td>Inputstream</td>
-<td>字节输入流</td>
-</tr>
-<tr>
-<td>Writer</td>
-<td>字符输出流</td>
-</tr>
-<tr>
-<td>Reader</td>
-<td>字符输入流</td>
-</tr>
-<tr>
-<td>RandomAccessFile</td>
-<td>随机存取文件</td>
-</tr>
-</tbody>
-</table>
-<h2 id="2-字节流与字符流"><a class="header-anchor" href="#2-字节流与字符流"></a>2.字节流与字符流</h2>
-<blockquote>
-<p>什么是字节流？</p>
-<p>字节流–传输过程中，传输数据的最基本单位是字节的流。</p>
-<p>什么是字符流？</p>
-<p>字符流–传输过程中，传输数据的最基本单位是字符的流。</p>
-</blockquote>
-<h2 id="3-节点流和处理流"><a class="header-anchor" href="#3-节点流和处理流"></a>3.节点流和处理流</h2>
-<blockquote>
-<p>节点流：可以从或向一个特定的地方（节点）读写数据。如FileReader。</p>
-<p>处理流：是对一个已存在的流的连接和封装，通过所封装的流的功能调用实现数据读写。如BufferedReader.处理流的构造方法总是要带一个其他的流对象做参数。一个流对象经过其他流的多次包装，称为流的链接。</p>
-</blockquote>
-<h2 id="4-常用字节输入流"><a class="header-anchor" href="#4-常用字节输入流"></a>4.常用字节输入流</h2>
-<p>常用的字节输入流包括Inputstream以及Inputstream的子类。</p>
-<p><img src="https://wx2.sinaimg.cn/large/d67ca93ely1g4yb6pwpmij20qo0dyabr.jpg" srcset="/img/loading.gif" lazyload alt="IO字节输入流"></p>
-<h2 id="5-常用字节输出流"><a class="header-anchor" href="#5-常用字节输出流"></a>5.常用字节输出流</h2>
-<p>常用字节输出流包括OutputStream以及OutputStream的子类。</p>
-<p><img src="https://ws1.sinaimg.cn/large/d67ca93ely1g4yb6pskqzj20qo0asgmu.jpg" srcset="/img/loading.gif" lazyload alt="IO字节输出流"></p>
-<h2 id="6-常用字符输入流"><a class="header-anchor" href="#6-常用字符输入流"></a>6.常用字符输入流</h2>
-<p>常用字符输入流包括Reader以及Reader的子类。</p>
-<p><img src="https://wx1.sinaimg.cn/large/d67ca93ely1g4yb6poa62j20qo0ga0uk.jpg" srcset="/img/loading.gif" lazyload alt="IO字符输入流"></p>
-<h2 id="7-常用字符输出流"><a class="header-anchor" href="#7-常用字符输出流"></a>7.常用字符输出流</h2>
-<p>常用字符输出流包括Writer以及Writer的子类。</p>
-<p><img src="https://ws2.sinaimg.cn/large/d67ca93ely1g4yb6ojw72j20nc0gzabr.jpg" srcset="/img/loading.gif" lazyload alt="IO字符输出流"></p>
-<h2 id="8-RandomAccessFile类"><a class="header-anchor" href="#8-RandomAccessFile类"></a>8.RandomAccessFile类</h2>
-<p>RandomAccessFile（随机访问文件）类是专门用来处理文件的类。<code>随机访问</code>中的<code>随机</code>指的是可以跳转到文件的任意位置处读写数据。</p>
-<h3 id="8-1读写模式"><a class="header-anchor" href="#8-1读写模式"></a>8.1读写模式</h3>
-<table>
-<thead>
-<tr>
-<th>模式</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>r</td>
-<td>表示以只读方式打开，调用结果对象的任何write方法都将导致抛出IOException</td>
-</tr>
-<tr>
-<td>rw</td>
-<td>打开以便读取和写入，如果该文件尚不存在，则尝试创建该文件</td>
-</tr>
-<tr>
-<td>rws</td>
-<td>打开以便读取和写入，相对于&quot;rw&quot;，还要求对文件内容或元数据的每个更新都同步写入到底层存储设备</td>
-</tr>
-<tr>
-<td>rwd</td>
-<td>打开以便读取和写入，相对于&quot;rw&quot;，还要求对文件内容的每个更新都同步写入到底层存储设备</td>
-</tr>
-</tbody>
-</table>
-<h3 id="8-2常用方法"><a class="header-anchor" href="#8-2常用方法"></a>8.2常用方法</h3>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">long</span> <span class="hljs-title function_">getFilePointer</span><span class="hljs-params">()</span>;<span class="hljs-comment">//返回此文件中的当前偏移量</span><br><br><span class="hljs-type">long</span> <span class="hljs-title function_">length</span><span class="hljs-params">()</span>;<span class="hljs-comment">//返回此文件的长度</span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">read</span><span class="hljs-params">()</span>;<span class="hljs-comment">//从此文件中读取一个数据字节</span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">read</span><span class="hljs-params">(<span class="hljs-type">byte</span>[] b)</span>;<span class="hljs-comment">//读取byte数组长度的字节到byte数组中，到达文末返回-1</span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">read</span><span class="hljs-params">(<span class="hljs-type">byte</span>[] b, <span class="hljs-type">int</span> off, <span class="hljs-type">int</span> len)</span>;<span class="hljs-comment">//将最多len个数据字节从此文件的指定初始偏移量off读入byte数组</span><br><br>String <span class="hljs-title function_">readLine</span><span class="hljs-params">()</span>;<span class="hljs-comment">//从此文件读取文本的下一行</span><br><br><span class="hljs-keyword">void</span> <span class="hljs-title function_">write</span><span class="hljs-params">(<span class="hljs-type">int</span> b)</span>;<span class="hljs-comment">//向此文件写入指定的字节</span><br><br><span class="hljs-keyword">void</span> <span class="hljs-title function_">write</span><span class="hljs-params">(<span class="hljs-type">byte</span>[] b)</span>;<span class="hljs-comment">//将byte数组长度个字节从指定byte数组写入到此文件中</span><br><br><span class="hljs-keyword">void</span> <span class="hljs-title function_">write</span><span class="hljs-params">(<span class="hljs-type">byte</span>[] b, <span class="hljs-type">int</span> off, <span class="hljs-type">int</span> len)</span>;<span class="hljs-comment">//将len个字节从指定byte数组写入到此文件，并从偏移量off处开始</span><br></code></pre></td></tr></table></figure>
+                <h2 id="抽象工厂模式"><a class="header-anchor" href="#抽象工厂模式"></a>抽象工厂模式</h2>
+<h3 id="模式动机"><a class="header-anchor" href="#模式动机"></a>模式动机</h3>
+<ul>
+<li>在工厂方法模式中一个具体工厂对应一种具体产品，但有时候需要一个工厂对应多个产品对象，而抽象工厂模式就可以实现这种情况。为方便理解引入一下概念
+<ul>
+<li>产品等级结构：即产品的继承结构，如一个抽象类是电视机，其子类有海尔电视机、海信电视机、TCL电视机</li>
+<li>产品族：产品族是指由同一个工厂生产的，位于不同产品等级结构中的一组产品，如海尔电器工厂生产的海尔电视机、海尔电冰箱</li>
+</ul>
+</li>
+<li>抽象工厂模式是所有形式的工厂模式中最为抽象和最具一般性的一种形态</li>
+<li>与工厂方法模式最大的区别在于，一个工厂等级结构可以负责多个不同产品等级结构中的产品对象的创建。当一个工厂等级结构可以创建出属于不同产品等级结构的一个产品族中的所有对象时，抽象工厂模式比工厂方法模式更为简单、有效率</li>
+</ul>
+<h3 id="模式定义"><a class="header-anchor" href="#模式定义"></a>模式定义</h3>
+<p>抽象工厂模式：提供一个创建一系列相关或相互依赖对象的接口，而无须指定它们具体的类。抽象工厂模式又称为Kit模式，属于对象创建型模式。</p>
+<h3 id="模式结构"><a class="header-anchor" href="#模式结构"></a>模式结构</h3>
+<ul>
+<li>AbstractFactory：抽象工厂</li>
+<li>ConcreteFactory：具体工厂</li>
+<li>AbstractProduct：抽象产品</li>
+<li>Product：具体产品</li>
+</ul>
+<p><img src="https://img.kedr.cc/picbed/202206271928471.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><a target="_blank" rel="noopener" href="http://www.plantuml.com/plantuml/uml/SoWkIImgAStDuKfCAYufIamkKN24Cjo0EB-e4bCYe2W_fJIvn16dZ1DNSavYSR42r0H3LAuHb0ipnX2DZoRlP8Z6D-92Sw62JOsU7jmolB88lJ3RmD88jn2Gnz3lX2BlP4X0teWBvam5FJqxXBLOXPtWmaOegerGXH5cEwJcfG2Z4W00">在线编辑</a></p>
+<h3 id="代码实现"><a class="header-anchor" href="#代码实现"></a>代码实现</h3>
+<p>抽象工厂</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AbstractFactory</span> &#123;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> AbstractProductA <span class="hljs-title function_">createProductA</span><span class="hljs-params">()</span>;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> AbstractProductB <span class="hljs-title function_">createProductB</span><span class="hljs-params">()</span>;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>具体工厂1</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Factory1</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">AbstractFactory</span> &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> AbstractProductA <span class="hljs-title function_">createProductA</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ProductA1</span>();<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> AbstractProductB <span class="hljs-title function_">createProductB</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ProductB1</span>();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>具体工厂2</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Factory2</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">AbstractFactory</span> &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> AbstractProductA <span class="hljs-title function_">createProductA</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ProductA2</span>();<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> AbstractProductB <span class="hljs-title function_">createProductB</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ProductB2</span>();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>测试</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Test</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">testAbstractFactory</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">AbstractFactory</span> <span class="hljs-variable">factory1</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Factory1</span>();<br>    <span class="hljs-type">AbstractFactory</span> <span class="hljs-variable">factory2</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Factory2</span>();<br>    Assert.assertEquals(factory1.createProductA().getClass().getName(), ProductA1.class.getName());<br>    Assert.assertEquals(factory1.createProductB().getClass().getName(), ProductB1.class.getName());<br>    Assert.assertEquals(factory2.createProductA().getClass().getName(), ProductA2.class.getName());<br>    Assert.assertEquals(factory2.createProductB().getClass().getName(), ProductB2.class.getName());<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="优缺点"><a class="header-anchor" href="#优缺点"></a>优缺点</h3>
+<ul>
+<li>优点
+<ul>
+<li>应用抽象工厂模式可以实现高内聚低耦合的设计目的</li>
+<li>当一个产品族中的多个对象被设计成一起工厂时，它能够保证客户端始终只使用同一个产品族的对象</li>
+<li>增加新的具体工厂和产品族很方便，无需修改已有系统，符合开闭原则</li>
+</ul>
+</li>
+<li>缺点
+<ul>
+<li>难以扩展抽象工厂来生产新种类产品，对抽象接口进行修改会涉及到对所有子类工厂的修改，十分不便</li>
+<li>开闭原则的倾斜性（增加新的工厂和产品族容易，增加新的产品等级结构麻烦）</li>
+</ul>
+</li>
+</ul>
+<h3 id="适用环境"><a class="header-anchor" href="#适用环境"></a>适用环境</h3>
+<ul>
+<li>一个系统不应当依赖于产品类实例如何被创建、组合和表达的细节</li>
+<li>系统中有多于一个的产品族，而每次只使用其中某一产品族</li>
+<li>属于同一个产品族的产品将在一起使用，这一约束必须在系统的设计中体现出来</li>
+<li>系统提供一个产品类的库，所有的产品以同样的接口出现，从而使客户端不依赖于具体实现</li>
+</ul>
+<h3 id="模式拓展"><a class="header-anchor" href="#模式拓展"></a>模式拓展</h3>
+<ul>
+<li>开闭原则的倾斜性
+<ul>
+<li>要求系统对扩展开放，对修改封闭，通过扩展达到增强其功能的目的
+<ul>
+<li>增加产品族：工厂模式可以很好的支持开闭原则，只需要增加一个新的具体工厂即可</li>
+<li>增加产品等级结构：需要修改抽象工厂并修改所有具体工厂，不能很好地支持开闭原则</li>
+</ul>
+</li>
+<li>抽象工厂模式的这种性质称为“开闭原则”的倾斜性，抽象工厂模式以一种倾斜的方式支持增加新的产品，它为新产品族的增加提供方便，但不能为新的产品等级结构的增加提供这样的方便</li>
+</ul>
+</li>
+<li>工厂模式的退化
+<ul>
+<li>当抽象工厂模式中每一个具体工厂类只创建一个产品对象，即只存在一个产品等级结构时，抽象工厂模式退化为工厂方法模式</li>
+</ul>
+</li>
+</ul>
 
                 
               </div>
@@ -436,15 +418,8 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E5%AD%A6%E4%B9%A0/" class="category-chain-item">学习</a>
+  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="category-chain-item">学习笔记</a>
   
-  
-    <span>></span>
-    
-  <a href="/categories/%E5%AD%A6%E4%B9%A0/java/" class="category-chain-item">java</a>
-  
-  
-
   
 
       </span>
@@ -458,9 +433,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/java/">#java</a>
+        <a href="/tags/%E7%AC%94%E8%AE%B0/">#笔记</a>
       
-        <a href="/tags/I-O/">#I/O</a>
+        <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">#设计模式</a>
       
     </div>
   
@@ -472,8 +447,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Java I/O学习笔记</div>
-      <div>https://blog.zhuweitung.space/posts/1061884183/</div>
+      <div>图说设计模式笔记#2</div>
+      <div>https://blog.zhuweitung.space/posts/1939664859/</div>
     </div>
     <div class="license-meta">
       
@@ -485,7 +460,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2019年7月13日</div>
+          <div>2022年6月27日</div>
         </div>
       
       
@@ -515,18 +490,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/posts/3499891971/" title="Mac下破解NavicatPremium">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Mac下破解NavicatPremium</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/posts/854505700/" title="618配台电脑">
-                        <span class="hidden-mobile">618配台电脑</span>
+                      <a href="/posts/3935682145/" title="图说设计模式笔记#1">
+                        <span class="hidden-mobile">图说设计模式笔记#1</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
