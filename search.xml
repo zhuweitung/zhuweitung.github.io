@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>acme.sh不完全指南</title>
+      <link href="/posts/1896637794/"/>
+      <url>/posts/1896637794/</url>
+      
+        <content type="html"><![CDATA[<h2 id="安装acme-sh"><a class="header-anchor" href="#安装acme-sh"></a><a href="http://xn--acme-ke9g492u.sh">安装acme.sh</a></h2><p><a href="http://acme.sh">acme.sh</a> 的安装方式有很多种，我为了后期迁移方便就使用 docker 来安装。</p><h3 id="准备"><a class="header-anchor" href="#准备"></a>准备</h3><p>安装 docker、docker-compose</p><p>创建数据存放目录以及 docker-compose 文件</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">mkdir</span> acme.sh<br><span class="hljs-built_in">cd</span> acme.sh<br><span class="hljs-built_in">touch</span> docker-compose.yml<br></code></pre></td></tr></table></figure><h3 id="docker-compose"><a class="header-anchor" href="#docker-compose"></a>docker-compose</h3><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs yml"><span class="hljs-attr">version:</span> <span class="hljs-string">&#x27;3&#x27;</span><br><span class="hljs-attr">services:</span><br>  <span class="hljs-attr">acme.sh:</span><br>    <span class="hljs-attr">image:</span> <span class="hljs-string">neilpang/acme.sh:latest</span><br>    <span class="hljs-attr">container_name:</span> <span class="hljs-string">acme.sh</span><br>    <span class="hljs-attr">restart:</span> <span class="hljs-string">always</span><br>    <span class="hljs-attr">network_mode:</span> <span class="hljs-string">host</span><br>    <span class="hljs-attr">volumes:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">./:/acme.sh</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">/data/certificate/:/certificate</span><br>    <span class="hljs-attr">command:</span> <span class="hljs-string">daemon</span><br>    <span class="hljs-attr">environment:</span><br>      <span class="hljs-attr">TZ:</span> <span class="hljs-string">Asia/Shanghai</span><br></code></pre></td></tr></table></figure><h3 id="安装"><a class="header-anchor" href="#安装"></a>安装</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker-compose up -d<br></code></pre></td></tr></table></figure><h3 id="测试"><a class="header-anchor" href="#测试"></a>测试</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker <span class="hljs-built_in">exec</span> acme.sh --version<br></code></pre></td></tr></table></figure><h3 id="设置邮箱"><a class="header-anchor" href="#设置邮箱"></a>设置邮箱</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;ACCOUNT_EMAIL=&#x27;YOUR_EMAIL&#x27;&quot;</span> &gt;&gt; ./account.conf<br></code></pre></td></tr></table></figure><h2 id="获取DNSPod-Token"><a class="header-anchor" href="#获取DNSPod-Token"></a>获取DNSPod Token</h2><ul><li><p>登录 DNSPod 后访问 <a href="https://console.dnspod.cn/account/token/token">API 密钥</a>，点击创建密钥</p></li><li><p>复制<code>ID</code>和<code>Token</code></p><p><img src="https://img.kedr.cc/picbed/202209012038828.png" alt=""></p></li><li><p>将获取到的两个值写入到<code>./account.conf</code></p></li></ul><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;SAVED_DP_Id=&#x27;Id&#x27;&quot;</span> &gt;&gt; ./account.conf<br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;SAVED_DP_Key=&#x27;Token&#x27;&quot;</span> &gt;&gt; ./account.conf<br></code></pre></td></tr></table></figure><h2 id="获取Cloudflare-Token"><a class="header-anchor" href="#获取Cloudflare-Token"></a>获取Cloudflare Token</h2><ul><li><p>登录 Cloudflare，进入需要生成证书的域名的<code>概述</code>页面</p></li><li><p>复制<code>区域ID</code>、<code>账户ID</code>，点击获取API令牌，创建令牌</p></li></ul><p><img src="https://img.kedr.cc/picbed/202209012044624.png" alt=""></p><p><img src="https://img.kedr.cc/picbed/202209012055841.png" alt=""></p><ul><li>复制<code>令牌</code></li></ul><p><img src="https://img.kedr.cc/picbed/202209012056946.png" alt=""></p><ul><li>将获取到的三个值写入到<code>./account.conf</code></li></ul><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;SAVED_CF_Token=&#x27;令牌&#x27;&quot;</span> &gt;&gt; ./account.conf<br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;SAVED_CF_Account_ID=&#x27;账户ID&#x27;&quot;</span> &gt;&gt; ./account.conf<br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;SAVED_CF_Zone_ID=&#x27;区域ID&#x27;&quot;</span> &gt;&gt; ./account.conf<br></code></pre></td></tr></table></figure><h2 id="获取ZeroSSL-API-Key"><a class="header-anchor" href="#获取ZeroSSL-API-Key"></a>获取ZeroSSL API Key</h2><ul><li>登录 ZeroSSL 并访问 <a href="https://app.zerossl.com/developer">Developer</a> 页面，点击生成<code>EAB Credentials</code></li></ul><p><img src="https://img.kedr.cc/picbed/202209012059553.png" alt=""></p><ul><li>复制<code>EAB KID</code>和<code>EAB HMAC Key</code></li></ul><p><img src="https://img.kedr.cc/picbed/202209012100234.png" alt=""></p><ul><li>将 ZeroSSL 注册到 <a href="http://acme.sh">acme.sh</a></li></ul><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker <span class="hljs-built_in">exec</span> acme.sh --register-account --server zerossl --eab-kid YOUR_EAB_KID --eab-hmac-key YOUR_EAB_HMAC_Key<br></code></pre></td></tr></table></figure><h2 id="生成证书"><a class="header-anchor" href="#生成证书"></a>生成证书</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker <span class="hljs-built_in">exec</span> acme.sh --issue -d domain.com -d *.domain.com --dns dns_dp -k ec-256<br>docker <span class="hljs-built_in">exec</span> acme.sh --issue -d domain.com -d *.domain.com --dns dns_cf -k ec-256<br></code></pre></td></tr></table></figure><h2 id="安装证书"><a class="header-anchor" href="#安装证书"></a>安装证书</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker <span class="hljs-built_in">exec</span> acme.sh --install-cert -d domain.com -d *.domain.com --fullchain-file /certificate/domain.com.crt --key-file /certificate/domain.com.key --ecc --reloadcmd <span class="hljs-string">&quot;自定义后续操作&quot;</span><br></code></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> 服务器 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 证书 </tag>
+            
+            <tag> DNS </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>图说设计模式笔记#3</title>
       <link href="/posts/77324109/"/>
       <url>/posts/77324109/</url>
@@ -20,9 +47,9 @@
       
         <tags>
             
-            <tag> 笔记 </tag>
-            
             <tag> 设计模式 </tag>
+            
+            <tag> 笔记 </tag>
             
         </tags>
       
@@ -47,9 +74,9 @@
       
         <tags>
             
-            <tag> 笔记 </tag>
-            
             <tag> 设计模式 </tag>
+            
+            <tag> 笔记 </tag>
             
         </tags>
       
@@ -74,9 +101,9 @@
       
         <tags>
             
-            <tag> 笔记 </tag>
-            
             <tag> 设计模式 </tag>
+            
+            <tag> 笔记 </tag>
             
         </tags>
       
