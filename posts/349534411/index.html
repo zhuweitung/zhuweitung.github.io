@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="https://img.kedr.cc/picbed/favicon-16x16-next.png">
-  <link rel="icon" href="https://img.kedr.cc/picbed/favicon-16x16-next.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="https://cdn.jsdelivr.net/gh/zhuweitung/picbed/favicon-16x16-next.png">
+  <link rel="icon" href="https://cdn.jsdelivr.net/gh/zhuweitung/picbed/favicon-16x16-next.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -23,14 +23,14 @@
 <meta property="og:site_name" content="zhuweitung&#39;s blog">
 <meta property="og:description" content="Java网络编程之Socket 什么是Socket 通常也称作”套接字“，用于描述IP地址和端口，是一个通信链的句柄。应用程序通常通过”套接字”向网络发出请求或者应答网络请求。 TCP与UDP的区别  TCP是一种面向连接的保证可靠传输的协议，可靠，效率稍低； UDP是一种无连接的协议，不可靠，效率高； 建立起一个TCP连接需要经过“三次握手”； TCP传输数据没有大小限制； UDP的每个数据报中">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://img.kedr.cc/picbed/20210516162903.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/zhuweitung/picbed/20210516162903.png">
 <meta property="article:published_time" content="2020-09-12T05:19:08.000Z">
-<meta property="article:modified_time" content="2022-06-19T06:11:46.303Z">
+<meta property="article:modified_time" content="2022-11-28T11:58:24.867Z">
 <meta property="article:author" content="zhuweitung">
 <meta property="article:tag" content="java">
 <meta property="article:tag" content="socket">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://img.kedr.cc/picbed/20210516162903.png">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/zhuweitung/picbed/20210516162903.png">
   
   
   
@@ -227,7 +227,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('https://img.kedr.cc/bing-wallpaper/wallpaper/day1_1080.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('https://cdn.jsdelivr.net/gh/zhuweitung/bing-wallpaper/wallpaper/day1_1080.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -318,7 +318,7 @@
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2022年6月19日 下午
+                    本文最后更新于：2022年11月28日 晚上
                   
                 
               </p>
@@ -339,7 +339,7 @@
 <li>UDP传输数据时是有大小限制的，每个被传输的数据报必须限定在64KB之内；</li>
 </ul>
 <h4 id="TCP连接的三次握手"><a class="header-anchor" href="#TCP连接的三次握手"></a>TCP连接的三次握手</h4>
-<p><img src="https://img.kedr.cc/picbed/20200912162951.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/zhuweitung/picbed/20200912162951.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h4 id="Java-Udp实现"><a class="header-anchor" href="#Java-Udp实现"></a>Java Udp实现</h4>
 <p>服务端：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">UdpServer</span> &#123;<br><br>    <span class="hljs-keyword">private</span> Integer port;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">UdpServer</span><span class="hljs-params">(Integer port)</span> &#123;<br>        <span class="hljs-built_in">this</span>.port = port;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">start</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> IOException &#123;<br>        System.out.println(<span class="hljs-string">&quot;UDP服务端启动&quot;</span>);<br>        <span class="hljs-type">DatagramSocket</span> <span class="hljs-variable">socket</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">DatagramSocket</span>(<span class="hljs-built_in">this</span>.port);<br>        <span class="hljs-type">byte</span>[] bytes = <span class="hljs-keyword">new</span> <span class="hljs-title class_">byte</span>[<span class="hljs-number">1024</span>];<br>        <span class="hljs-type">DatagramPacket</span> <span class="hljs-variable">packet</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">DatagramPacket</span>(bytes, bytes.length);<br>        <span class="hljs-comment">//等待客户端发送内容，若客户端不发送则一直等待，阻塞效果</span><br>        socket.receive(packet);<br>        <span class="hljs-type">String</span> <span class="hljs-variable">data</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>(packet.getData(), packet.getLength());<br>        System.out.println(<span class="hljs-string">&quot;服务端收到数据：&quot;</span> + data);<br>        socket.close();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
@@ -638,6 +638,17 @@
 </div>
 
   
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+    <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+      浙ICP备2022018827号-1
+    </a>
+  </span>
+  
+</div>
+
   
   
 </div>

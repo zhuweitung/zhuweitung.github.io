@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="https://img.kedr.cc/picbed/favicon-16x16-next.png">
-  <link rel="icon" href="https://img.kedr.cc/picbed/favicon-16x16-next.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="https://cdn.jsdelivr.net/gh/zhuweitung/picbed/favicon-16x16-next.png">
+  <link rel="icon" href="https://cdn.jsdelivr.net/gh/zhuweitung/picbed/favicon-16x16-next.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -23,14 +23,14 @@
 <meta property="og:site_name" content="zhuweitung&#39;s blog">
 <meta property="og:description" content="什么是JVM？">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://img.kedr.cc/picbed/20210516162248.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/zhuweitung/picbed/20210516162248.png">
 <meta property="article:published_time" content="2020-07-19T03:42:46.000Z">
-<meta property="article:modified_time" content="2022-06-19T06:11:46.304Z">
+<meta property="article:modified_time" content="2022-11-28T11:58:24.869Z">
 <meta property="article:author" content="zhuweitung">
 <meta property="article:tag" content="java">
 <meta property="article:tag" content="jvm">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://img.kedr.cc/picbed/20210516162248.png">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/zhuweitung/picbed/20210516162248.png">
   
   
   
@@ -227,7 +227,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('https://img.kedr.cc/bing-wallpaper/wallpaper/day1_1080.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('https://cdn.jsdelivr.net/gh/zhuweitung/bing-wallpaper/wallpaper/day1_1080.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -318,7 +318,7 @@
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2022年6月19日 下午
+                    本文最后更新于：2022年11月28日 晚上
                   
                 
               </p>
@@ -335,7 +335,7 @@
 <li>自动内存管理，垃圾回收功能（gc）</li>
 </ul>
 <p>运行图：</p>
-<p><img src="https://img.kedr.cc/picbed/20200719115116.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/zhuweitung/picbed/20200719115116.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <ul>
 <li>源代码编译为字节码文件</li>
 <li>类加载器加载到JJVM内存中</li>
@@ -378,7 +378,7 @@
 <p><em>按方法的调用关系入栈出栈</em></p>
 <p>在IDEA中查看虚拟机栈（debug模式下）</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>    function1();<br>&#125;<br><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">function1</span><span class="hljs-params">()</span> &#123;<br>    function2();<br>&#125;<br><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">function2</span><span class="hljs-params">()</span> &#123;<br>    function3();<br>&#125;<br><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">function3</span><span class="hljs-params">()</span> &#123;<br>    System.out.println(<span class="hljs-string">&quot;function3&quot;</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
-<img src="https://img.kedr.cc/picbed/20200719123511.png" srcset="/img/loading.gif" lazyload align="left"/>
+<img src="https://cdn.jsdelivr.net/gh/zhuweitung/picbed/20200719123511.png" srcset="/img/loading.gif" lazyload align="left"/>
 <p><em>配置文件中</em>*-Xss**来设置栈内存*</p>
 <p>方法中的局部变量线程安全</p>
 <p><strong>栈内存溢出：</strong></p>
@@ -721,6 +721,17 @@
 </div>
 
   
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+    <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+      浙ICP备2022018827号-1
+    </a>
+  </span>
+  
+</div>
+
   
   
 </div>
