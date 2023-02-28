@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="https://cdn.jsdelivr.net/gh/zhuweitung/picbed/favicon-16x16-next.png">
-  <link rel="icon" href="https://cdn.jsdelivr.net/gh/zhuweitung/picbed/favicon-16x16-next.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/favicon-16x16-next.png">
+  <link rel="icon" href="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/favicon-16x16-next.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -23,16 +23,16 @@
 <meta property="og:site_name" content="zhuweitung&#39;s blog">
 <meta property="og:description" content="rclone可以将文件备份到云存储，onedrive是可靠云存储空间，两者结合可以实现服务器上重要文件的备份。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/zhuweitung/picbed/202206221901309.png">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/202206221901309.png">
 <meta property="article:published_time" content="2022-06-22T10:43:38.000Z">
-<meta property="article:modified_time" content="2022-11-28T11:58:24.859Z">
+<meta property="article:modified_time" content="2023-02-28T12:58:41.440Z">
 <meta property="article:author" content="zhuweitung">
 <meta property="article:tag" content="vps">
 <meta property="article:tag" content="backup">
 <meta property="article:tag" content="rclone">
 <meta property="article:tag" content="onedrive">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/zhuweitung/picbed/202206221901309.png">
+<meta name="twitter:image" content="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/202206221901309.png">
   
   
   
@@ -229,7 +229,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('https://cdn.jsdelivr.net/gh/zhuweitung/bing-wallpaper/wallpaper/day1_1080.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('https://cdn.staticaly.com/gh/zhuweitung/bing-wallpaper/main/wallpaper/day1_1080.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -317,14 +317,6 @@
             <!-- SEO header -->
             <h1 style="display: none">rclone+onedrive备份服务器</h1>
             
-              <p class="note note-info">
-                
-                  
-                    本文最后更新于：2022年11月28日 晚上
-                  
-                
-              </p>
-            
             
               <div class="markdown-body">
                 
@@ -344,21 +336,21 @@
 </blockquote>
 <h3 id="在azure上注册新应用"><a class="header-anchor" href="#在azure上注册新应用"></a>在azure上注册新应用</h3>
 <p>访问 <a target="_blank" rel="noopener" href="https://portal.azure.com/#blade/Microsoft_AAD_RegisteredApps/ApplicationsListBlade">azure 注册应用</a>，点击<strong>新注册</strong></p>
-<p><img src="https://cdn.jsdelivr.net/gh/zhuweitung/picbed/202206221920461.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/202206221920461.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>输入<strong>应用名称</strong>，选择<strong>任何组织目录(任何 Azure AD 目录 - 多租户)中的帐户和个人 Microsoft 帐户(例如，Skype、Xbox)</strong>，重定向URI选择<strong>Web</strong>，并填入<strong><a target="_blank" rel="noopener" href="http://localhost:53682/">http://localhost:53682/</a></strong>，点击注册</p>
-<p><img src="https://cdn.jsdelivr.net/gh/zhuweitung/picbed/202206221923487.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/202206221923487.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>注册成功后，点击概述，复制客户端ID备用</p>
-<p><img src="https://cdn.jsdelivr.net/gh/zhuweitung/picbed/202206221929038.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/202206221929038.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h3 id="创建客户端密码"><a class="header-anchor" href="#创建客户端密码"></a>创建客户端密码</h3>
 <p>依次点击<strong>证书和密码</strong>、<strong>新客户端密码</strong>，添加客户端密码，截止期限最多24个月，点击<strong>添加</strong></p>
-<p><img src="https://cdn.jsdelivr.net/gh/zhuweitung/picbed/202206221933056.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p><img src="https://cdn.jsdelivr.net/gh/zhuweitung/picbed/202206221935693.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/202206221933056.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/202206221935693.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>复制密钥值备用！刚创建时才能看到密钥值，如果看不到了，就删掉重新创建试试吧。</p>
 <h3 id="设置API权限"><a class="header-anchor" href="#设置API权限"></a>设置API权限</h3>
 <p>依次点击<strong>API权限</strong>、<strong>添加权限</strong>、<strong>Microsoft Graph</strong>、<strong>委托的权限</strong>，将以下权限全部勾选上 Files.Read, Files.ReadWrite, Files.Read.All, Files.ReadWrite.All, offline_access, User.Read, Sites.Read.All</p>
-<p><img src="https://cdn.jsdelivr.net/gh/zhuweitung/picbed/202206221940284.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/202206221940284.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>最终的权限列表</p>
-<p><img src="https://cdn.jsdelivr.net/gh/zhuweitung/picbed/202206221944446.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/202206221944446.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h2 id="获取token"><a class="header-anchor" href="#获取token"></a>获取token</h2>
 <h3 id="在windows上安装rclone"><a class="header-anchor" href="#在windows上安装rclone"></a>在windows上安装rclone</h3>
 <p>在 <a target="_blank" rel="noopener" href="https://rclone.org/downloads/">官方</a>下载windows版本并解压</p>
