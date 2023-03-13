@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/46a7ac4e17fd8f2dd0876a95502faf5e.png">
 <meta property="article:published_time" content="2021-06-17T05:30:54.000Z">
-<meta property="article:modified_time" content="2023-03-12T09:24:31.422Z">
+<meta property="article:modified_time" content="2023-03-13T13:59:54.821Z">
 <meta property="article:author" content="zhuweitung">
 <meta property="article:tag" content="java">
 <meta property="article:tag" content="springboot">
@@ -256,7 +256,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          9.8k 字
+          16k 字
         
       </span>
     
@@ -267,7 +267,7 @@
         
         
         
-          82 分钟
+          136 分钟
         
       </span>
     
@@ -645,6 +645,86 @@
 <p>Spring Boot同时支持静态和模板化的欢迎页面。 它首先在配置的静态内容位置寻找一个 <code>index.html</code> 文件。 如果没有找到，它就会寻找 <code>index</code> 模板。 如果找到了其中之一，它就会自动作为应用程序的欢迎页面使用。</p>
 <p>访问 项目访问根路径/或项目访问根路径/index.html 会解析到欢迎页面</p>
 <p>若配置了自定义的静态资源路径则失效</p>
+<h5 id="静态内容加载原理"><a class="header-anchor" href="#静态内容加载原理"></a>静态内容加载原理</h5>
+<ul>
+<li>
+<p>Springboot启动后加载各依赖组件的自动配置类</p>
+</li>
+<li>
+<p>SpringMVC功能的自动配置类为 <code>WebMvcAutoConfiguration</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@AutoConfiguration(after = &#123; DispatcherServletAutoConfiguration.class, TaskExecutionAutoConfiguration.class,</span><br><span class="hljs-meta">		ValidationAutoConfiguration.class &#125;)</span><br><span class="hljs-meta">@ConditionalOnWebApplication(type = Type.SERVLET)</span><br><span class="hljs-meta">@ConditionalOnClass(&#123; Servlet.class, DispatcherServlet.class, WebMvcConfigurer.class &#125;)</span><br><span class="hljs-meta">@ConditionalOnMissingBean(WebMvcConfigurationSupport.class)</span><br><span class="hljs-meta">@AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE + 10)</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">WebMvcAutoConfiguration</span> &#123;&#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p>内部有一个<code>WebMvcAutoConfigurationAdapter</code>配置类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Configuration(proxyBeanMethods = false)</span><br><span class="hljs-meta">@Import(EnableWebMvcConfiguration.class)</span><br><span class="hljs-meta">@EnableConfigurationProperties(&#123; WebMvcProperties.class, WebProperties.class &#125;)</span><br><span class="hljs-meta">@Order(0)</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">WebMvcAutoConfigurationAdapter</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">WebMvcConfigurer</span>, ServletContextAware &#123;&#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p>将配置文件与<code>WebMvcProperties</code>和<code>WebProperties</code>类进行绑定</p>
+</li>
+<li>
+<p>执行<code>addResourceHandlers</code>方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Override</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">addResourceHandlers</span><span class="hljs-params">(ResourceHandlerRegistry registry)</span> &#123;<br>    <span class="hljs-comment">// add-mappings=false时禁用静态资源访问</span><br>	<span class="hljs-keyword">if</span> (!<span class="hljs-built_in">this</span>.resourceProperties.isAddMappings()) &#123;<br>		logger.debug(<span class="hljs-string">&quot;Default resource handling disabled&quot;</span>);<br>		<span class="hljs-keyword">return</span>;<br>	&#125;<br>    <span class="hljs-comment">// 将访问 /webjars/** 的请求加入到资源处理器</span><br>	addResourceHandler(registry, <span class="hljs-string">&quot;/webjars/**&quot;</span>, <span class="hljs-string">&quot;classpath:/META-INF/resources/webjars/&quot;</span>);<br>    <span class="hljs-comment">// 将访问 static-path-pattern 配置的请求加入到资源处理器，并指定资源路径为 static-locations 配置的值</span><br>	addResourceHandler(registry, <span class="hljs-built_in">this</span>.mvcProperties.getStaticPathPattern(), (registration) -&gt; &#123;<br>		registration.addResourceLocations(<span class="hljs-built_in">this</span>.resourceProperties.getStaticLocations());<br>		<span class="hljs-keyword">if</span> (<span class="hljs-built_in">this</span>.servletContext != <span class="hljs-literal">null</span>) &#123;<br>			<span class="hljs-type">ServletContextResource</span> <span class="hljs-variable">resource</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ServletContextResource</span>(<span class="hljs-built_in">this</span>.servletContext, SERVLET_LOCATION);<br>			registration.addResourceLocations(resource);<br>		&#125;<br>	&#125;);<br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="请求参数处理"><a class="header-anchor" href="#请求参数处理"></a>请求参数处理</h4>
+<h5 id="HiddenHttpMethodFilter"><a class="header-anchor" href="#HiddenHttpMethodFilter"></a>HiddenHttpMethodFilter</h5>
+<p>通过表单隐藏域，以post方式提交一个<code>_method</code>字段给服务器，通过HiddenHttpMethodFilter处理包装后，请求的method变为了传入的合法方式，以此实现RESTful风格的接口</p>
+<p>WebMvcAutoConfiguration类中有以下代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Bean</span><br><span class="hljs-meta">@ConditionalOnMissingBean(HiddenHttpMethodFilter.class)</span><br><span class="hljs-meta">@ConditionalOnProperty(prefix = &quot;spring.mvc.hiddenmethod.filter&quot;, name = &quot;enabled&quot;)</span><br><span class="hljs-keyword">public</span> OrderedHiddenHttpMethodFilter <span class="hljs-title function_">hiddenHttpMethodFilter</span><span class="hljs-params">()</span> &#123;<br>	<span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">OrderedHiddenHttpMethodFilter</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>通过上面代码可以知道，要开启还需要进行以下配置</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs yml"><span class="hljs-attr">spring:</span><br>  <span class="hljs-attr">mvc:</span><br>    <span class="hljs-attr">hiddenmethod:</span><br>      <span class="hljs-attr">filter:</span><br>        <span class="hljs-attr">enabled:</span> <span class="hljs-literal">true</span><br></code></pre></td></tr></table></figure>
+<h5 id="请求映射原理"><a class="header-anchor" href="#请求映射原理"></a>请求映射原理</h5>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/cfd4bcf2373372f73b45ae9a0a10e9c9.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>SpringMVC功能分析都从 org.springframework.web.servlet.DispatcherServlet-&gt;doDispatch()开始</p>
+<p>doDispatch调用getHandler方法获取处理器</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">protected</span> HandlerExecutionChain <span class="hljs-title function_">getHandler</span><span class="hljs-params">(HttpServletRequest request)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>	<span class="hljs-keyword">if</span> (<span class="hljs-built_in">this</span>.handlerMappings != <span class="hljs-literal">null</span>) &#123;<br>		<span class="hljs-keyword">for</span> (HandlerMapping mapping : <span class="hljs-built_in">this</span>.handlerMappings) &#123;<br>			<span class="hljs-type">HandlerExecutionChain</span> <span class="hljs-variable">handler</span> <span class="hljs-operator">=</span> mapping.getHandler(request);<br>			<span class="hljs-keyword">if</span> (handler != <span class="hljs-literal">null</span>) &#123;<br>				<span class="hljs-keyword">return</span> handler;<br>			&#125;<br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/799bf7b255e380706cd079b62c6efc00.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><code>RequestMappingHandlerMapping</code>保存了所有@RequestMapping和handler的映射规则</p>
+<p>所有的请求映射都在HandlerMapping中</p>
+<ul>
+<li>SpringBoot自动配置了 WelcomePageHandlerMapping、RequestMappingHandlerMapping</li>
+<li>请求进来后会遍历所有的HandlerMapping，来查找映射的handler</li>
+<li>当需要自定义映射处理时，可以自己自定义HandlerMapping，并注册到容器中</li>
+</ul>
+<h4 id="参数注解"><a class="header-anchor" href="#参数注解"></a>参数注解</h4>
+<p>常见的有@PathVariable、@RequestHeader、@ModelAttribute、@RequestParam、@MatrixVariable、@CookieValue、@RequestBody</p>
+<h5 id="MatrixVariable"><a class="header-anchor" href="#MatrixVariable"></a>@MatrixVariable</h5>
+<p>@MatrixVariable即矩阵变量</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//1、请求路径：/person/lisi;age=30,hobby=a,b,c/wangmei;age=29,hobby=e,f</span><br><span class="hljs-comment">//2、SpringBoot默认是禁用了矩阵变量的功能，需要手动开启</span><br><span class="hljs-comment">// 原理：对于路径的处理通过UrlPathHelper进行解析，它的removeSemicolonContent属性表示会移除分号后的内，开启矩阵变量功能需要实现WebMvcConfigurer接口并重写configurePathMatch，并将UrlPathHelper的removeSemicolonContent设置为false</span><br><span class="hljs-comment">//3、矩阵变量必须有url路径变量才能被解析</span><br><br><span class="hljs-meta">@GetMapping(&quot;/person/&#123;father&#125;/&#123;mother&#125;&quot;)</span><br><span class="hljs-keyword">public</span> String <span class="hljs-title function_">family</span><span class="hljs-params">(<span class="hljs-meta">@PathVariable(&quot;father&quot;)</span> String father,</span><br><span class="hljs-params">                  <span class="hljs-meta">@MatrixVariable(pathVar = &quot;father&quot;, value = &quot;age&quot;)</span> Integer fatherAge,</span><br><span class="hljs-params">                  <span class="hljs-meta">@MatrixVariable(pathVar = &quot;father&quot;, value = &quot;hobby&quot;)</span> List&lt;String&gt; fatherHobby,</span><br><span class="hljs-params">                  <span class="hljs-meta">@PathVariable(&quot;mother&quot;)</span> String mother,</span><br><span class="hljs-params">                  <span class="hljs-meta">@MatrixVariable(pathVar = &quot;mother&quot;, value = &quot;age&quot;)</span> Integer motherAge,</span><br><span class="hljs-params">                  <span class="hljs-meta">@MatrixVariable(pathVar = &quot;mother&quot;, value = &quot;hobby&quot;)</span> List&lt;String&gt; motherHobby)</span> &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;family&quot;</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="参数处理原理"><a class="header-anchor" href="#参数处理原理"></a>参数处理原理</h4>
+<ul>
+<li>
+<p>doDispatch方法中先充HandlerMapping中找到处理请求的handler（Controller.methd()）</p>
+</li>
+<li>
+<p>找到当前handler的适配器HandlerAdapter（RequestMappingHandlerAdapter）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">protected</span> HandlerAdapter <span class="hljs-title function_">getHandlerAdapter</span><span class="hljs-params">(Object handler)</span> <span class="hljs-keyword">throws</span> ServletException &#123;<br>	<span class="hljs-keyword">if</span> (<span class="hljs-built_in">this</span>.handlerAdapters != <span class="hljs-literal">null</span>) &#123;<br>		<span class="hljs-keyword">for</span> (HandlerAdapter adapter : <span class="hljs-built_in">this</span>.handlerAdapters) &#123;<br>			<span class="hljs-keyword">if</span> (adapter.supports(handler)) &#123;<br>				<span class="hljs-keyword">return</span> adapter;<br>			&#125;<br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ServletException</span>(<span class="hljs-string">&quot;No adapter for handler [&quot;</span> + handler +<br>			<span class="hljs-string">&quot;]: The DispatcherServlet configuration needs to include a HandlerAdapter that supports this handler&quot;</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/2af5782c18afbf791cd8dcff39da24a9.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<ul>
+<li>RequestMappingHandlerAdapter：支持方法上标注@RequestMapping</li>
+<li>HandlerFunctionAdapter：支持函数式编程的</li>
+</ul>
+</li>
+<li>
+<p>执行适配器的handle方法，调用<code>RequestMappingHandlerAdapter</code>的<code>handleInternal</code>方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Override</span><br><span class="hljs-keyword">protected</span> ModelAndView <span class="hljs-title function_">handleInternal</span><span class="hljs-params">(HttpServletRequest request,</span><br><span class="hljs-params">		HttpServletResponse response, HandlerMethod handlerMethod)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>	ModelAndView mav;<br>	checkRequest(request);<br>    <span class="hljs-comment">// ...</span><br>	mav = invokeHandlerMethod(request, response, handlerMethod);<br>    <span class="hljs-comment">// ...</span><br>	<span class="hljs-keyword">return</span> mav;<br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p>执行invokeHandlerMethod方法，方法内会设置<code>参数解析器</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">if</span> (<span class="hljs-built_in">this</span>.argumentResolvers != <span class="hljs-literal">null</span>) &#123;<br>	invocableMethod.setHandlerMethodArgumentResolvers(<span class="hljs-built_in">this</span>.argumentResolvers);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/8f07c7c801046dfeb6203dde7f61807f.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+</ul>
+<p>​			由上面的参数解析器可以知道，SpringMVC目标方法能写多少种参数类型，取决于参数解析器</p>
+<ul>
+<li>
+<p>调用invokeAndHandle-&gt;invokeForRequest-&gt;getMethodArgumentValues方法，解析参数</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">protected</span> Object[] getMethodArgumentValues(NativeWebRequest request, <span class="hljs-meta">@Nullable</span> ModelAndViewContainer mavContainer,<br>		Object... providedArgs) <span class="hljs-keyword">throws</span> Exception &#123;<br>	MethodParameter[] parameters = getMethodParameters();<br>	<span class="hljs-keyword">if</span> (ObjectUtils.isEmpty(parameters)) &#123;<br>		<span class="hljs-keyword">return</span> EMPTY_ARGS;<br>	&#125;<br>	Object[] args = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Object</span>[parameters.length];<br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; parameters.length; i++) &#123;<br>		<span class="hljs-type">MethodParameter</span> <span class="hljs-variable">parameter</span> <span class="hljs-operator">=</span> parameters[i];<br>		parameter.initParameterNameDiscovery(<span class="hljs-built_in">this</span>.parameterNameDiscoverer);<br>		args[i] = findProvidedArgument(parameter, providedArgs);<br>		<span class="hljs-keyword">if</span> (args[i] != <span class="hljs-literal">null</span>) &#123;<br>			<span class="hljs-keyword">continue</span>;<br>		&#125;<br>        <span class="hljs-comment">// 判断是否支持解析当前参数，内部会循环判断解析器是否支持</span><br>		<span class="hljs-keyword">if</span> (!<span class="hljs-built_in">this</span>.resolvers.supportsParameter(parameter)) &#123;<br>			<span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">IllegalStateException</span>(formatArgumentError(parameter, <span class="hljs-string">&quot;No suitable resolver&quot;</span>));<br>		&#125;<br>		<span class="hljs-keyword">try</span> &#123;<br>            <span class="hljs-comment">// 执行参数解析</span><br>			args[i] = <span class="hljs-built_in">this</span>.resolvers.resolveArgument(parameter, mavContainer, request, <span class="hljs-built_in">this</span>.dataBinderFactory);<br>		&#125;<br>		<span class="hljs-keyword">catch</span> (Exception ex) &#123;<br>			<span class="hljs-comment">// Leave stack trace for later, exception may actually be resolved and handled...</span><br>			<span class="hljs-keyword">if</span> (logger.isDebugEnabled()) &#123;<br>				<span class="hljs-type">String</span> <span class="hljs-variable">exMsg</span> <span class="hljs-operator">=</span> ex.getMessage();<br>				<span class="hljs-keyword">if</span> (exMsg != <span class="hljs-literal">null</span> &amp;&amp; !exMsg.contains(parameter.getExecutable().toGenericString())) &#123;<br>					logger.debug(formatArgumentError(parameter, exMsg));<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">throw</span> ex;<br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">return</span> args;<br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p>获取参数后通过反射执行真正的处理方法，并返回值，再对返回值进行解析</p>
+</li>
+</ul>
 
                 
               </div>
