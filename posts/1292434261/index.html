@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/46a7ac4e17fd8f2dd0876a95502faf5e.png">
 <meta property="article:published_time" content="2021-06-17T05:30:54.000Z">
-<meta property="article:modified_time" content="2023-03-13T13:59:54.821Z">
+<meta property="article:modified_time" content="2023-03-15T13:58:15.867Z">
 <meta property="article:author" content="zhuweitung">
 <meta property="article:tag" content="java">
 <meta property="article:tag" content="springboot">
@@ -256,7 +256,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          16k 字
+          24k 字
         
       </span>
     
@@ -267,7 +267,7 @@
         
         
         
-          136 分钟
+          202 分钟
         
       </span>
     
@@ -722,9 +722,187 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">protected</span> Object[] getMethodArgumentValues(NativeWebRequest request, <span class="hljs-meta">@Nullable</span> ModelAndViewContainer mavContainer,<br>		Object... providedArgs) <span class="hljs-keyword">throws</span> Exception &#123;<br>	MethodParameter[] parameters = getMethodParameters();<br>	<span class="hljs-keyword">if</span> (ObjectUtils.isEmpty(parameters)) &#123;<br>		<span class="hljs-keyword">return</span> EMPTY_ARGS;<br>	&#125;<br>	Object[] args = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Object</span>[parameters.length];<br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; parameters.length; i++) &#123;<br>		<span class="hljs-type">MethodParameter</span> <span class="hljs-variable">parameter</span> <span class="hljs-operator">=</span> parameters[i];<br>		parameter.initParameterNameDiscovery(<span class="hljs-built_in">this</span>.parameterNameDiscoverer);<br>		args[i] = findProvidedArgument(parameter, providedArgs);<br>		<span class="hljs-keyword">if</span> (args[i] != <span class="hljs-literal">null</span>) &#123;<br>			<span class="hljs-keyword">continue</span>;<br>		&#125;<br>        <span class="hljs-comment">// 判断是否支持解析当前参数，内部会循环判断解析器是否支持</span><br>		<span class="hljs-keyword">if</span> (!<span class="hljs-built_in">this</span>.resolvers.supportsParameter(parameter)) &#123;<br>			<span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">IllegalStateException</span>(formatArgumentError(parameter, <span class="hljs-string">&quot;No suitable resolver&quot;</span>));<br>		&#125;<br>		<span class="hljs-keyword">try</span> &#123;<br>            <span class="hljs-comment">// 执行参数解析</span><br>			args[i] = <span class="hljs-built_in">this</span>.resolvers.resolveArgument(parameter, mavContainer, request, <span class="hljs-built_in">this</span>.dataBinderFactory);<br>		&#125;<br>		<span class="hljs-keyword">catch</span> (Exception ex) &#123;<br>			<span class="hljs-comment">// Leave stack trace for later, exception may actually be resolved and handled...</span><br>			<span class="hljs-keyword">if</span> (logger.isDebugEnabled()) &#123;<br>				<span class="hljs-type">String</span> <span class="hljs-variable">exMsg</span> <span class="hljs-operator">=</span> ex.getMessage();<br>				<span class="hljs-keyword">if</span> (exMsg != <span class="hljs-literal">null</span> &amp;&amp; !exMsg.contains(parameter.getExecutable().toGenericString())) &#123;<br>					logger.debug(formatArgumentError(parameter, exMsg));<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">throw</span> ex;<br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">return</span> args;<br>&#125;<br></code></pre></td></tr></table></figure>
 </li>
 <li>
-<p>获取参数后通过反射执行真正的处理方法，并返回值，再对返回值进行解析</p>
+<p><code>resolveArgument</code>方法中会创建<code>WebDataBinder</code>对象，该对象中的<code>GenericConversionService</code>属性包含大量类型转换器，用于将字符串转换为对应的类型</p>
+</li>
+<li>
+<p>将所有的数据都放在<code>ModelAndViewContainer</code>，包含要去的页面地址，以及Model（BingdingAwareModelMap）数据</p>
+</li>
+<li>
+<p>执行<code>processDispatchResult</code>-&gt;render-&gt;<code>renderMergedOutputModel</code></p>
 </li>
 </ul>
+<h5 id="自定义类型转换器"><a class="header-anchor" href="#自定义类型转换器"></a>自定义类型转换器</h5>
+<p>前端提交数据格式</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/116f24261fc53408f1f16207bf80d904.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>后端接收格式</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@PostMapping(&quot;create&quot;)</span><br><span class="hljs-keyword">public</span> String <span class="hljs-title function_">create</span><span class="hljs-params">(Demo demo)</span> &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;success&quot;</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>类型转换器</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Configuration</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">WebConfig</span> &#123;<br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-keyword">public</span> WebMvcConfigurer <span class="hljs-title function_">webMvcConfigurer</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">WebMvcConfigurer</span>() &#123;<br>            <span class="hljs-meta">@Override</span><br>            <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">addFormatters</span><span class="hljs-params">(FormatterRegistry registry)</span> &#123;<br>                <span class="hljs-comment">// 添加自定义类型转换器</span><br>                registry.addConverter(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Converter</span>&lt;String, Demo&gt;() &#123;<br>                    <span class="hljs-meta">@Override</span><br>                    <span class="hljs-keyword">public</span> Demo <span class="hljs-title function_">convert</span><span class="hljs-params">(String source)</span> &#123;<br>                        <span class="hljs-keyword">if</span> (source != <span class="hljs-literal">null</span>) &#123;<br>                            <span class="hljs-type">Demo</span> <span class="hljs-variable">demo</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Demo</span>();<br>                            String[] parts = source.split(<span class="hljs-string">&quot;@&quot;</span>);<br>                            <span class="hljs-keyword">if</span> (parts.length &gt; <span class="hljs-number">0</span>) &#123;<br>                                <span class="hljs-keyword">try</span> &#123;<br>                                    demo.setId(Integer.parseInt(parts[<span class="hljs-number">0</span>]));<br>                                &#125; <span class="hljs-keyword">catch</span> (NumberFormatException e) &#123;&#125;<br>                            &#125;<br>                            <span class="hljs-keyword">if</span> (parts.length &gt; <span class="hljs-number">1</span>) &#123;<br>                                demo.setName(parts[<span class="hljs-number">1</span>]);<br>                            &#125;<br>                            <span class="hljs-keyword">return</span> demo;<br>                        &#125;<br>                        <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>                    &#125;<br>                &#125;);<br>            &#125;<br>        &#125;;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="数据响应与内容协商"><a class="header-anchor" href="#数据响应与内容协商"></a>数据响应与内容协商</h4>
+<h5 id="数据响应流程"><a class="header-anchor" href="#数据响应流程"></a>数据响应流程</h5>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@GetMapping(&quot;demo&quot;)</span><br><span class="hljs-keyword">public</span> Demo <span class="hljs-title function_">demo</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Demo</span>(<span class="hljs-number">666</span>, <span class="hljs-string">&quot;老铁&quot;</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>请求上面接口后，返回值处理过程如下</p>
+<ul>
+<li>
+<p>执行invokeForRequest方法后获取到返回值，遍历返回值解析器对返回值进行处理</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">try</span> &#123;<br>	<span class="hljs-built_in">this</span>.returnValueHandlers.handleReturnValue(<br>			returnValue, getReturnValueType(returnValue), mavContainer, webRequest);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/1e1db88d634eeddbb64f11d8215e75a6.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<ul>
+<li>SpringMVC支持以下类型的返回值
+<ul>
+<li>ModelAndView</li>
+<li>Model</li>
+<li>View</li>
+<li>ResponseBodyEmitter</li>
+<li>StreamingResponseBody</li>
+<li>HttpEntity</li>
+<li>HttpHeaders</li>
+<li>Callable</li>
+<li>DeferredResult</li>
+<li>AsyncTask</li>
+<li>方法有@ModelAttribute注解</li>
+<li>@ResponseBody注解</li>
+<li>void或字符串</li>
+<li>Map</li>
+<li>在默认解析模式下，对于任何不是简单类型的返回值类型</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>遍历找到支持返回值类型的解析器后，执行解析器的<code>handleReturnValue</code>方法</p>
+</li>
+<li>
+<p>RequestResponseBodyMethodProcessor处理器可以处理加了@ResponseBody注解的</p>
+</li>
+<li>
+<p>执行<code>writeWithMessageConverters</code>方式，会利用消息转换器（MessageConverters）来处理</p>
+</li>
+<li>
+<p>若返回数据不是流类型（InputStreamResource、Resource）的，会进行<code>内容协商</code>（浏览器在请求头中告诉服务器它可以接受什么类型的内容）</p>
+</li>
+<li>
+<p>内容协商完成获取到<code>mediaType</code></p>
+</li>
+<li>
+<p>遍历所有消息转换器，判断是否支持（supports）返回值类型，是否可以写为（canWrite）mediaType类型的内容</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/8e215da64665a289e0202bdee6795c40.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<ul>
+<li>byte：[application/octet-stream, */*]</li>
+<li>String：[text/plain, */*]</li>
+<li>String：[text/plain, */*]</li>
+<li>Resource：[*/*]</li>
+<li>ResourceRegion：[application/xml, text/xml, application/*+xml]</li>
+<li>DOMSource、SAXSource、StAXSource、StreamSource、Source</li>
+<li>MultiValueMap：[application/x-www-form-urlencoded, multipart/form-data, multipart/mixed]</li>
+<li>任意类型：[application/json, application/*+json]</li>
+<li>任意类型：[application/json, application/*+json]</li>
+<li>支持注解方式xml处理</li>
+</ul>
+</li>
+<li>
+<p>最终 MappingJackson2HttpMessageConverter  把对象转为JSON写到响应体中</p>
+</li>
+</ul>
+<h5 id="内容协商原理"><a class="header-anchor" href="#内容协商原理"></a>内容协商原理</h5>
+<p>客户端通过请求头中不同的<code>Accept</code>值来告诉服务器本客户端可以接收的数据类型</p>
+<p>内容协商的代码在<code>AbstractMessageConverterMethodProcessor</code>的<code>writeWithMessageConverters</code>方法中</p>
+<ul>
+<li>
+<p>先从响应头中获取媒体类型，若没有则继续协商</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">MediaType</span> <span class="hljs-variable">selectedMediaType</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br><span class="hljs-type">MediaType</span> <span class="hljs-variable">contentType</span> <span class="hljs-operator">=</span> outputMessage.getHeaders().getContentType();<br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p>从请求头中获取客户端支持的类型</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">acceptableTypes = getAcceptableMediaTypes(request);<br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p>遍历内容协商策略，默认使用基于请求头的策略，返回请求头中描述的支持的类型</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Override</span><br><span class="hljs-keyword">public</span> List&lt;MediaType&gt; <span class="hljs-title function_">resolveMediaTypes</span><span class="hljs-params">(NativeWebRequest request)</span> <span class="hljs-keyword">throws</span> HttpMediaTypeNotAcceptableException &#123;<br>	<span class="hljs-keyword">for</span> (ContentNegotiationStrategy strategy : <span class="hljs-built_in">this</span>.strategies) &#123;<br>		List&lt;MediaType&gt; mediaTypes = strategy.resolveMediaTypes(request);<br>		<span class="hljs-keyword">if</span> (mediaTypes.equals(MEDIA_TYPE_ALL_LIST)) &#123;<br>			<span class="hljs-keyword">continue</span>;<br>		&#125;<br>		<span class="hljs-keyword">return</span> mediaTypes;<br>	&#125;<br>	<span class="hljs-keyword">return</span> MEDIA_TYPE_ALL_LIST;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/18d12eb10c9610e14ae011d4b89e3b51.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+<li>
+<p>获取服务端能生成的媒体类型</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">List&lt;MediaType&gt; producibleTypes = getProducibleMediaTypes(request, valueType, targetType);<br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p>获取服务端能生成且客户端支持的媒体类型</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java">List&lt;MediaType&gt; mediaTypesToUse = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;();<br><span class="hljs-keyword">for</span> (MediaType requestedType : acceptableTypes) &#123;<br>	<span class="hljs-keyword">for</span> (MediaType producibleType : producibleTypes) &#123;<br>		<span class="hljs-keyword">if</span> (requestedType.isCompatibleWith(producibleType)) &#123;<br>			mediaTypesToUse.add(getMostSpecificMediaType(requestedType, producibleType));<br>		&#125;<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p>按媒体类型权重值进行排序，并以第一个媒体类型作为最终使用的类型</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java">MediaType.sortBySpecificityAndQuality(mediaTypesToUse);<br><br><span class="hljs-keyword">for</span> (MediaType mediaType : mediaTypesToUse) &#123;<br>	<span class="hljs-keyword">if</span> (mediaType.isConcrete()) &#123;<br>		selectedMediaType = mediaType;<br>		<span class="hljs-keyword">break</span>;<br>	&#125;<br>	<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (mediaType.isPresentIn(ALL_APPLICATION_MEDIA_TYPES)) &#123;<br>		selectedMediaType = MediaType.APPLICATION_OCTET_STREAM;<br>		<span class="hljs-keyword">break</span>;<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p>遍历消息解析器，获取支持生成对应媒体类型的解析器</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">for</span> (HttpMessageConverter&lt;?&gt; converter : <span class="hljs-built_in">this</span>.messageConverters) &#123;<br>    <span class="hljs-comment">// ...</span><br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p>调用消息解析器的write方法将数据写到响应中</p>
+</li>
+</ul>
+<h5 id="开启基于请求参数方式内容协商功能"><a class="header-anchor" href="#开启基于请求参数方式内容协商功能"></a>开启基于请求参数方式内容协商功能</h5>
+<p>修改配置文件：</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs yml"><span class="hljs-attr">spring:</span><br>    <span class="hljs-attr">contentnegotiation:</span><br>      <span class="hljs-attr">favor-parameter:</span> <span class="hljs-literal">true</span> <span class="hljs-comment"># 开启请求参数内容协商模式</span><br></code></pre></td></tr></table></figure>
+<p>请求格式：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">http:<span class="hljs-regexp">//</span>localhost:<span class="hljs-number">8123</span><span class="hljs-regexp">/test/</span>demo?format=xml<br></code></pre></td></tr></table></figure>
+<h5 id="自定义消息转换器"><a class="header-anchor" href="#自定义消息转换器"></a>自定义消息转换器</h5>
+<p>实现接口<code>HttpMessageConverter</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">CustomMessageConverter</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">HttpMessageConverter</span>&lt;Demo&gt; &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">canRead</span><span class="hljs-params">(Class&lt;?&gt; clazz, MediaType mediaType)</span> &#123;<br>        <span class="hljs-comment">// 不进行读取解析，直接返回false</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>    &#125;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">canWrite</span><span class="hljs-params">(Class&lt;?&gt; clazz, MediaType mediaType)</span> &#123;<br>        <span class="hljs-comment">// 对转换的类型做限制</span><br>        <span class="hljs-keyword">return</span> clazz.isAssignableFrom(Demo.class);<br>    &#125;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> List&lt;MediaType&gt; <span class="hljs-title function_">getSupportedMediaTypes</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-comment">// 自定义媒体类型</span><br>        <span class="hljs-keyword">return</span> MediaType.parseMediaTypes(<span class="hljs-string">&quot;application/z-custom&quot;</span>);<br>    &#125;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> Demo <span class="hljs-title function_">read</span><span class="hljs-params">(Class&lt;? extends Demo&gt; clazz, HttpInputMessage inputMessage)</span> <span class="hljs-keyword">throws</span> IOException, HttpMessageNotReadableException &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>    &#125;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">write</span><span class="hljs-params">(Demo demo, MediaType contentType, HttpOutputMessage outputMessage)</span> <span class="hljs-keyword">throws</span> IOException, HttpMessageNotWritableException &#123;<br>        <span class="hljs-comment">// 将数据以需要的形式写入到响应中</span><br>        outputMessage.getBody().write(demo.toString().getBytes());<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>注册自定义的消息转换器</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Bean</span><br><span class="hljs-keyword">public</span> WebMvcConfigurer <span class="hljs-title function_">webMvcConfigurer</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">WebMvcConfigurer</span>() &#123;<br>        <span class="hljs-comment">// 添加自定义消息转换器</span><br>        <span class="hljs-meta">@Override</span><br>        <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">extendMessageConverters</span><span class="hljs-params">(List&lt;HttpMessageConverter&lt;?&gt;&gt; converters)</span> &#123;<br>            converters.add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">CustomMessageConverter</span>());<br>        &#125;<br>    &#125;;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>添加自定义类型到基于请求参数方式内容协商策略中</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Bean</span><br><span class="hljs-keyword">public</span> WebMvcConfigurer <span class="hljs-title function_">webMvcConfigurer</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">WebMvcConfigurer</span>() &#123;<br>        <span class="hljs-comment">// 自定义内容协商策略</span><br>        <span class="hljs-meta">@Override</span><br>        <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">configureContentNegotiation</span><span class="hljs-params">(ContentNegotiationConfigurer configurer)</span> &#123;<br>            Map&lt;String, MediaType&gt; mediaTypes = <span class="hljs-keyword">new</span> <span class="hljs-title class_">HashMap</span>&lt;&gt;();<br>            mediaTypes.put(<span class="hljs-string">&quot;json&quot;</span>, MediaType.APPLICATION_JSON);<br>            mediaTypes.put(<span class="hljs-string">&quot;xml&quot;</span>, MediaType.APPLICATION_XML);<br>            mediaTypes.put(<span class="hljs-string">&quot;z-custom&quot;</span>, MediaType.parseMediaType(<span class="hljs-string">&quot;application/z-custom&quot;</span>));<br>            configurer.strategies(Arrays.asList(<span class="hljs-keyword">new</span> <span class="hljs-title class_">ParameterContentNegotiationStrategy</span>(mediaTypes),<br>                                                <span class="hljs-keyword">new</span> <span class="hljs-title class_">HeaderContentNegotiationStrategy</span>()));<br>        &#125;<br>    &#125;;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>添加自定义的功能有可能会覆盖默认的很多功能，导致一些默认功能失效，需要谨慎使用</p>
+<h4 id="视图解析原理"><a class="header-anchor" href="#视图解析原理"></a>视图解析原理</h4>
+<ul>
+<li>入口还是DispatcherServlet的<code>doDispatch</code>方法</li>
+<li>HandlerAdapter通过反射执行完控制器方法后都会返回<code>ModelAndView</code>对象，该对象包含数据和视图地址</li>
+<li>执行<code>processDispatchResult</code>方法，决定页面如何响应</li>
+<li>调用render(mv, request, response)方法进行页面渲染逻辑</li>
+<li>通过resolveViewName方法获取到View对象
+<ul>
+<li>ContentNegotiationViewResolver中包含了所有支持的视图解析器，通过遍历视图解析器获取支持的解析器，然后解析得到视图对象</li>
+</ul>
+</li>
+<li>调用view.render(mv.getModelInternal(), request, response)进行页面渲染工作</li>
+</ul>
+<h4 id="拦截器"><a class="header-anchor" href="#拦截器"></a>拦截器</h4>
+<p>实现<code>HandlerInterceptor</code>接口</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AdminInterceptor</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">HandlerInterceptor</span> &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">preHandle</span><span class="hljs-params">(HttpServletRequest request, HttpServletResponse response, Object handler)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;1&quot;</span>.equals(request.getParameter(<span class="hljs-string">&quot;force&quot;</span>));<br>    &#125;<br>    <span class="hljs-comment">// 根据需要实现postHandle、afterCompletion方法</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>注册拦截器</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Bean</span><br><span class="hljs-keyword">public</span> WebMvcConfigurer <span class="hljs-title function_">webMvcConfigurer</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">WebMvcConfigurer</span>() &#123;<br>        <span class="hljs-comment">// 自定义拦截器</span><br>        <span class="hljs-meta">@Override</span><br>        <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">addInterceptors</span><span class="hljs-params">(InterceptorRegistry registry)</span> &#123;<br>            registry.addInterceptor(<span class="hljs-keyword">new</span> <span class="hljs-title class_">AdminInterceptor</span>())<br>                    .addPathPatterns(<span class="hljs-string">&quot;/admin/**&quot;</span>)<br>                    .excludePathPatterns(<span class="hljs-string">&quot;/admin/hello&quot;</span>);<br>        &#125;<br>    &#125;;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h5 id="拦截器原理"><a class="header-anchor" href="#拦截器原理"></a>拦截器原理</h5>
+<ul>
+<li>
+<p>doDispatch方法中调用<code>getHandler</code>获取到<code>HandlerExecutionChain</code>对象，该对象包含了处理器和一个拦截器列表</p>
+</li>
+<li>
+<p>按顺序执行所有拦截器的preHandle方法</p>
+</li>
+<li>
+<p>若所有拦截器都放行，则执行目标方法</p>
+<ul>
+<li>
+<p>多个拦截器的执行顺序和拦截器在SpringMVC的配置文件的配置顺序有关</p>
+</li>
+<li>
+<p>preHandle()会按照配置的顺序执行，而postHandle()和afterComplation()会按照配置的反序执行</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs stylus">com<span class="hljs-selector-class">.zhuweitung</span><span class="hljs-selector-class">.springboot2</span><span class="hljs-selector-class">.interceptor</span><span class="hljs-selector-class">.GlobalHandlerInterceptor</span> preHandle<br>com<span class="hljs-selector-class">.zhuweitung</span><span class="hljs-selector-class">.springboot2</span><span class="hljs-selector-class">.interceptor</span><span class="hljs-selector-class">.AdminHandlerInterceptor</span> preHandle<br>com<span class="hljs-selector-class">.zhuweitung</span><span class="hljs-selector-class">.springboot2</span><span class="hljs-selector-class">.interceptor</span><span class="hljs-selector-class">.AdminHandlerInterceptor</span> postHandle<br>com<span class="hljs-selector-class">.zhuweitung</span><span class="hljs-selector-class">.springboot2</span><span class="hljs-selector-class">.interceptor</span><span class="hljs-selector-class">.GlobalHandlerInterceptor</span> postHandle<br>com<span class="hljs-selector-class">.zhuweitung</span><span class="hljs-selector-class">.springboot2</span><span class="hljs-selector-class">.interceptor</span><span class="hljs-selector-class">.AdminHandlerInterceptor</span> afterCompletion<br>com<span class="hljs-selector-class">.zhuweitung</span><span class="hljs-selector-class">.springboot2</span><span class="hljs-selector-class">.interceptor</span><span class="hljs-selector-class">.GlobalHandlerInterceptor</span> afterCompletion<br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>
+<p>若某个拦截器执行preHandle没有放行</p>
+<ul>
+<li>
+<p>preHandle()返回false和它之前的拦截器的preHandle()都会执行，postHandle()都不执行，返回false的拦截器之前的拦截器的afterComplation()会执行</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs stylus">com<span class="hljs-selector-class">.zhuweitung</span><span class="hljs-selector-class">.springboot2</span><span class="hljs-selector-class">.interceptor</span><span class="hljs-selector-class">.GlobalHandlerInterceptor</span> preHandle<br>com<span class="hljs-selector-class">.zhuweitung</span><span class="hljs-selector-class">.springboot2</span><span class="hljs-selector-class">.interceptor</span><span class="hljs-selector-class">.AdminHandlerInterceptor</span> preHandle<br>com<span class="hljs-selector-class">.zhuweitung</span><span class="hljs-selector-class">.springboot2</span><span class="hljs-selector-class">.interceptor</span><span class="hljs-selector-class">.GlobalHandlerInterceptor</span> afterCompletion<br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/c016ea9fb27fdd1f0e90d1d71d5efbd0.svg" srcset="/img/loading.gif" lazyload alt=""></p>
 
                 
               </div>
