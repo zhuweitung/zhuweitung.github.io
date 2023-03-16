@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/46a7ac4e17fd8f2dd0876a95502faf5e.png">
 <meta property="article:published_time" content="2021-06-17T05:30:54.000Z">
-<meta property="article:modified_time" content="2023-03-15T13:58:15.867Z">
+<meta property="article:modified_time" content="2023-03-16T13:59:10.785Z">
 <meta property="article:author" content="zhuweitung">
 <meta property="article:tag" content="java">
 <meta property="article:tag" content="springboot">
@@ -256,7 +256,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          24k 字
+          27k 字
         
       </span>
     
@@ -267,7 +267,7 @@
         
         
         
-          202 分钟
+          228 分钟
         
       </span>
     
@@ -903,6 +903,95 @@
 </li>
 </ul>
 <p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/c016ea9fb27fdd1f0e90d1d71d5efbd0.svg" srcset="/img/loading.gif" lazyload alt=""></p>
+<h4 id="文件上传"><a class="header-anchor" href="#文件上传"></a>文件上传</h4>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@PostMapping(&quot;upload&quot;)</span><br><span class="hljs-keyword">public</span> String <span class="hljs-title function_">upload</span><span class="hljs-params">(<span class="hljs-meta">@RequestPart</span> MultipartFile[] files)</span> <span class="hljs-keyword">throws</span> IOException &#123;<br>    <span class="hljs-keyword">if</span> (files.length &gt; <span class="hljs-number">0</span>) &#123;<br>        <span class="hljs-keyword">for</span> (MultipartFile file : files) &#123;<br>            <span class="hljs-type">String</span> <span class="hljs-variable">newFileName</span> <span class="hljs-operator">=</span> UUID.randomUUID().toString() + <span class="hljs-string">&quot;.&quot;</span> + FileUtil.getSuffix(file.getOriginalFilename());<br>            file.transferTo(<span class="hljs-keyword">new</span> <span class="hljs-title class_">File</span>(<span class="hljs-string">&quot;D:\\tmp\\upload\\&quot;</span> + newFileName));<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;success&quot;</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>配置文件上传大小</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs yml"><span class="hljs-attr">spring:</span><br>  <span class="hljs-attr">servlet:</span><br>    <span class="hljs-attr">multipart:</span><br>      <span class="hljs-attr">max-file-size:</span> <span class="hljs-string">50MB</span> <span class="hljs-comment"># 单个文件最大值</span><br>      <span class="hljs-attr">max-request-size:</span> <span class="hljs-string">100MB</span> <span class="hljs-comment"># 单次请求文件大小总量最大值</span><br></code></pre></td></tr></table></figure>
+<h5 id="自动配置原理-v2"><a class="header-anchor" href="#自动配置原理-v2"></a>自动配置原理</h5>
+<ul>
+<li>
+<p>自动配置类为<code>MultipartAutoConfiguration</code>，属性类为<code>MultipartProperties</code></p>
+</li>
+<li>
+<p>MultipartAutoConfiguration中将<code>StandardServletMultipartResolver</code>注册为multipartResolver（文件上传解析器）</p>
+</li>
+<li>
+<p>文件上传请求会进入DispatcherServlet的<code>doDispatch</code>方法</p>
+</li>
+<li>
+<p>进入<code>checkMultipart</code>方法，使用配置的文件上传解析器判断参数是否是multipart（判断 ContentType 上是否以 multipart 开始）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Override</span><br><span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">isMultipart</span><span class="hljs-params">(HttpServletRequest request)</span> &#123;<br>	<span class="hljs-keyword">return</span> StringUtils.startsWithIgnoreCase(request.getContentType(),<br>			(<span class="hljs-built_in">this</span>.strictServletCompliance ? MediaType.MULTIPART_FORM_DATA_VALUE : <span class="hljs-string">&quot;multipart/&quot;</span>));<br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p>使用参数解析器<code>RequestPartMethodArgumentResolver</code>对参数进行解析</p>
+</li>
+<li>
+<p>将request中文件信息封装为一个Map，MultiValueMap&lt;String, MultipartFile&gt;</p>
+</li>
+<li>
+<p>解析完成后将MultipartFile数组交给控制器方法处理</p>
+</li>
+</ul>
+<h4 id="异常处理"><a class="header-anchor" href="#异常处理"></a>异常处理</h4>
+<h5 id="默认规则"><a class="header-anchor" href="#默认规则"></a>默认规则</h5>
+<ul>
+<li>默认情况下，Spring Boot提供<code>/error</code>处理所有错误的映射</li>
+<li>对于浏览器，响应<code>whitelabel</code>错误视图，以html形式呈现错误信息</li>
+<li>对于非浏览器客户端，响应json数据其中包含错误，HTTP状态和异常消息的详细信息</li>
+</ul>
+<h5 id="自动配置原理-v3"><a class="header-anchor" href="#自动配置原理-v3"></a>自动配置原理</h5>
+<ul>
+<li>
+<p><code>ErrorMvcAutoConfiguration</code>是异常处理规则的自动配置类</p>
+</li>
+<li>
+<p>注册了<code>DefaultErrorAttributes</code>（errorAttributes）组件，定义错误信息中包含哪些内容</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Order(Ordered.HIGHEST_PRECEDENCE)</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">DefaultErrorAttributes</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">ErrorAttributes</span>, HandlerExceptionResolver, Ordered &#123;&#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p>注册了<code>BasicErrorController</code>组件，默认路径为/error，有两个处理方法，分别返回页面（new ModelAndView(“error”, model)， error为下面注册的错误视图）和Json</p>
+<ul>
+<li>根据请求头中<code>Accept</code>是否为<code>text/html</code>，进入不同方法</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Controller</span><br><span class="hljs-meta">@RequestMapping(&quot;$&#123;server.error.path:$&#123;error.path:/error&#125;&#125;&quot;)</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">BasicErrorController</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">AbstractErrorController</span> &#123;&#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p>注册了一个id为<code>error</code>的错误视图</p>
+</li>
+<li>
+<p>注册了<code>BeanNameViewResolver</code>视图解析器，作用是根据bean名称解析，服务于上面的错误视图</p>
+</li>
+<li>
+<p>注册了<code>DefaultErrorViewResolver</code>，将不同错误渲染到不同页面上</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">static</span> &#123;<br>	Map&lt;Series, String&gt; views = <span class="hljs-keyword">new</span> <span class="hljs-title class_">EnumMap</span>&lt;&gt;(Series.class);<br>	views.put(Series.CLIENT_ERROR, <span class="hljs-string">&quot;4xx&quot;</span>);<br>	views.put(Series.SERVER_ERROR, <span class="hljs-string">&quot;5xx&quot;</span>);<br>	SERIES_VIEWS = Collections.unmodifiableMap(views);<br>&#125;<br><br><span class="hljs-meta">@Override</span><br><span class="hljs-keyword">public</span> ModelAndView <span class="hljs-title function_">resolveErrorView</span><span class="hljs-params">(HttpServletRequest request, HttpStatus status, Map&lt;String, Object&gt; model)</span> &#123;<br>	<span class="hljs-type">ModelAndView</span> <span class="hljs-variable">modelAndView</span> <span class="hljs-operator">=</span> resolve(String.valueOf(status.value()), model);<br>	<span class="hljs-keyword">if</span> (modelAndView == <span class="hljs-literal">null</span> &amp;&amp; SERIES_VIEWS.containsKey(status.series())) &#123;<br>		modelAndView = resolve(SERIES_VIEWS.get(status.series()), model);<br>	&#125;<br>	<span class="hljs-keyword">return</span> modelAndView;<br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+<h5 id="异常处理流程"><a class="header-anchor" href="#异常处理流程"></a>异常处理流程</h5>
+<ul>
+<li>
+<p>执行目标方法，目标方法有任何异常都会被catch，并被封装为dispatchException</p>
+</li>
+<li>
+<p>进入<code>processDispatchResult</code>方法，进行视图解析</p>
+</li>
+<li>
+<p>执行<code>processHandlerException</code>方法，处理异常</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">if</span> (<span class="hljs-built_in">this</span>.handlerExceptionResolvers != <span class="hljs-literal">null</span>) &#123;<br>    <span class="hljs-comment">// 遍历所有处理器异常解析器来处理异常</span><br>	<span class="hljs-keyword">for</span> (HandlerExceptionResolver resolver : <span class="hljs-built_in">this</span>.handlerExceptionResolvers) &#123;<br>		exMv = resolver.resolveException(request, response, handler, ex);<br>		<span class="hljs-keyword">if</span> (exMv != <span class="hljs-literal">null</span>) &#123;<br>			<span class="hljs-keyword">break</span>;<br>		&#125;<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/040740b4eb23f058e0f512e14415f6b2.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<ul>
+<li>DefaultErrorAttributes将异常信息保存到request域，返回null视图</li>
+<li>当没有解析器能够处理异常时，会继续向上抛出异常，底层会转达到/error</li>
+</ul>
+</li>
+<li>
+<p>/error请求被BasicErrorController处理</p>
+<ul>
+<li>解析错误视图，遍历所有ErrorViewResolver进行解析</li>
+<li>DefaultErrorViewResolver会根据响应状态码获取返回页面名称（先根据精确的状态码查找页面，若没有再通过模糊的，如4xx、5xx进行查找），并拼接为地址</li>
+<li>模板引擎最终响应这个页面</li>
+</ul>
+</li>
+</ul>
 
                 
               </div>

@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/42db6ab21f267cf1edb872df8b8f5a01.png">
 <meta property="article:published_time" content="2020-08-15T05:53:42.000Z">
-<meta property="article:modified_time" content="2023-03-12T09:24:31.403Z">
+<meta property="article:modified_time" content="2023-03-16T12:41:44.657Z">
 <meta property="article:author" content="zhuweitung">
 <meta property="article:tag" content="java">
 <meta name="twitter:card" content="summary_large_image">
@@ -266,7 +266,7 @@
         
         
         
-          232 分钟
+          233 分钟
         
       </span>
     
@@ -1572,8 +1572,8 @@
 <p>如果不考虑隔离性，可能会引发如下问题：</p>
 <ul>
 <li>脏读：当一个事务读取另一个事务尚未提交的改变时，产生脏读</li>
-<li>不可重复读：同一查询在同一事务中多次进行，由于其他提交事务所做的修改或删除，每次返回不同的结果集，此时发生不可重复度</li>
-<li>幻读：同一查询在同一事务中多次进行，由于其他事务所做的插入操作，每次返回不同的结果集，此时发生幻读</li>
+<li>不可重复读：同一查询在同一事务中多次进行，由于其他提交事务所做的修改或删除，每次返回不同的结果集，此时发生不可重复度（说的是变没变化的问题：原来是A,现在却变为了B,则为不可重复读）</li>
+<li>幻读：同一查询在同一事务中多次进行，由于其他事务所做的插入操作，每次返回不同的结果集，此时发生幻读（说的是存不存在的问题：原来不存在的,现在存在了,则是幻读）</li>
 </ul>
 </li>
 </ul>
@@ -1607,7 +1607,7 @@
 <td>可重复读 Repeatable read</td>
 <td>×</td>
 <td>×</td>
-<td>×</td>
+<td>√</td>
 <td>不加锁</td>
 </tr>
 <tr>
@@ -1619,6 +1619,7 @@
 </tr>
 </tbody>
 </table>
+<p>可重复读一般不会出现幻读，当B事务插入数据并提交后，A事务执行了没有条件的update，这个update会作用在所有的行上（包括B事务插入的数据），此时A事务会产生幻读</p>
 <h4 id="事务ACID"><a class="header-anchor" href="#事务ACID"></a>事务ACID</h4>
 <ul>
 <li>原子性（Atomicity）：原子性是指事务是一个不可分割的工作单位，事务中的操作要么都发生，要么都不发生</li>
