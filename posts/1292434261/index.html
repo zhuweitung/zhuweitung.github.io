@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/46a7ac4e17fd8f2dd0876a95502faf5e.png">
 <meta property="article:published_time" content="2021-06-17T05:30:54.000Z">
-<meta property="article:modified_time" content="2023-03-16T13:59:10.785Z">
+<meta property="article:modified_time" content="2023-03-18T13:01:51.505Z">
 <meta property="article:author" content="zhuweitung">
 <meta property="article:tag" content="java">
 <meta property="article:tag" content="springboot">
@@ -256,7 +256,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          27k 字
+          45k 字
         
       </span>
     
@@ -267,7 +267,7 @@
         
         
         
-          228 分钟
+          378 分钟
         
       </span>
     
@@ -992,6 +992,463 @@
 </ul>
 </li>
 </ul>
+<h5 id="自定义异常处理方式"><a class="header-anchor" href="#自定义异常处理方式"></a>自定义异常处理方式</h5>
+<ul>
+<li>
+<p>自定义错误页</p>
+<ul>
+<li>error/404.html   error/5xx.html；有精确的错误状态码页面就匹配精确，没有就找 4xx.html；如果都没有就触发白页</li>
+</ul>
+</li>
+<li>
+<p><code>@ControllerAdvice</code>+<code>@ExceptionHandler</code>处理全局异常； <code>ExceptionHandlerExceptionResolver</code> 来处理</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@ControllerAdvice</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">CustomExceptionHandler</span> &#123;<br>    <span class="hljs-meta">@ExceptionHandler(&#123;CustomException.class&#125;)</span><br>    <span class="hljs-meta">@ResponseBody</span><br>    <span class="hljs-keyword">public</span> Result <span class="hljs-title function_">handleCustom</span><span class="hljs-params">(Exception exception)</span> &#123;<br>        <span class="hljs-keyword">return</span> Result.fail(exception.getMessage());<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p><code>@ResponseStatus</code>+自定义异常 ； <code>ResponseStatusExceptionResolver</code>来处理 ，获取@ResponseStatus注解的信息，然后底层调用 response.sendError(statusCode, resolvedReason)；tomcat发送的/error</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@ResponseStatus(value = HttpStatus.BAD_GATEWAY, reason = &quot;访问太频繁&quot;)</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">TooManyRequestException</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">RuntimeException</span> &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">long</span> <span class="hljs-variable">serialVersionUID</span> <span class="hljs-operator">=</span> <span class="hljs-number">7699893349483938519L</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p>Spring底层的异常，如参数类型转换异常；<code>DefaultHandlerExceptionResolver</code> 处理框架底层的异常</p>
+</li>
+<li>
+<p>自定义实现 <code>HandlerExceptionResolver</code>接口来处理异常；可以作为默认的全局异常处理规则（优先级需要调高）</p>
+</li>
+<li>
+<p>实现接口<code>ErrorViewResolver</code>来自定义错误视图处理</p>
+<ul>
+<li>如ErrorMvcAutoConfiguration中配置了DefaultErrorViewResolver，通过错误码拼接为地址，渲染对应模板文件在呈现给客户端</li>
+</ul>
+</li>
+</ul>
+<h4 id="Web原生组件注入"><a class="header-anchor" href="#Web原生组件注入"></a>Web原生组件注入</h4>
+<p>JavaWeb原生组件就是Servlet、Filter、Listener</p>
+<h5 id="使用注解"><a class="header-anchor" href="#使用注解"></a>使用注解</h5>
+<p>当使用嵌入式容器时，可以通过使用 <code>@ServletComponentScan</code> 来启用对 <code>@WebServlet</code>、<code>@WebFilter</code> 和 <code>@WebListener</code> 注解的类的自动注册</p>
+<p>这种方式注册的servlet不会经过spring的拦截器</p>
+<h5 id="使用RegistrationBean"><a class="header-anchor" href="#使用RegistrationBean"></a>使用RegistrationBean</h5>
+<p>可以使用 <code>ServletRegistrationBean</code>、 <code>FilterRegistrationBean</code> 和 <code>ServletListenerRegistrationBean</code> 类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Configuration</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MyRegistConfig</span> &#123;<br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-keyword">public</span> ServletRegistrationBean <span class="hljs-title function_">myServlet</span><span class="hljs-params">()</span>&#123;<br>        <span class="hljs-type">MyServlet</span> <span class="hljs-variable">myServlet</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MyServlet</span>();<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ServletRegistrationBean</span>(myServlet,<span class="hljs-string">&quot;/my&quot;</span>,<span class="hljs-string">&quot;/my02&quot;</span>);<br>    &#125;<br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-keyword">public</span> FilterRegistrationBean <span class="hljs-title function_">myFilter</span><span class="hljs-params">()</span>&#123;<br>        <span class="hljs-type">MyFilter</span> <span class="hljs-variable">myFilter</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MyFilter</span>();<br>        <span class="hljs-type">FilterRegistrationBean</span> <span class="hljs-variable">filterRegistrationBean</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">FilterRegistrationBean</span>(myFilter);<br>        filterRegistrationBean.setUrlPatterns(Arrays.asList(<span class="hljs-string">&quot;/my&quot;</span>,<span class="hljs-string">&quot;/css/*&quot;</span>));<br>        <span class="hljs-keyword">return</span> filterRegistrationBean;<br>    &#125;<br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-keyword">public</span> ServletListenerRegistrationBean <span class="hljs-title function_">myListener</span><span class="hljs-params">()</span>&#123;<br>        <span class="hljs-type">MySwervletContextListener</span> <span class="hljs-variable">mySwervletContextListener</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MySwervletContextListener</span>();<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ServletListenerRegistrationBean</span>(mySwervletContextListener);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>DispatchServlet注册的原理</p>
+<ul>
+<li><code>DispatcherServletAutoConfiguration</code>类中配置了名称为<code>dispatcherServlet</code>的<code>DispatcherServlet</code>的Bean</li>
+<li><code>DispatcherServletRegistrationConfiguration</code>中通过RegistrationBean的方式注册了dispatcherServlet</li>
+</ul>
+<h3 id="数据访问"><a class="header-anchor" href="#数据访问"></a>数据访问</h3>
+<h4 id="SQL"><a class="header-anchor" href="#SQL"></a>SQL</h4>
+<h5 id="JDBC"><a class="header-anchor" href="#JDBC"></a>JDBC</h5>
+<p>添加JDBC场景依赖</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter-data-jdbc<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/97e12129e59c710db017f0a704bb8d97.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>这个场景包引入了数据库连接池、jdbc、事务等包，但是数据库驱动需要根据项目情况手动引入</p>
+<p>添加数据库对应版本的驱动包</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>mysql<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>mysql-connector-java<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>5.1.38<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p>相关自动配置类：</p>
+<ul>
+<li>DataSourceAutoConfiguration：数据源的自动配置</li>
+<li>DataSourceTransactionManagerAutoConfiguration：事务管理器的自动配置</li>
+<li>JdbcTemplateAutoConfiguration： JdbcTemplate的自动配置</li>
+<li>JndiDataSourceAutoConfiguration： jndi的自动配置</li>
+<li>XADataSourceAutoConfiguration：分布式事务相关的</li>
+</ul>
+<p>添加连接配置和连接池配置</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">spring:</span><br>  <span class="hljs-attr">datasource:</span><br>    <span class="hljs-attr">driver-class-name:</span> <span class="hljs-string">com.mysql.jdbc.Driver</span><br>    <span class="hljs-attr">url:</span> <span class="hljs-string">jdbc:mysql://localhost:3306/tmp?useSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;rewriteBatchedStatements=true</span><br>    <span class="hljs-attr">username:</span> <span class="hljs-string">root</span><br>    <span class="hljs-attr">password:</span> <span class="hljs-number">123456</span><br>    <span class="hljs-attr">hikari:</span><br>      <span class="hljs-attr">minimum-idle:</span> <span class="hljs-number">5</span><br>      <span class="hljs-attr">maximum-pool-size:</span> <span class="hljs-number">50</span><br></code></pre></td></tr></table></figure>
+<h5 id="更换连接池"><a class="header-anchor" href="#更换连接池"></a>更换连接池</h5>
+<p>方式一：</p>
+<p>添加连接池依赖</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.alibaba<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>druid<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>1.2.15<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p>添加配置类来覆盖默认数据源配置</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Configuration</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">DruidDataSourceConfig</span> &#123;<br>    <span class="hljs-meta">@ConfigurationProperties(&quot;spring.datasource&quot;)</span> <span class="hljs-comment">// 复用yml文件中的连接配置</span><br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-keyword">public</span> DataSource <span class="hljs-title function_">dataSource</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-type">DruidDataSource</span> <span class="hljs-variable">druidDataSource</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">DruidDataSource</span>();<br>        druidDataSource.setMinIdle(<span class="hljs-number">5</span>);<br>        druidDataSource.setMaxActive(<span class="hljs-number">50</span>);<br>        <span class="hljs-keyword">return</span> druidDataSource;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>方式二：</p>
+<p>添加连接池场景包</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.alibaba<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>druid-spring-boot-starter<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>1.1.17<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/e61ac1a1d775977fe60faa8d1023e1ea.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>这个场景包除了引入了方式一的依赖，还引入了自动配置包</p>
+<p>自动配置类为<code>DruidDataSourceAutoConfigure</code>，导入了一下4个配置</p>
+<ul>
+<li>DruidSpringAopConfiguration：用于监控SpringBean</li>
+<li>DruidStatViewServletConfiguration：配置StatViewServlet（监控页面）</li>
+<li>DruidWebStatFilterConfiguration：配置WebStatFilter</li>
+<li>DruidFilterConfiguration：所有Druid自己filter的配置</li>
+</ul>
+<p>添加连接配置和连接池配置</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs yml"><span class="hljs-attr">datasource:</span><br>  <span class="hljs-attr">driver-class-name:</span> <span class="hljs-string">com.mysql.jdbc.Driver</span><br>  <span class="hljs-attr">url:</span> <span class="hljs-string">jdbc:mysql://localhost:3306/tmp?useSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;rewriteBatchedStatements=true</span><br>  <span class="hljs-attr">username:</span> <span class="hljs-string">root</span><br>  <span class="hljs-attr">password:</span> <span class="hljs-number">123456</span><br>  <span class="hljs-attr">druid:</span><br>    <span class="hljs-attr">min-idle:</span> <span class="hljs-number">5</span><br>    <span class="hljs-attr">max-active:</span> <span class="hljs-number">50</span><br>    <span class="hljs-attr">stat-view-servlet:</span> <span class="hljs-comment"># 开启监控页面</span><br>      <span class="hljs-attr">enabled:</span> <span class="hljs-literal">true</span><br>      <span class="hljs-attr">login-username:</span> <span class="hljs-string">root</span><br>      <span class="hljs-attr">login-password:</span> <span class="hljs-number">123456</span><br></code></pre></td></tr></table></figure>
+<h5 id="mybatis"><a class="header-anchor" href="#mybatis"></a>mybatis</h5>
+<ul>
+<li>
+<p>添加场景包</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.mybatis.spring.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>mybatis-spring-boot-starter<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>2.3.0<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/1621383e0276e9a9db9509606e069a69.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+<li>
+<p>修改相关配置</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs yml"><span class="hljs-attr">mybatis:</span><br>  <span class="hljs-attr">mapper-locations:</span> <span class="hljs-string">classpath:mapper/*.xml</span><br>  <span class="hljs-attr">configuration:</span><br>    <span class="hljs-attr">map-underscore-to-camel-case:</span> <span class="hljs-literal">true</span> <span class="hljs-comment"># 开启驼峰命名映射</span><br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p>编写mapper接口，接口加上<code>@Mapper</code>注解，mybatis会自动扫描加上此注解的类</p>
+<ul>
+<li>使用<code>@MapperScan(basePackages=&quot;xxx&quot;)</code>注解，指定mapper接口包路径，就不需要在每个mapper接口上添加@Mapper注解了</li>
+</ul>
+</li>
+<li>
+<p>将mapper.xml文件放置对应目录下，与配置文件中<code>mapper-locations</code>描述的路径保持一致</p>
+</li>
+</ul>
+<h5 id="mybatis-plus"><a class="header-anchor" href="#mybatis-plus"></a>mybatis-plus</h5>
+<ul>
+<li>
+<p>添加场景包</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.baomidou<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>mybatis-plus-boot-starter<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>3.5.1<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/8ce4e6c46c8f4e4939e31f7ac1896775.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+<li>
+<p>修改相关配置</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs yml"><span class="hljs-attr">mybatis-plus:</span><br><span class="hljs-comment">#  mapper-locations: classpath:mapper/*.xml # 有默认配置可以不配置</span><br>  <span class="hljs-attr">configuration:</span><br>    <span class="hljs-attr">map-underscore-to-camel-case:</span> <span class="hljs-literal">true</span> <span class="hljs-comment"># 开启驼峰命名映射</span><br>    <span class="hljs-attr">default-enum-type-handler:</span> <span class="hljs-string">com.baomidou.mybatisplus.core.handlers.MybatisEnumTypeHandler</span> <span class="hljs-comment"># 枚举类处理</span><br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p>分页插件</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Configuration</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MybatisPlusConfig</span> &#123;<br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 开启分页插件</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-keyword">public</span> MybatisPlusInterceptor <span class="hljs-title function_">mybatisPlusInterceptor</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-type">MybatisPlusInterceptor</span> <span class="hljs-variable">interceptor</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MybatisPlusInterceptor</span>();<br>        interceptor.addInnerInterceptor(<span class="hljs-keyword">new</span> <span class="hljs-title class_">PaginationInnerInterceptor</span>(DbType.MYSQL));<br>        <span class="hljs-keyword">return</span> interceptor;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="Redis"><a class="header-anchor" href="#Redis"></a>Redis</h4>
+<h5 id="引入与配置"><a class="header-anchor" href="#引入与配置"></a>引入与配置</h5>
+<ul>
+<li>
+<p>添加场景包</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter-data-redis<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/207ae50ed66915807bfa8d8f3bafdf55.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+</ul>
+<p>​		默认引入lettuce作为redis客户端</p>
+<ul>
+<li>
+<p>添加配置</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs yml"><span class="hljs-attr">spring:</span><br>  <span class="hljs-attr">redis:</span><br>    <span class="hljs-attr">host:</span> <span class="hljs-number">192.168</span><span class="hljs-number">.0</span><span class="hljs-number">.123</span><br>    <span class="hljs-attr">port:</span> <span class="hljs-number">46379</span><br>    <span class="hljs-attr">password:</span> <span class="hljs-number">123456</span><br>    <span class="hljs-attr">database:</span> <span class="hljs-number">1</span><br>    <span class="hljs-attr">lettuce:</span><br>      <span class="hljs-attr">pool:</span><br>        <span class="hljs-attr">min-idle:</span> <span class="hljs-number">5</span><br>        <span class="hljs-attr">max-active:</span> <span class="hljs-number">50</span><br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+<h5 id="自动配置"><a class="header-anchor" href="#自动配置"></a>自动配置</h5>
+<ul>
+<li>RedisAutoConfiguration：redis的自动配置类
+<ul>
+<li>会导入LettuceConnectionConfiguration和JedisConnectionConfiguration，分别表示lettuce和jedis客户端的配置</li>
+<li>注册了一个<code>RedisTemplate&lt;Object, Object&gt;</code>，键值都是object类型</li>
+<li>注册了一个<code>StringRedisTemplate</code>，键值都是字符串类型</li>
+</ul>
+</li>
+<li>RedisProperties：配置属性类</li>
+</ul>
+<h5 id="使用jedis"><a class="header-anchor" href="#使用jedis"></a>使用jedis</h5>
+<ul>
+<li>
+<p>引入依赖</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>redis.clients<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>jedis<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p>修改配置文件</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs yml"><span class="hljs-attr">spring:</span><br>  <span class="hljs-attr">redis:</span><br>    <span class="hljs-attr">client-type:</span> <span class="hljs-string">jedis</span><br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+<h5 id="使用"><a class="header-anchor" href="#使用"></a>使用</h5>
+<p>配置键值的序列化与反序列化器：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Configuration</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">RedisSerializeConfig</span> &#123;<br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-keyword">public</span> RedisTemplate&lt;String, Object&gt; <span class="hljs-title function_">redisTemplate</span><span class="hljs-params">(RedisConnectionFactory redisConnectionFactory)</span> &#123;<br>        RedisTemplate&lt;String, Object&gt; template = <span class="hljs-keyword">new</span> <span class="hljs-title class_">RedisTemplate</span>&lt;&gt;();<br>        template.setConnectionFactory(redisConnectionFactory);<br>        <span class="hljs-type">Jackson2JsonRedisSerializer</span> <span class="hljs-variable">jackson2JsonRedisSerializer</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Jackson2JsonRedisSerializer</span>(Object.class);<br>        <span class="hljs-type">ObjectMapper</span> <span class="hljs-variable">objectMapper</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ObjectMapper</span>();<br>        objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);<br>        <span class="hljs-comment">// 日期序列化处理</span><br>        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);<br>        objectMapper.registerModule(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Jdk8Module</span>())<br>                .registerModule(<span class="hljs-keyword">new</span> <span class="hljs-title class_">JavaTimeModule</span>())<br>                .registerModule(<span class="hljs-keyword">new</span> <span class="hljs-title class_">ParameterNamesModule</span>());<br>        <span class="hljs-comment">// 存储java的类型，方便反序列化,没有这行，将存储为纯json字符串</span><br>        objectMapper.activateDefaultTyping(<br>                LaissezFaireSubTypeValidator.instance,<br>                ObjectMapper.DefaultTyping.NON_FINAL,<br>                JsonTypeInfo.As.WRAPPER_ARRAY);<br>        jackson2JsonRedisSerializer.setObjectMapper(objectMapper);<br>        template.setKeySerializer(RedisSerializer.string());<br>        template.setHashKeySerializer(RedisSerializer.string());<br>        template.setValueSerializer(jackson2JsonRedisSerializer);<br>        template.setHashValueSerializer(jackson2JsonRedisSerializer);<br>        template.afterPropertiesSet();<br>        <span class="hljs-keyword">return</span> template;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>测试：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@SpringBootTest</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">RedisTemplateTest</span> &#123;<br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> RedisTemplate redisTemplate;<br>    <span class="hljs-keyword">static</span> User user;<br>    <span class="hljs-meta">@BeforeAll</span><br>    <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">prepare</span><span class="hljs-params">()</span> &#123;<br>        user = <span class="hljs-keyword">new</span> <span class="hljs-title class_">User</span>();<br>        user.setId(<span class="hljs-number">46379</span>);<br>        user.setName(<span class="hljs-string">&quot;redis&quot;</span>);<br>    &#125;<br>    <span class="hljs-meta">@Test</span><br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">testUserSetGet</span><span class="hljs-params">()</span> &#123;<br>        ValueOperations&lt;String, Object&gt; ops = redisTemplate.opsForValue();<br>        ops.set(<span class="hljs-string">&quot;junit:user:&quot;</span> + user.getId(), user);<br>        <span class="hljs-type">Object</span> <span class="hljs-variable">o</span> <span class="hljs-operator">=</span> ops.get(<span class="hljs-string">&quot;junit:user:&quot;</span> + user.getId());<br>        Assertions.assertNotNull(o);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="单元测试"><a class="header-anchor" href="#单元测试"></a>单元测试</h3>
+<h4 id="JUnit5-的变化"><a class="header-anchor" href="#JUnit5-的变化"></a>JUnit5 的变化</h4>
+<p>Spring Boot 2.2.0 版本开始引入 <code>JUnit5</code> 作为单元测试默认库</p>
+<p>JUnit5由三个不同的子项目组成，JUnit 5 = JUnit Platform + JUnit Jupiter + JUnit Vintage</p>
+<ul>
+<li>JUnit Platform: Junit Platform是在JVM上启动测试框架的基础，不仅支持Junit自制的测试引擎，其他测试引擎也都可以接入。</li>
+<li>JUnit Jupiter: JUnit Jupiter提供了JUnit5的新的编程模型，是JUnit5新特性的核心。内部包含了一个测试引擎，用于在Junit Platform上运行。</li>
+<li>JUnit Vintage: 由于JUint已经发展多年，为了照顾老的项目，JUnit Vintage提供了兼容JUnit4.x,Junit3.x的测试引擎。</li>
+</ul>
+<p><em>注意：SpringBoot 2.4 以上版本移除了默认对 Vintage 的依赖。如果需要兼容junit4需要自行引入（不能使用junit4的功能 @Test）</em></p>
+<h4 id="引入"><a class="header-anchor" href="#引入"></a>引入</h4>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter-test<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<h4 id="使用方式示例"><a class="header-anchor" href="#使用方式示例"></a>使用方式示例</h4>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@SpringBootTest</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">RedisTemplateTest</span> &#123;<br>    <span class="hljs-meta">@BeforeAll</span><br>    <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">prepare</span><span class="hljs-params">()</span> &#123;<br>    &#125;<br>    <span class="hljs-meta">@Test</span><br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">test1</span><span class="hljs-params">()</span> &#123;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="常用注解"><a class="header-anchor" href="#常用注解"></a>常用注解</h4>
+<ul>
+<li>**@Test :**表示方法是测试方法。但是与JUnit4的@Test不同，他的职责非常单一不能声明任何属性，拓展的测试将会由Jupiter提供额外测试</li>
+<li>**@ParameterizedTest :**表示方法是参数化测试</li>
+<li>**@RepeatedTest :**表示方法可重复执行</li>
+<li>**@DisplayName :**为测试类或者测试方法设置展示名称</li>
+<li>**@BeforeEach :**表示在每个单元测试之前执行</li>
+<li>**@AfterEach :**表示在每个单元测试之后执行</li>
+<li>**@BeforeAll :**表示在所有单元测试之前执行</li>
+<li>**@AfterAll :**表示在所有单元测试之后执行</li>
+<li>**@Tag :**表示单元测试类别，类似于JUnit4中的@Categories</li>
+<li>**@Disabled :**表示测试类或测试方法不执行，类似于JUnit4中的@Ignore</li>
+<li>**@Timeout :**表示测试方法运行如果超过了指定时间将会返回错误</li>
+<li>**@ExtendWith :**为测试类或测试方法提供扩展类引用</li>
+</ul>
+<h4 id="断言"><a class="header-anchor" href="#断言"></a>断言</h4>
+<p>断言（assertions）是测试方法中的核心部分，用来对测试需要满足的条件进行验证</p>
+<p>这些断言方法都是 org.junit.jupiter.api.<code>Assertions</code> 的静态方法</p>
+<h5 id="简单断言"><a class="header-anchor" href="#简单断言"></a>简单断言</h5>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>assertEquals</td>
+<td>判断两个对象或两个原始类型是否相等</td>
+</tr>
+<tr>
+<td>assertNotEquals</td>
+<td>判断两个对象或两个原始类型是否不相等</td>
+</tr>
+<tr>
+<td>assertSame</td>
+<td>判断两个对象引用是否指向同一个对象</td>
+</tr>
+<tr>
+<td>assertNotSame</td>
+<td>判断两个对象引用是否指向不同的对象</td>
+</tr>
+<tr>
+<td>assertTrue</td>
+<td>判断给定的布尔值是否为 true</td>
+</tr>
+<tr>
+<td>assertFalse</td>
+<td>判断给定的布尔值是否为 false</td>
+</tr>
+<tr>
+<td>assertNull</td>
+<td>判断给定的对象引用是否为 null</td>
+</tr>
+<tr>
+<td>assertNotNull</td>
+<td>判断给定的对象引用是否不为 null</td>
+</tr>
+</tbody>
+</table>
+<h5 id="数组断言"><a class="header-anchor" href="#数组断言"></a>数组断言</h5>
+<p>通过 <code>assertArrayEquals</code> 方法来判断两个对象或原始类型的数组是否相等</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Test</span><br><span class="hljs-keyword">void</span> <span class="hljs-title function_">arrayEquals</span><span class="hljs-params">()</span> &#123;<br>    assertArrayEquals(<span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[]&#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>&#125;, <span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[]&#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>&#125;);<br>&#125;<br></code></pre></td></tr></table></figure>
+<h5 id="组合断言"><a class="header-anchor" href="#组合断言"></a>组合断言</h5>
+<p><code>assertAll</code> 方法接受多个 org.junit.jupiter.api.Executable 函数式接口的实例作为要验证的断言，可以通过 lambda 表达式很容易的提供这些断言</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Test</span><br><span class="hljs-keyword">void</span> <span class="hljs-title function_">all</span><span class="hljs-params">()</span> &#123;<br>    assertAll(<br>            () -&gt; assertEquals(<span class="hljs-number">2</span>, <span class="hljs-number">1</span> + <span class="hljs-number">1</span>),<br>            () -&gt; assertTrue(<span class="hljs-number">1</span> &gt; <span class="hljs-number">0</span>)<br>    );<br>&#125;<br></code></pre></td></tr></table></figure>
+<h5 id="异常断言"><a class="header-anchor" href="#异常断言"></a>异常断言</h5>
+<p>用于测试方法抛出异常</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Test</span><br><span class="hljs-keyword">void</span> <span class="hljs-title function_">exception</span><span class="hljs-params">()</span> &#123;<br>    assertThrows(ArithmeticException.class, () -&gt; System.out.println(<span class="hljs-number">1</span> % <span class="hljs-number">0</span>));<br>&#125;<br></code></pre></td></tr></table></figure>
+<h5 id="超时断言"><a class="header-anchor" href="#超时断言"></a>超时断言</h5>
+<p>用于测试方法超时时间</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Test</span><br><span class="hljs-keyword">void</span> <span class="hljs-title function_">timeout</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-comment">// 测试方法超过1s时不通过</span><br>    assertTimeout(Duration.ofSeconds(<span class="hljs-number">1</span>), () -&gt; Thread.sleep(<span class="hljs-number">100</span>));<br>&#125;<br></code></pre></td></tr></table></figure>
+<h5 id="快速失败"><a class="header-anchor" href="#快速失败"></a>快速失败</h5>
+<p>通过 fail 方法直接使得测试失败</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Test</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">shouldFail</span><span class="hljs-params">()</span> &#123;<br> fail(<span class="hljs-string">&quot;This should fail&quot;</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="前置条件"><a class="header-anchor" href="#前置条件"></a>前置条件</h4>
+<p>JUnit 5 中的前置条件（assumptions）类似于断言，不同之处在于不满足的断言会使得测试方法失败，而不满足的前置条件只会使得测试方法的<code>执行终止</code>。前置条件可以看成是测试方法执行的前提，当该前提不满足时，就没有继续执行的必要。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">String</span> <span class="hljs-variable">environment</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;DEV&quot;</span>;<br><span class="hljs-meta">@Test</span><br><span class="hljs-keyword">void</span> <span class="hljs-title function_">simpleAssume</span><span class="hljs-params">()</span> &#123;<br>    assumeTrue(Objects.equals(<span class="hljs-built_in">this</span>.environment, <span class="hljs-string">&quot;DEV&quot;</span>));<br>    assumeFalse(Objects.equals(<span class="hljs-built_in">this</span>.environment, <span class="hljs-string">&quot;PROD&quot;</span>));<br>&#125;<br><span class="hljs-meta">@Test</span><br><span class="hljs-keyword">void</span> <span class="hljs-title function_">assumeThenDo</span><span class="hljs-params">()</span> &#123;<br>    assumingThat(<br>            Objects.equals(<span class="hljs-built_in">this</span>.environment, <span class="hljs-string">&quot;DEV&quot;</span>),<br>            () -&gt; System.out.println(<span class="hljs-string">&quot;In DEV&quot;</span>)<br>    );<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>assumeTrue 和 assumFalse 确保给定的条件为 true 或 false，不满足条件会使得测试执行终止。</p>
+<p>assumingThat 的参数是表示条件的布尔值和对应的 Executable 接口的实现对象。只有条件满足时，Executable 对象才会被执行；当条件不满足时，测试执行并不会终止。</p>
+<h4 id="嵌套测试"><a class="header-anchor" href="#嵌套测试"></a>嵌套测试</h4>
+<p>JUnit 5 可以通过 Java 中的内部类和@Nested 注解实现嵌套测试，从而可以更好的把相关的测试方法组织在一起。在内部类中可以使用@BeforeEach 和@AfterEach 注解，而且嵌套的层次没有限制。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@DisplayName(&quot;A stack&quot;)</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">TestingAStackDemo</span> &#123;<br><br>    Stack&lt;Object&gt; stack;<br><br>    <span class="hljs-meta">@Test</span><br>    <span class="hljs-meta">@DisplayName(&quot;is instantiated with new Stack()&quot;)</span><br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">isInstantiatedWithNew</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">new</span> <span class="hljs-title class_">Stack</span>&lt;&gt;();<br>    &#125;<br><br>    <span class="hljs-meta">@Nested</span><br>    <span class="hljs-meta">@DisplayName(&quot;when new&quot;)</span><br>    <span class="hljs-keyword">class</span> <span class="hljs-title class_">WhenNew</span> &#123;<br><br>        <span class="hljs-meta">@BeforeEach</span><br>        <span class="hljs-keyword">void</span> <span class="hljs-title function_">createNewStack</span><span class="hljs-params">()</span> &#123;<br>            stack = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Stack</span>&lt;&gt;();<br>        &#125;<br><br>        <span class="hljs-meta">@Test</span><br>        <span class="hljs-meta">@DisplayName(&quot;is empty&quot;)</span><br>        <span class="hljs-keyword">void</span> <span class="hljs-title function_">isEmpty</span><span class="hljs-params">()</span> &#123;<br>            assertTrue(stack.isEmpty());<br>        &#125;<br><br>        <span class="hljs-meta">@Test</span><br>        <span class="hljs-meta">@DisplayName(&quot;throws EmptyStackException when popped&quot;)</span><br>        <span class="hljs-keyword">void</span> <span class="hljs-title function_">throwsExceptionWhenPopped</span><span class="hljs-params">()</span> &#123;<br>            assertThrows(EmptyStackException.class, stack::pop);<br>        &#125;<br><br>        <span class="hljs-meta">@Test</span><br>        <span class="hljs-meta">@DisplayName(&quot;throws EmptyStackException when peeked&quot;)</span><br>        <span class="hljs-keyword">void</span> <span class="hljs-title function_">throwsExceptionWhenPeeked</span><span class="hljs-params">()</span> &#123;<br>            assertThrows(EmptyStackException.class, stack::peek);<br>        &#125;<br><br>        <span class="hljs-meta">@Nested</span><br>        <span class="hljs-meta">@DisplayName(&quot;after pushing an element&quot;)</span><br>        <span class="hljs-keyword">class</span> <span class="hljs-title class_">AfterPushing</span> &#123;<br><br>            <span class="hljs-type">String</span> <span class="hljs-variable">anElement</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;an element&quot;</span>;<br><br>            <span class="hljs-meta">@BeforeEach</span><br>            <span class="hljs-keyword">void</span> <span class="hljs-title function_">pushAnElement</span><span class="hljs-params">()</span> &#123;<br>                stack.push(anElement);<br>            &#125;<br><br>            <span class="hljs-meta">@Test</span><br>            <span class="hljs-meta">@DisplayName(&quot;it is no longer empty&quot;)</span><br>            <span class="hljs-keyword">void</span> <span class="hljs-title function_">isNotEmpty</span><span class="hljs-params">()</span> &#123;<br>                assertFalse(stack.isEmpty());<br>            &#125;<br><br>            <span class="hljs-meta">@Test</span><br>            <span class="hljs-meta">@DisplayName(&quot;returns the element when popped and is empty&quot;)</span><br>            <span class="hljs-keyword">void</span> <span class="hljs-title function_">returnElementWhenPopped</span><span class="hljs-params">()</span> &#123;<br>                assertEquals(anElement, stack.pop());<br>                assertTrue(stack.isEmpty());<br>            &#125;<br><br>            <span class="hljs-meta">@Test</span><br>            <span class="hljs-meta">@DisplayName(&quot;returns the element when peeked but remains not empty&quot;)</span><br>            <span class="hljs-keyword">void</span> <span class="hljs-title function_">returnElementWhenPeeked</span><span class="hljs-params">()</span> &#123;<br>                assertEquals(anElement, stack.peek());<br>                assertFalse(stack.isEmpty());<br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="参数化测试"><a class="header-anchor" href="#参数化测试"></a>参数化测试</h4>
+<p>利用**@ValueSource**等注解，指定入参，我们将可以使用不同的参数进行多次单元测试，而不需要每新增一个参数就新增一个单元测试，省去了很多冗余代码</p>
+<p>实现<code>ArgumentsProvider</code>接口，任何外部文件都可以作为它的入参</p>
+<h5 id="常用注解-v2"><a class="header-anchor" href="#常用注解-v2"></a>常用注解</h5>
+<ul>
+<li>@ValueSource: 为参数化测试指定入参来源，支持八大基础类以及String类型,Class类型</li>
+<li>@NullSource: 表示为参数化测试提供一个null的入参</li>
+<li>@EnumSource: 表示为参数化测试提供一个枚举入参</li>
+<li>@CsvFileSource：表示读取指定CSV文件内容作为参数化测试入参</li>
+<li>@MethodSource：表示读取指定方法的返回值作为参数化测试入参(注意方法返回需要是一个流)</li>
+</ul>
+<h5 id="示例"><a class="header-anchor" href="#示例"></a>示例</h5>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@ParameterizedTest</span><br><span class="hljs-meta">@ValueSource(strings = &#123;&quot;one&quot;, &quot;two&quot;, &quot;three&quot;&#125;)</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">parameterizedTest1</span><span class="hljs-params">(String string)</span> &#123;<br>    System.out.println(string);<br>    Assertions.assertTrue(StringUtils.isNotBlank(string));<br>&#125;<br><br><span class="hljs-meta">@ParameterizedTest</span><br><span class="hljs-meta">@MethodSource(&quot;produce&quot;)</span> <span class="hljs-comment">// 指定产生数据的方法名</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">testWithExplicitLocalMethodSource</span><span class="hljs-params">(String name)</span> &#123;<br>    System.out.println(name);<br>    Assertions.assertNotNull(name);<br>&#125;<br><br><span class="hljs-keyword">static</span> Stream&lt;String&gt; <span class="hljs-title function_">produce</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-keyword">return</span> Stream.of(<span class="hljs-string">&quot;apple&quot;</span>, <span class="hljs-string">&quot;banana&quot;</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="指标监控"><a class="header-anchor" href="#指标监控"></a>指标监控</h3>
+<h4 id="简介"><a class="header-anchor" href="#简介"></a>简介</h4>
+<p>SpringBoot Actuator，使得我们每个微服务快速引用即可获得生产级别的应用监控、审计等功能。</p>
+<h4 id="使用-v2"><a class="header-anchor" href="#使用-v2"></a>使用</h4>
+<ul>
+<li>
+<p>引入依赖</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter-actuator<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p>修改配置</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs yml"><span class="hljs-attr">management:</span><br>  <span class="hljs-attr">endpoints:</span><br>    <span class="hljs-attr">enabled-by-default:</span> <span class="hljs-literal">true</span>  <span class="hljs-comment"># 暴露所有端点信息</span><br>    <span class="hljs-attr">web:</span><br>      <span class="hljs-attr">exposure:</span><br>        <span class="hljs-attr">include:</span> <span class="hljs-string">&#x27;*&#x27;</span> <span class="hljs-comment"># 以web方式暴露</span><br>  <span class="hljs-attr">endpoint:</span><br>    <span class="hljs-attr">health:</span> <span class="hljs-comment"># 单独配置健康端点</span><br>      <span class="hljs-attr">show-details:</span> <span class="hljs-string">always</span> <span class="hljs-comment"># 显示详细详细</span><br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="常用端点"><a class="header-anchor" href="#常用端点"></a>常用端点</h4>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>auditevents</code></td>
+<td>暴露当前应用程序的审核事件信息。需要一个<code>AuditEventRepository组件</code>。</td>
+</tr>
+<tr>
+<td><code>beans</code></td>
+<td>显示应用程序中所有Spring Bean的完整列表。</td>
+</tr>
+<tr>
+<td><code>caches</code></td>
+<td>暴露可用的缓存。</td>
+</tr>
+<tr>
+<td><code>conditions</code></td>
+<td>显示自动配置的所有条件信息，包括匹配或不匹配的原因。</td>
+</tr>
+<tr>
+<td><code>configprops</code></td>
+<td>显示所有<code>@ConfigurationProperties</code>。</td>
+</tr>
+<tr>
+<td><code>env</code></td>
+<td>暴露Spring的属性<code>ConfigurableEnvironment</code></td>
+</tr>
+<tr>
+<td><code>flyway</code></td>
+<td>显示已应用的所有Flyway数据库迁移。 需要一个或多个<code>Flyway</code>组件。</td>
+</tr>
+<tr>
+<td><code>health</code></td>
+<td>显示应用程序运行状况信息。</td>
+</tr>
+<tr>
+<td><code>httptrace</code></td>
+<td>显示HTTP跟踪信息（默认情况下，最近100个HTTP请求-响应）。需要一个<code>HttpTraceRepository</code>组件。</td>
+</tr>
+<tr>
+<td><code>info</code></td>
+<td>显示应用程序信息。</td>
+</tr>
+<tr>
+<td><code>integrationgraph</code></td>
+<td>显示Spring <code>integrationgraph</code> 。需要依赖<code>spring-integration-core</code>。</td>
+</tr>
+<tr>
+<td><code>loggers</code></td>
+<td>显示和修改应用程序中日志的配置。</td>
+</tr>
+<tr>
+<td><code>liquibase</code></td>
+<td>显示已应用的所有Liquibase数据库迁移。需要一个或多个<code>Liquibase</code>组件。</td>
+</tr>
+<tr>
+<td><code>metrics</code></td>
+<td>显示当前应用程序的“指标”信息。</td>
+</tr>
+<tr>
+<td><code>mappings</code></td>
+<td>显示所有<code>@RequestMapping</code>路径列表。</td>
+</tr>
+<tr>
+<td><code>scheduledtasks</code></td>
+<td>显示应用程序中的计划任务。</td>
+</tr>
+<tr>
+<td><code>sessions</code></td>
+<td>允许从Spring Session支持的会话存储中检索和删除用户会话。需要使用Spring Session的基于Servlet的Web应用程序。</td>
+</tr>
+<tr>
+<td><code>shutdown</code></td>
+<td>使应用程序正常关闭。默认禁用。</td>
+</tr>
+<tr>
+<td><code>startup</code></td>
+<td>显示由<code>ApplicationStartup</code>收集的启动步骤数据。需要使用<code>SpringApplication</code>进行配置<code>BufferingApplicationStartup</code>。</td>
+</tr>
+<tr>
+<td><code>threaddump</code></td>
+<td>执行线程转储。</td>
+</tr>
+</tbody>
+</table>
+<p>若应用程序是Web应用程序，则可以使用以下附加端点：</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>heapdump</code></td>
+<td>返回<code>hprof</code>堆转储文件。</td>
+</tr>
+<tr>
+<td><code>jolokia</code></td>
+<td>通过HTTP暴露JMX bean（需要引入Jolokia，不适用于WebFlux）。需要引入依赖<code>jolokia-core</code>。</td>
+</tr>
+<tr>
+<td><code>logfile</code></td>
+<td>返回日志文件的内容（如果已设置<code>logging.file.name</code>或<code>logging.file.path</code>属性）。支持使用HTTP<code>Range</code>标头来检索部分日志文件的内容。</td>
+</tr>
+<tr>
+<td><code>prometheus</code></td>
+<td>以Prometheus服务器可以抓取的格式公开指标。需要依赖<code>micrometer-registry-prometheus</code>。</td>
+</tr>
+</tbody>
+</table>
+<p>最常用的Endpoint</p>
+<ul>
+<li>Health：监控状况</li>
+<li>Metrics：运行时指标</li>
+<li>Loggers：日志记录</li>
+</ul>
+<h4 id="Health-Endpoint"><a class="header-anchor" href="#Health-Endpoint"></a>Health Endpoint</h4>
+<p>Health Endpoint返回当前服务的健康状态，端点开启<code>show-details: always</code>后返回应用包含的一系列组件的健康状态</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/42c454794aab5df51d6ea2855a6a1673.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h4 id="Metrics-Endpoint"><a class="header-anchor" href="#Metrics-Endpoint"></a>Metrics Endpoint</h4>
+<p>提供详细的、层级的、空间指标信息，这些信息可以被pull（主动推送）或者push（被动获取）方式得到</p>
+<ul>
+<li>通过Metrics对接多种监控系统</li>
+<li>简化核心Metrics开发</li>
+<li>添加自定义Metrics或者扩展已有Metrics</li>
+</ul>
+<p>通过访问<code>/actuator/metrics</code>查看所有的指标名称</p>
+<p>再通过访问<code>/actuator/metrics/&#123;requiredMetricName&#125;</code>查看指标的具体信息</p>
+<h4 id="自定义端点信息"><a class="header-anchor" href="#自定义端点信息"></a>自定义端点信息</h4>
+<h5 id="自定义健康信息"><a class="header-anchor" href="#自定义健康信息"></a>自定义健康信息</h5>
+<p>需要实现<code>HealthIndicator</code>接口或者继承<code>AbstractHealthIndicator</code>抽象类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Component</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">PMOpenHealthIndicator</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">AbstractHealthIndicator</span> &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">doHealthCheck</span><span class="hljs-params">(Health.Builder builder)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>        <span class="hljs-comment">// 实现健康检查逻辑</span><br>        Map&lt;String, Object&gt; healthInfo = <span class="hljs-keyword">new</span> <span class="hljs-title class_">HashMap</span>&lt;&gt;();<br>        <span class="hljs-keyword">if</span> (DateUtil.isAM(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>())) &#123;<br>            builder.status(Status.OUT_OF_SERVICE);<br>            healthInfo.put(<span class="hljs-string">&quot;message&quot;</span>, <span class="hljs-string">&quot;上午暂停服务&quot;</span>);<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            builder.up();<br>            healthInfo.put(<span class="hljs-string">&quot;message&quot;</span>, <span class="hljs-string">&quot;正常服务中&quot;</span>);<br>        &#125;<br>        builder.withDetails(healthInfo);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>查看健康状态</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/d52a1f4bd4489eeb26eda9bb7578812d.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h5 id="自定义info信息"><a class="header-anchor" href="#自定义info信息"></a>自定义info信息</h5>
+<p>方式一：</p>
+<p>在配置文件中配置</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs yml"><span class="hljs-attr">info:</span><br>  <span class="hljs-attr">projectName:</span> <span class="hljs-string">@project.artifactId@</span>  <span class="hljs-comment">#使用@可以获取maven的pom文件值</span><br>  <span class="hljs-attr">projectVersion:</span> <span class="hljs-string">@project.version@</span><br></code></pre></td></tr></table></figure>
+<p>方式二：</p>
+<p>实现<code>InfoContributor</code>接口</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Component</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ApplicationInfoContributor</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">InfoContributor</span> &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">contribute</span><span class="hljs-params">(Info.Builder builder)</span> &#123;<br>        builder.withDetail(<span class="hljs-string">&quot;name&quot;</span>, <span class="hljs-string">&quot;jdap&quot;</span>)<br>                .withDetail(<span class="hljs-string">&quot;version&quot;</span>, <span class="hljs-string">&quot;1.0.0&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h5 id="自定义指标信息"><a class="header-anchor" href="#自定义指标信息"></a>自定义指标信息</h5>
+<p>比如说我想要获取文件上传次数的指标，可以使用以下方式实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@RestController</span><br><span class="hljs-meta">@RequestMapping(&quot;file&quot;)</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">FileController</span> &#123;<br>    <span class="hljs-keyword">private</span> Counter counter;<br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">FileController</span><span class="hljs-params">(MeterRegistry meterRegistry)</span> &#123;<br>        counter = meterRegistry.counter(<span class="hljs-string">&quot;file.upload.counter&quot;</span>);<br>    &#125;<br>    <span class="hljs-meta">@PostMapping(&quot;upload&quot;)</span><br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">upload</span><span class="hljs-params">(<span class="hljs-meta">@RequestPart</span> MultipartFile[] files)</span> <span class="hljs-keyword">throws</span> IOException &#123;<br>        counter.increment();<br>        <span class="hljs-comment">// do upload</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;success&quot;</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>在其他场景中也可以使用以下方式</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Bean</span><br>MeterBinder <span class="hljs-title function_">queueSize</span><span class="hljs-params">(Queue queue)</span> &#123;<br>    <span class="hljs-keyword">return</span> (registry) -&gt; Gauge.builder(<span class="hljs-string">&quot;queueSize&quot;</span>, queue::size).register(registry);<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="自定义端点"><a class="header-anchor" href="#自定义端点"></a>自定义端点</h4>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Component</span><br><span class="hljs-meta">@Endpoint(id = &quot;container&quot;)</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">DockerEndpoint</span> &#123;<br><br>    <span class="hljs-meta">@ReadOperation</span><br>    <span class="hljs-keyword">public</span> Map <span class="hljs-title function_">getDockerInfo</span><span class="hljs-params">()</span>&#123;<br>        <span class="hljs-keyword">return</span> Collections.singletonMap(<span class="hljs-string">&quot;info&quot;</span>,<span class="hljs-string">&quot;docker started...&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-meta">@WriteOperation</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">restartDocker</span><span class="hljs-params">()</span>&#123;<br>        System.out.println(<span class="hljs-string">&quot;docker restarted....&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="可视化"><a class="header-anchor" href="#可视化"></a>可视化</h4>
+<p>使用<a target="_blank" rel="noopener" href="https://github.com/codecentric/spring-boot-admin">spring-boot-admin</a>实现可视化，<a target="_blank" rel="noopener" href="https://codecentric.github.io/spring-boot-admin/current/getting-started.html">参考文档</a></p>
+<h5 id="监控可视化平台服务端"><a class="header-anchor" href="#监控可视化平台服务端"></a>监控可视化平台服务端</h5>
+<p>另起一个项目作为监控可视化平台</p>
+<p>引入依赖</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br><span class="hljs-comment">&lt;!-- 指标监控可视化 --&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>de.codecentric<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-admin-starter-server<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>2.7.9<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p>配置服务端口</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs yml"><span class="hljs-attr">server:</span><br>  <span class="hljs-attr">port:</span> <span class="hljs-number">8124</span><br></code></pre></td></tr></table></figure>
+<h5 id="客户端"><a class="header-anchor" href="#客户端"></a>客户端</h5>
+<p>客户端就是被监控的项目</p>
+<p>引入依赖</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-comment">&lt;!-- 指标监控可视化客户端 --&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>de.codecentric<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-admin-starter-client<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>2.7.9<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p>修改配置</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs yml"><span class="hljs-attr">spring:</span><br>  <span class="hljs-attr">boot:</span><br>    <span class="hljs-attr">admin:</span><br>      <span class="hljs-attr">client:</span><br>        <span class="hljs-attr">url:</span> <span class="hljs-string">http://127.0.0.1:8124</span> <span class="hljs-comment"># 服务端地址</span><br>  <span class="hljs-attr">application:</span><br>    <span class="hljs-attr">name:</span> <span class="hljs-string">jdap</span> <span class="hljs-comment"># 此名称用于服务端显示作为标识</span><br></code></pre></td></tr></table></figure>
+<h3 id="原理解析"><a class="header-anchor" href="#原理解析"></a>原理解析</h3>
 
                 
               </div>
