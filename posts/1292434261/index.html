@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/46a7ac4e17fd8f2dd0876a95502faf5e.png">
 <meta property="article:published_time" content="2021-06-17T05:30:54.000Z">
-<meta property="article:modified_time" content="2023-03-18T13:01:51.505Z">
+<meta property="article:modified_time" content="2023-03-19T08:49:24.822Z">
 <meta property="article:author" content="zhuweitung">
 <meta property="article:tag" content="java">
 <meta property="article:tag" content="springboot">
@@ -256,7 +256,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          45k 字
+          50k 字
         
       </span>
     
@@ -267,7 +267,7 @@
         
         
         
-          378 分钟
+          418 分钟
         
       </span>
     
@@ -1449,6 +1449,245 @@
 <p>修改配置</p>
 <figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs yml"><span class="hljs-attr">spring:</span><br>  <span class="hljs-attr">boot:</span><br>    <span class="hljs-attr">admin:</span><br>      <span class="hljs-attr">client:</span><br>        <span class="hljs-attr">url:</span> <span class="hljs-string">http://127.0.0.1:8124</span> <span class="hljs-comment"># 服务端地址</span><br>  <span class="hljs-attr">application:</span><br>    <span class="hljs-attr">name:</span> <span class="hljs-string">jdap</span> <span class="hljs-comment"># 此名称用于服务端显示作为标识</span><br></code></pre></td></tr></table></figure>
 <h3 id="原理解析"><a class="header-anchor" href="#原理解析"></a>原理解析</h3>
+<h4 id="Profile功能"><a class="header-anchor" href="#Profile功能"></a>Profile功能</h4>
+<p>用于多环境适配</p>
+<h5 id="application-profile功能"><a class="header-anchor" href="#application-profile功能"></a>application-profile功能</h5>
+<ul>
+<li>
+<p>默认配置文件  application.yaml；任何时候都会加载</p>
+</li>
+<li>
+<p>指定环境配置文件  application-{env}.yaml</p>
+<ul>
+<li>application-dev.yml</li>
+<li>application-prod.yml</li>
+</ul>
+</li>
+<li>
+<p>激活指定环境</p>
+</li>
+<li>
+<ul>
+<li>
+<p>配置文件激活，在默认配置文件中进行以下配置</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs yml"><span class="hljs-attr">spring:</span><br>  <span class="hljs-attr">profiles:</span><br>    <span class="hljs-attr">active:</span> <span class="hljs-string">dev</span><br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p>命令行激活：java -jar xxx.jar –<strong>spring.profiles.active=dev</strong></p>
+</li>
+</ul>
+</li>
+<li>
+<p>默认配置与环境配置同时生效</p>
+</li>
+<li>
+<p>同名配置项，profile配置优先</p>
+</li>
+</ul>
+<h5 id="Profile条件装配功能"><a class="header-anchor" href="#Profile条件装配功能"></a>@Profile条件装配功能</h5>
+<p>标记类在指定环境下才生效</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Configuration(proxyBeanMethods = false)</span><br><span class="hljs-meta">@Profile(&quot;prod&quot;)</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ProductionConfiguration</span> &#123;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h5 id="profile分组"><a class="header-anchor" href="#profile分组"></a>profile分组</h5>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs yml"><span class="hljs-attr">spring:</span><br>  <span class="hljs-attr">profiles:</span><br>    <span class="hljs-attr">active:</span> <span class="hljs-string">dev</span><br>    <span class="hljs-attr">group:</span> <br>      <span class="hljs-attr">prod:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">prod1</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">prod2</span><br>      <span class="hljs-attr">dev:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">dev1</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-string">dev2</span><br></code></pre></td></tr></table></figure>
+<p>spring.profiles.active指定组名来激活环境组</p>
+<h4 id="外部化配置"><a class="header-anchor" href="#外部化配置"></a>外部化配置</h4>
+<h5 id="外部配置源"><a class="header-anchor" href="#外部配置源"></a>外部配置源</h5>
+<p>Java属性文件、YAML文件、环境变量、命令行参数</p>
+<h5 id="配置文件查找位置"><a class="header-anchor" href="#配置文件查找位置"></a>配置文件查找位置</h5>
+<p>以下位置的配置文件中，若出现相同配置项，从下到上依次覆盖</p>
+<ul>
+<li>classpath 根路径</li>
+<li>classpath 根路径下config目录</li>
+<li>jar包当前目录</li>
+<li>jar包当前目录的config目录</li>
+<li>/config子目录的直接子目录</li>
+</ul>
+<h5 id="配置文件加载顺序"><a class="header-anchor" href="#配置文件加载顺序"></a>配置文件加载顺序</h5>
+<ol>
+<li>当前jar包内部的application.properties和application.yml</li>
+<li>当前jar包内部的application-{profile}.properties 和 application-{profile}.yml</li>
+<li>引用的外部jar包的application.properties和application.yml</li>
+<li>引用的外部jar包的application-{profile}.properties 和 application-{profile}.yml</li>
+</ol>
+<h5 id="总结-v2"><a class="header-anchor" href="#总结-v2"></a>总结</h5>
+<p>指定的环境配置优先，外部优先，后面的可以覆盖前面的同名配置项</p>
+<h4 id="SpringBoot原理"><a class="header-anchor" href="#SpringBoot原理"></a>SpringBoot原理</h4>
+<h5 id="SpringBoot启动过程"><a class="header-anchor" href="#SpringBoot启动过程"></a>SpringBoot启动过程</h5>
+<ul>
+<li>
+<p>SpringApplication.run(启动类.class, args)</p>
+</li>
+<li>
+<p>new SpringApplication(primarySources).run(args)：创建一个SpringApplication并运行</p>
+</li>
+<li>
+<p>SpringApplication的创建</p>
+<ul>
+<li>
+<p>保存一些信息</p>
+</li>
+<li>
+<p>获取web应用类型，servlet或webflux</p>
+</li>
+<li>
+<p><code>bootstrapRegistryInitializers</code>：获取引导注册初始化器</p>
+<ul>
+<li>从<code>META-INF/spring.factories</code>文件中读取org.springframework.boot.<code>BootstrapRegistryInitializer</code>类型的类</li>
+</ul>
+</li>
+<li>
+<p><code>initializers</code>：获取应用初始化器</p>
+<ul>
+<li>
+<p>从<code>META-INF/spring.factories</code>文件中读取org.springframework.context.<code>ApplicationContextInitializer</code>类型的类</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/6709bf8c8c5c53d9d6b5c2afe7befc2c.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+</ul>
+</li>
+<li>
+<p><code>listeners</code>：获取应用监听器</p>
+<ul>
+<li>
+<p>从<code>META-INF/spring.factories</code>文件中读取org.springframework.context.<code>ApplicationListener</code>类型的类</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/9bdf85bd2caaab388411825bf8a097d3.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+</ul>
+</li>
+<li>
+<p>deduceMainApplicationClass()：推导出main方法所在类</p>
+</li>
+</ul>
+</li>
+<li>
+<p>SpringApplication的运行</p>
+<ul>
+<li>
+<p>记录应用启动时间</p>
+</li>
+<li>
+<p><code>createBootstrapContext</code>()：创建引导上下文</p>
+<ul>
+<li>创建DefaultBootstrapContext对象</li>
+<li>遍历<code>bootstrapRegistryInitializers</code>，调用initialize方法初始化上下文环境设置</li>
+</ul>
+</li>
+<li>
+<p>configureHeadlessProperty()：让当前应用进行headless模式，java.awt.headless</p>
+</li>
+<li>
+<p>getRunListeners()：获取运行监听器</p>
+<ul>
+<li>
+<p>从<code>META-INF/spring.factories</code>文件中读取org.springframework.boot.<code>SpringApplicationRunListener</code>类型的类</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/84164a12f76164b2670e66078417f982.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+</ul>
+</li>
+<li>
+<p>listeners.starting(bootstrapContext, this.mainApplicationClass)：遍历上面获取的所有运行监听器，调用<code>starting</code>方法，相当于通知关心系统启动事件的监听器系统已启动</p>
+</li>
+<li>
+<p>applicationArguments：保存命令行参数</p>
+</li>
+<li>
+<p>prepareEnvironment()：准备环境信息</p>
+<ul>
+<li>
+<p>getOrCreateEnvironment()：获取或创建一个环境信息</p>
+</li>
+<li>
+<p>configureEnvironment()：配置环境信息</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">configureEnvironment</span><span class="hljs-params">(ConfigurableEnvironment environment, String[] args)</span> &#123;<br>	<span class="hljs-keyword">if</span> (<span class="hljs-built_in">this</span>.addConversionService) &#123;<br>        <span class="hljs-comment">// 设置类型转换器</span><br>		environment.setConversionService(<span class="hljs-keyword">new</span> <span class="hljs-title class_">ApplicationConversionService</span>());<br>	&#125;<br>    <span class="hljs-comment">// 读取所有的配置源的配置属性值</span><br>	configurePropertySources(environment, args);<br>	configureProfiles(environment, args);<br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p>ConfigurationPropertySources.attach(environment)：绑定环境信息</p>
+</li>
+<li>
+<p>listeners.environmentPrepared(bootstrapContext, environment)：遍历运行监听器调用<code>environmentPrepared</code>方法，通知所有运行监听器当前环境已准备完毕</p>
+</li>
+</ul>
+</li>
+<li>
+<p>打印banner</p>
+</li>
+<li>
+<p><code>createApplicationContext</code>()：创建IOC容器</p>
+<ul>
+<li>根据项目类型(servlet)创建容器</li>
+<li>当前会创建<code>AnnotationConfigServletWebServerApplicationContext</code></li>
+</ul>
+</li>
+<li>
+<p><code>prepareContext</code>()：准备IOC容器信息</p>
+<ul>
+<li>context.setEnvironment(environment)：保存环境信息到容器中</li>
+<li>postProcessApplicationContext()：IOC容器后置处理</li>
+<li>applyInitializers()：应用初始化器
+<ul>
+<li>遍历创建阶段获取的<code>ApplicationContextInitializer</code>，调用initialize方法对IOC容器进行初始化扩展</li>
+</ul>
+</li>
+<li>listeners.contextPrepared(context)：遍历运行监听器调用<code>contextPrepared</code>方法，通知所有运行监听器IOC容器已准备完毕</li>
+<li>listeners.contextLoaded(context)：遍历运行监听器调用<code>contextLoaded</code>方法，通知所有运行监听器IOC容器已加载完毕</li>
+</ul>
+</li>
+<li>
+<p><code>refreshContext</code>()：刷新IOC容器</p>
+<ul>
+<li>创建容器中的所有组件</li>
+</ul>
+</li>
+<li>
+<p>打印启动耗时</p>
+</li>
+<li>
+<p>listeners.started(context, timeTakenToStartup)：遍历运行监听器调用<code>started</code>方法，通知所有运行监听器当前项目已启动</p>
+</li>
+<li>
+<p>callRunners()：调用所有的runner</p>
+<ul>
+<li>从IOC容器中获取org.springframework.boot.<code>ApplicationRunner</code>和org.springframework.boot.<code>CommandLineRunner</code>类型的runner对象</li>
+<li>将所有runner按order排序</li>
+<li>遍历所有runner调用run方法</li>
+</ul>
+</li>
+<li>
+<p>启动成功或失败</p>
+<ul>
+<li>若启动没有异常
+<ul>
+<li>listeners.ready(context, timeTakenToReady)：遍历运行监听器调用<code>ready</code>方法，通知所有运行监听器当前项目已准备就绪</li>
+</ul>
+</li>
+<li>若启动有异常
+<ul>
+<li>调用handleRunFailure方法，处理运行失败情况
+<ul>
+<li>isteners.failed(context, exception)：遍历运行监听器调用<code>failed</code>方法，通知所有运行监听器当前项目启动失败</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="SpringBoot启动过程中的关键组件"><a class="header-anchor" href="#SpringBoot启动过程中的关键组件"></a>SpringBoot启动过程中的关键组件</h5>
+<ul>
+<li>org.springframework.context.<code>ApplicationContextInitializer</code></li>
+<li>org.springframework.context.<code>ApplicationListener</code></li>
+<li>org.springframework.boot.<code>SpringApplicationRunListener</code></li>
+<li>org.springframework.boot.<code>ApplicationRunner</code></li>
+<li>org.springframework.boot.<code>CommandLineRunner</code></li>
+</ul>
+<h5 id="自定义关键组件注意事项"><a class="header-anchor" href="#自定义关键组件注意事项"></a>自定义关键组件注意事项</h5>
+<p>继承对应的接口，实现对应的方法</p>
+<p>除了上面的两个runner，其他类都需要在再<code>META-INF/spring.factories</code>文件中声明</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs properties"><span class="hljs-attr">org.springframework.context.ApplicationContextInitializer</span>=<span class="hljs-string">\</span><br><span class="hljs-string">  com.zhuweitung.jdap.listener.MyApplicationContextInitializer</span><br><br><span class="hljs-attr">org.springframework.context.ApplicationListener</span>=<span class="hljs-string">\</span><br><span class="hljs-string">  com.zhuweitung.jdap.listener.MyApplicationListener</span><br><br><span class="hljs-attr">org.springframework.boot.SpringApplicationRunListener</span>=<span class="hljs-string">\</span><br><span class="hljs-string">  com.zhuweitung.jdap.listener.MySpringApplicationRunListener</span><br></code></pre></td></tr></table></figure>
+<p>上面的两个runner需要加上<code>@Component</code>注解注册为组件</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Slf4j</span><br><span class="hljs-meta">@Order(1)</span><br><span class="hljs-meta">@Component</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MyApplicationRunner</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">ApplicationRunner</span> &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">(ApplicationArguments args)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>      log.info(<span class="hljs-string">&quot;MyApplicationRunner run, args is &#123;&#125;&quot;</span>, Arrays.toString(args.getSourceArgs()));<br>    &#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Slf4j</span><br><span class="hljs-meta">@Order(2)</span><br><span class="hljs-meta">@Component</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MyCommandLineRunner</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">CommandLineRunner</span> &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">(String... args)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>        log.info(<span class="hljs-string">&quot;MyCommandLineRunner run, args is &#123;&#125;&quot;</span>, Arrays.toString(args));<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
                 
               </div>
