@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/5c1f7e9edb873dbd9a1d3eb049469912.png">
 <meta property="article:published_time" content="2022-03-19T09:43:48.000Z">
-<meta property="article:modified_time" content="2023-03-21T13:58:01.984Z">
+<meta property="article:modified_time" content="2023-03-22T14:30:25.312Z">
 <meta property="article:author" content="zhuweitung">
 <meta property="article:tag" content="java">
 <meta property="article:tag" content="juc">
@@ -256,7 +256,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          15k 字
+          34k 字
         
       </span>
     
@@ -267,7 +267,7 @@
         
         
         
-          128 分钟
+          286 分钟
         
       </span>
     
@@ -660,13 +660,19 @@
 <p>JMM是一种抽象的概念，仅仅描述一组约定或规范，这组规范定义了程序中各个变量的读写访问方式，并决定一个线程对共享变量的写入时机以及何如对另一个线程可见，关键技术点都是围绕多线程<code>的原子性、可见性和有序性</code>展开的。</p>
 <h4 id="三大特性"><a class="header-anchor" href="#三大特性"></a>三大特性</h4>
 <ul>
-<li>原子性：一个操作要么都成功，要么都失败</li>
-<li>可见性：指当一个线程修改某一个变量时，其他线程是否能够立即知道变更，JMM规定了所有的变量都存储在<code>主内存</code>中
+<li>
+<p>原子性：一个操作不能被打断，要么全部执行完毕，要么不执行</p>
+</li>
+<li>
+<p>可见性：指当一个线程修改某一个变量时，其他线程是否能够立即知道变更</p>
 <ul>
+<li>JMM规定了所有的变量都存储在<code>主内存</code>中</li>
 <li>线程不能直接修改主内存中的变量，线程修改变量时会先创建一个主内存中<code>变量的副本</code>保存到线程自己的<code>工作内存</code>中，其他线程无法访问本线程工作内存中的变量副本，线程间变量的传递都需要通过主内存来完成</li>
+<li>除了volatile关键字能实现可见性之外，还有synchronized，Lock，final也是可以的</li>
 </ul>
 </li>
-<li>有序性：一般习惯性认为代码总是从上到下有序执行，但其他底层为了提升性能，编译器和处理器通常会对指令序列进行重新排序（<code>指令重排</code>）。Java规范规定JVM线程内部维持<code>顺序化语义</code>，即只要程序的最终结果与它顺序执行的结果相等，那么指令的执行顺序可以与代码顺序不一致，此过程叫指令重排。
+<li>
+<p>有序性：一般习惯性认为代码总是从上到下有序执行，但其他底层为了提升性能，编译器和处理器通常会对指令序列进行重新排序（<code>指令重排</code>）。Java规范规定JVM线程内部维持<code>顺序化语义</code>，即只要程序的最终结果与它顺序执行的结果相等，那么指令的执行顺序可以与代码顺序不一致，此过程叫指令重排。</p>
 <ul>
 <li>优点是能够使机器指令更符合CPU的执行特性，最大限度的发挥机器性能</li>
 <li>缺点是指令重排可以保证<code>串行</code>语义一致，但<code>无法保证多线程间的语义也一致</code>，可能导致线程脏读出现</li>
@@ -674,9 +680,405 @@
 </li>
 </ul>
 <h4 id="happens-before"><a class="header-anchor" href="#happens-before"></a>happens-before</h4>
+<p>happens-before即先行发生原则。如果一个操作执行的结果需要对另一个操作可见或代码重排序，那么这两个操作之间必须存在happens-before原则。</p>
+<h5 id="总原则"><a class="header-anchor" href="#总原则"></a>总原则</h5>
+<ul>
+<li>若一个操作先行发生于另一个操作，那么第一操作的执行结果将对第二个操作可见，且第一个操作的执行顺序排在第二个操作之前</li>
+<li>两个操作之间存在happens-before关系，并不意味着一定要按照happens-before原则制定的顺序来执行；若重排序之后的执行结果与按照happens-before关系来执行的<code>结果一致</code>，那么这种重排序并不非法</li>
+</ul>
+<h5 id="八条规则"><a class="header-anchor" href="#八条规则"></a>八条规则</h5>
+<ul>
+<li>次序规则：<code>在一个线程内</code>，按照代码顺序，写在前面的操作先行发生于写在后面的操作，也就是说前面一步操作的结果能被后续操作获取</li>
+<li>锁定规则：一个unlock操作<code>先行发生</code>于后面（时间上的先后）对同一个锁的lock操作</li>
+<li>volatile变量规则：对一个volatile变量的<code>写操作先行发生</code>于后面（时间上的先后）对这个变量的读操作，也就是说前面的写对后面的读是可见的</li>
+<li>传递规则：若操作A先行发生于操作B，操作B先行发生于操作C，则可以得出操作A先行发生于操作C</li>
+<li>线程启动规则：Thread对象的start方法先行发生于此现场的每一个动作</li>
+<li>线程中断规则：对线程interrupt方法的调用先行发生于被中断线程的代码检测到中断事件的发生，也就是说先设置中断标识位，才能检测到中断事件</li>
+<li>线程终止规则：线程中的所有操作都先行发生于对此线程的终止检测，可以通过isAlive等方法检测线程是否已经终止执行</li>
+<li>对象终结规则：一个对象的初始化完成（构造函数执行结束）先行发生于它的finalize方法的开始</li>
+</ul>
+<h3 id="volatile与JMM"><a class="header-anchor" href="#volatile与JMM"></a>volatile与JMM</h3>
+<p>被volatile修饰的变量有2大特点，<code>可见性</code>和<code>有序性</code>（禁止指令重排）</p>
+<p>volatile的内存语义：</p>
+<ul>
+<li>当对一个volatile变量进行写操作时，JMM会把该线程对应的本地内存中的共享变量值<code>立即刷新回主内存</code>中</li>
+<li>当对一个volatile变量进行读操作时，JMM会把该线程对应的本地内存中的共享变量值设置为无效，重新回到主内存中读取最新的共享变量值</li>
+<li>总结：写操作立即刷新到主内存，读操作是直接从主内存读取</li>
+</ul>
+<p>volatile依靠<code>内存屏障</code>保证可见性和有序性</p>
+<h4 id="内存屏障"><a class="header-anchor" href="#内存屏障"></a>内存屏障</h4>
+<p>内存屏障是一类同步屏障指令，是CPU或编译器在对内存随机访问的操作中的一个同步点，使得此点之前的所有读写操作都执行后才可以开始执行此点之后的操作，避免代码重排序。JMM的重排序规则会要求Java编译器在生成JVM指令时<code>插入特定的内存屏障指令</code>，通过这些内存屏障指令，volatile实现了JMM中的可见性和有序性（禁重排），但是volatile<code>无法保障原子性</code>。</p>
+<p><code>内存屏障之前</code>的所有<code>写操作</code>都要回写到主内存</p>
+<p><code>内存屏障之后</code>的所有<code>读操作</code>都能获得内存屏障之前的所有写操作的最新结果（实现了可见性）</p>
+<h5 id="内存屏障分类"><a class="header-anchor" href="#内存屏障分类"></a>内存屏障分类</h5>
+<p>粗分为2种：</p>
+<ul>
+<li>读屏障（load barrier）：在读指令之前插入读屏障，让工作内存中的缓存数据失效，重新回到主内存中获取最新数据</li>
+<li>写屏障（store barrier）：在写指令之后插入写屏障，强制把工作内存（缓冲区）中的数据写回到主内存中</li>
+</ul>
+<p><code>Unsafe</code>类中关于屏障的代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 读屏障</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">native</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">loadFence</span><span class="hljs-params">()</span>;<br><span class="hljs-comment">// 写屏障</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">native</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">storeFence</span><span class="hljs-params">()</span>;<br><span class="hljs-comment">// 全屏障，即读写屏障</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">native</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">fullFence</span><span class="hljs-params">()</span>;<br></code></pre></td></tr></table></figure>
+<p>对应jdk源码中的Unsafe.java -&gt; unsafe.cpp -&gt; orderAccess.hpp</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/1f7e105dc286521fe130332eaa587297.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>细分为4种：</p>
+<table>
+<thead>
+<tr>
+<th>屏障类型</th>
+<th>指令示例</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LoadLoad</td>
+<td>Load1;LoadLoad;Load2</td>
+<td>保证load1的读取操作在load2及后续读取操作之前执行</td>
+</tr>
+<tr>
+<td>StoreStore</td>
+<td>Store1;StoreStore;Store2</td>
+<td>在store2及其后的写操作执行前，保证store1的写操作已刷新到主内存</td>
+</tr>
+<tr>
+<td>LoadStore</td>
+<td>Load1;LoadStore;Store2</td>
+<td>在store2及其后的写操作执行前，保证load1的读操作已读取结束</td>
+</tr>
+<tr>
+<td>StoreLoad</td>
+<td>Store1;StoreLoad;Load2</td>
+<td>在store1的写操作已刷新到主内存之后，load2及其后的读操作才能执行</td>
+</tr>
+</tbody>
+</table>
+<h4 id="volatile变量规则"><a class="header-anchor" href="#volatile变量规则"></a>volatile变量规则</h4>
+<table>
+<thead>
+<tr>
+<th>第一个操作</th>
+<th>第二个操作：普通读写</th>
+<th>第二个操作：volatile读</th>
+<th>第二个操作：volatile写</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>普通读写</td>
+<td>可以重排</td>
+<td>可以重排</td>
+<td>不可以重排</td>
+</tr>
+<tr>
+<td>volatile读</td>
+<td>不可以重排</td>
+<td>不可以重排</td>
+<td>不可以重排</td>
+</tr>
+<tr>
+<td>volatile写</td>
+<td>可以重排</td>
+<td>不可以重排</td>
+<td>不可以重排</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>volatile读之后的操作，都禁止重排序到volatile之前</li>
+<li>volatile写之前的操作，都禁止重排序到volatile之后</li>
+<li>volatile写之后volatile读，禁止重排序</li>
+</ul>
+<h4 id="volatile读插入内存屏障"><a class="header-anchor" href="#volatile读插入内存屏障"></a>volatile读插入内存屏障</h4>
+<p>读屏障：</p>
+<ul>
+<li>
+<p>在volatile读操作后面插入一个LoadLoad屏障，禁止将此volatile读与后面的普通读重排序</p>
+</li>
+<li>
+<p>在volatile读操作后面插入一个LoadStore屏障，禁止将此volatile读与后面的普通写重排序</p>
+</li>
+</ul>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/35b6f672ebd50ce40e6ab1a02c00e1c5.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>写屏障：</p>
+<ul>
+<li>在每个volatile写操作的前面插入一个StoreStore屏障，保证在volatile写之前，其前面锁头普通写操作已经刷新到主内存中</li>
+<li>在每个volatile写操作的后面插入一个StoreLoad屏障，避免volatile写与后面可能有的volatile读/写操作重排序</li>
+</ul>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/56ec33cab6ec74fe937b37b7e679db94.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h4 id="volatile变量读写过程"><a class="header-anchor" href="#volatile变量读写过程"></a>volatile变量读写过程</h4>
+<p>Java内存模型中定义的8种工作内存与主内存之间的原子操作：</p>
+<p>read(读取) -&gt; load(加载) -&gt; use(使用)-&gt; assign(赋值) -&gt; store(存储) -&gt; write(写入) -&gt; lock(锁定)-&gt; unlock(解锁)</p>
+<ul>
+<li>
+<p>read：作用于主内存，将变量的值从主内存传输到工作内存，主内存到工作内存</p>
+</li>
+<li>
+<p>load：作用于工作内存，将read从主内存传输的变量值放入工作内存变量副本中，即数据加载</p>
+</li>
+<li>
+<p>use：作用于工作内存，将工作内存变量副本的值传递给执行引擎，每当JVM遇到需要该变量的字节码指令时会执行该操作</p>
+</li>
+<li>
+<p>assign：作用于工作内存，将从执行引擎接收到的值赋值给工作内存变量，每当JVM遇到一个给变量赋值字节码指令时会执行该操作</p>
+</li>
+<li>
+<p>store：作用于工作内存，将赋值完毕的工作变量的值写回给主内存</p>
+</li>
+<li>
+<p>write：作用于主内存，将store传输过来的变量值赋值给主内存中的变量</p>
+</li>
+</ul>
+<p>由于上述只能保证单条指令的原子性，针对多条指令的组合性原子保证，没有大面积加锁，所以，JVM提供了另外两个原子指令:</p>
+<ul>
+<li>
+<p>lock：作用于主内存，将一个变量标记为一个线程独占的状态，只是写时候加锁，就只是锁了写变量的过程。</p>
+</li>
+<li>
+<p>unlock：作用于主内存，把一个处于锁定状态的变量释放，然后才能被其他线程占用</p>
+</li>
+</ul>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/a7241e267dc222660419cb845997456f.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h4 id="volatile的最佳实践"><a class="header-anchor" href="#volatile的最佳实践"></a>volatile的最佳实践</h4>
+<p>volatile变量不适合参与到依赖当前值的运算，如i=i+1,；i++等</p>
+<p>依靠volatile的可见性特点，通常volatile用于保存某个状态的boolean值或int值</p>
+<p>当volatile变量不符合以下两条时，需要加锁来保证原子性：</p>
+<ul>
+<li>运算结果并不依赖变量的当前值，或者能够确保只有单一的线程修改变量的值</li>
+<li>变量不需要与其他的状态变量共同参与不变约束</li>
+</ul>
+<p>最佳实践：</p>
+<ul>
+<li>单一赋值，但复合运算不可以（i++之类）</li>
+<li>状态标志，判断业务是否结束</li>
+<li>开销较低的读（读保证可见性不加锁，写需要加锁来保证原子性）</li>
+<li>DCL双重校验锁（Double Check Lock）</li>
+</ul>
+<h3 id="CAS"><a class="header-anchor" href="#CAS"></a>CAS</h3>
+<p>CAS（Compare And Swap），实现并发算法时常用的一种技术</p>
+<p>它包含三个操作数：内存位置、预期原值和更新值</p>
+<p>在执行CAS操作时，将内存位置的值与预期原值比较：若相匹配，处理器将该内存位置的值更新为新值；若不匹配，处理将不做任何操作或重试（这种重试行为被称为<code>自旋</code>），多个线程同时执行CAS操作只有一个会成功</p>
+<h4 id="硬件级别保证"><a class="header-anchor" href="#硬件级别保证"></a>硬件级别保证</h4>
+<p>CAS是JDK提供的<code>非阻塞原子性</code>操作，它通过硬件保证了比较-更新的原子性</p>
+<p>CAS是一条CPU的原子指令（<code>cmpxchg</code>），不会造成数据不一致问题，<code>Unsafe</code>提供的CAS方法（compareAndSwapInt等）底层实现即为CPU指令cmpxchg。CAS的原子性是CPU实现独占的，比起synchronized重量级锁，CAS的排他时间要短很多，所以在多线程情况下性能会比较好。</p>
+<h4 id="Unsafe类"><a class="header-anchor" href="#Unsafe类"></a>Unsafe类</h4>
+<p>Unsafe是CAS的核心类，由于Java方法无法直接访问底层系统，需要通过本地（native）方法来访问，Unsafe相当于一个后门，基于该类可以直接操作特定内存的数据。Unsafe类存在于sun.misc包中，其内部方法操作可以像C的指针一样直接操作内存。</p>
+<p>java.util.concurrent.atomic包中类的方法基本都是调用Unsafe类的方法实现的</p>
+<p>AtomicInteger类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">Unsafe</span> <span class="hljs-variable">unsafe</span> <span class="hljs-operator">=</span> Unsafe.getUnsafe();<br><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">long</span> valueOffset;<br><span class="hljs-keyword">static</span> &#123;<br>    <span class="hljs-keyword">try</span> &#123;<br>        <span class="hljs-comment">// 获取value变量值在内存中的偏移地址</span><br>        valueOffset = unsafe.objectFieldOffset<br>            (AtomicInteger.class.getDeclaredField(<span class="hljs-string">&quot;value&quot;</span>));<br>    &#125; <span class="hljs-keyword">catch</span> (Exception ex) &#123; <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(ex); &#125;<br>&#125;<br><br><span class="hljs-comment">// 使用volatile修改，保证变量的可见性</span><br><span class="hljs-keyword">private</span> <span class="hljs-keyword">volatile</span> <span class="hljs-type">int</span> value;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getAndIncrement</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-keyword">return</span> unsafe.getAndAddInt(<span class="hljs-built_in">this</span>, valueOffset, <span class="hljs-number">1</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>Unsafe类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">native</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">compareAndSwapInt</span><span class="hljs-params">(Object var1, <span class="hljs-type">long</span> var2, <span class="hljs-type">int</span> var4, <span class="hljs-type">int</span> var5)</span>;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getAndAddInt</span><span class="hljs-params">(Object var1, <span class="hljs-type">long</span> var2, <span class="hljs-type">int</span> var4)</span> &#123;<br>    <span class="hljs-type">int</span> var5;<br>    <span class="hljs-keyword">do</span> &#123;<br>        var5 = <span class="hljs-built_in">this</span>.getIntVolatile(var1, var2); <span class="hljs-comment">// 获取内存偏移位置上的原值</span><br>        <span class="hljs-comment">// 比较并更新，若不匹配就自旋</span><br>    &#125; <span class="hljs-keyword">while</span>(!<span class="hljs-built_in">this</span>.compareAndSwapInt(var1, var2, var5, var5 + var4));<br>    <span class="hljs-keyword">return</span> var5;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="AtomicReference"><a class="header-anchor" href="#AtomicReference"></a>AtomicReference</h4>
+<p>java.util.concurrent.atomic包下提供了AtomicReference类，可以将我们需要的任何对象包装进去称为原子类</p>
+<h4 id="CAS与自旋锁"><a class="header-anchor" href="#CAS与自旋锁"></a>CAS与自旋锁</h4>
+<p>自旋锁是指尝试获取锁的线程不会立即阻塞，而是采用循环的方式取尝试获取锁，当线程发现锁被占用时，会不断判断锁的状态，直到获取，这样的好处是减少线程上下文切换的消耗，缺点是循环会消耗CPU</p>
+<p>实现自旋锁：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-type">AtomicBoolean</span> <span class="hljs-variable">locked</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">AtomicBoolean</span>(<span class="hljs-literal">false</span>);<br><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">lock</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-keyword">while</span> (!locked.compareAndSet(<span class="hljs-literal">false</span>, <span class="hljs-literal">true</span>)) &#123;<br>        <span class="hljs-comment">// 若是上锁状态就自旋</span><br>    &#125;<br>    log.info(<span class="hljs-string">&quot;&#123;&#125; 上锁&quot;</span>, Thread.currentThread().getName());<br>&#125;<br><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">unlock</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-keyword">while</span> (!locked.compareAndSet(<span class="hljs-literal">true</span>, <span class="hljs-literal">false</span>)) &#123;<br>        <span class="hljs-comment">// 若是未上锁状态就自旋</span><br>    &#125;<br>    log.info(<span class="hljs-string">&quot;&#123;&#125; 解锁&quot;</span>, Thread.currentThread().getName());<br>&#125;<br><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>    <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(() -&gt; &#123;<br>        lock();<br>        <span class="hljs-keyword">try</span> &#123;<br>            Thread.sleep(TimeUnit.SECONDS.toMillis(<span class="hljs-number">2</span>));<br>        &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>            e.printStackTrace();<br>        &#125;<br>        unlock();<br>    &#125;).start();<br>    <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(() -&gt; &#123;<br>        lock();<br>        <span class="hljs-keyword">try</span> &#123;<br>            Thread.sleep(TimeUnit.SECONDS.toMillis(<span class="hljs-number">2</span>));<br>        &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>            e.printStackTrace();<br>        &#125;<br>        unlock();<br>    &#125;).start();<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="CAS缺点"><a class="header-anchor" href="#CAS缺点"></a>CAS缺点</h4>
+<ul>
+<li>
+<p>循环时间长开销很大</p>
+</li>
+<li>
+<p>会出现ABA问题</p>
+<ul>
+<li>
+<p>线程1从内存位置V取出A，同时线程2也从内存中取出A，并且线程2进行操作将值变为了B，然后又进行操作将V位置的数据变为了A，此时线程1进行CAS操作时发现内存中依然是A，CAS操作成功</p>
+</li>
+<li>
+<p>虽然线程1操作成功，但不代表这个过程没有问题</p>
+</li>
+<li>
+<p>要解决ABA问题可以使用版本号（version）/戳记（AtomicStampedReference）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> AtomicStampedReference&lt;Integer&gt; reference = <span class="hljs-keyword">new</span> <span class="hljs-title class_">AtomicStampedReference</span>&lt;&gt;(<span class="hljs-number">100</span>, <span class="hljs-number">0</span>);<br><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>    <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(() -&gt; &#123;<br>        <span class="hljs-type">Integer</span> <span class="hljs-variable">num</span> <span class="hljs-operator">=</span> reference.getReference();<br>        <span class="hljs-type">int</span> <span class="hljs-variable">stamp</span> <span class="hljs-operator">=</span> reference.getStamp();<br>        <span class="hljs-keyword">try</span> &#123;<br>            Thread.sleep(TimeUnit.SECONDS.toMillis(<span class="hljs-number">1</span>));<br>        &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>            e.printStackTrace();<br>        &#125;<br>        reference.compareAndSet(num, <span class="hljs-number">101</span>, stamp, stamp + <span class="hljs-number">1</span>);<br>        <span class="hljs-keyword">try</span> &#123;<br>            Thread.sleep(TimeUnit.SECONDS.toMillis(<span class="hljs-number">1</span>));<br>        &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>            e.printStackTrace();<br>        &#125;<br>        reference.compareAndSet(<span class="hljs-number">101</span>, num, stamp + <span class="hljs-number">1</span>, stamp + <span class="hljs-number">2</span>);<br>    &#125;).start();<br>    <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(() -&gt; &#123;<br>        <span class="hljs-type">Integer</span> <span class="hljs-variable">num</span> <span class="hljs-operator">=</span> reference.getReference();<br>        <span class="hljs-type">int</span> <span class="hljs-variable">stamp</span> <span class="hljs-operator">=</span> reference.getStamp();<br>        <span class="hljs-keyword">try</span> &#123;<br>            Thread.sleep(TimeUnit.SECONDS.toMillis(<span class="hljs-number">3</span>));<br>        &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>            e.printStackTrace();<br>        &#125;<br>        log.info(<span class="hljs-string">&quot;compareAndSet &#123;&#125;&quot;</span>, reference.compareAndSet(num, <span class="hljs-number">102</span>, stamp, stamp + <span class="hljs-number">1</span>));<br>    &#125;).start();<br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="原子操作类"><a class="header-anchor" href="#原子操作类"></a>原子操作类</h3>
+<p><img src="F:%5Cup%5Cimages%5C20230322160935.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h4 id="分类"><a class="header-anchor" href="#分类"></a>分类</h4>
+<p>基本类型原子类：</p>
+<ul>
+<li>AtomicInteger</li>
+<li>AtomicBoolean</li>
+<li>AtomicLong</li>
+</ul>
+<p>数组类型原子类：</p>
+<ul>
+<li>AtomicIntegerArray</li>
+<li>AtomicLongArray</li>
+<li>AtomicReferenceArray</li>
+</ul>
+<p>引用类型原子类：</p>
+<ul>
+<li>AtomicReference</li>
+<li>AtomicStampedReference：携带版本号的引用类型原子类，可以解决ABA问题，记录修改次数</li>
+<li>AtomicMarkableReference：原子更新时会更改标记位，标记是否修改过</li>
+</ul>
+<p>对象属性修改原子类：</p>
+<ul>
+<li>
+<p>AtomicIntegerFieldUpdater：基于反射，对指定类的指定volatile int 字段进行原子更新</p>
+</li>
+<li>
+<p>AtomicLongFieldUpdater：基于反射，对指定类的指定volatile long 字段进行原子更新</p>
+</li>
+<li>
+<p>AtomicReferenceFieldUpdater：基于反射，对指定类的指定volatile 引用类型字段进行原子更新</p>
+</li>
+<li>
+<p>使用目的：以线程安全的方式操作非线程安全对象内的某些字段</p>
+</li>
+<li>
+<p>使用要求</p>
+<ul>
+<li>进行操作的属性需要求<code>public volatile</code>关键字修饰</li>
+<li>使用静态方法newUpdater创建一个更新器，并设置需要更新的类和属性</li>
+</ul>
+</li>
+<li>
+<p>示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Data</span><br><span class="hljs-meta">@AllArgsConstructor</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Increment</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">volatile</span> <span class="hljs-type">int</span> value;<br>    <span class="hljs-keyword">private</span> String name;<br>&#125;<br><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> InterruptedException &#123;<br>    AtomicIntegerFieldUpdater&lt;Increment&gt; updater = <br>        AtomicIntegerFieldUpdater.newUpdater(Increment.class, <span class="hljs-string">&quot;value&quot;</span>);<br>    <span class="hljs-type">ExecutorService</span> <span class="hljs-variable">threadPool</span> <span class="hljs-operator">=</span> Executors.newFixedThreadPool(<span class="hljs-number">5</span>);<br>    <span class="hljs-type">Increment</span> <span class="hljs-variable">increment</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Increment</span>(<span class="hljs-number">0</span>, <span class="hljs-string">&quot;自增&quot;</span>);<br>    <span class="hljs-type">CountDownLatch</span> <span class="hljs-variable">count</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">CountDownLatch</span>(<span class="hljs-number">5</span>);<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">5</span>; i++) &#123;<br>        threadPool.submit(() -&gt; &#123;<br>            <span class="hljs-keyword">try</span> &#123;<br>                <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">j</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; j &lt; <span class="hljs-number">10000</span>; j++) &#123;<br>                    updater.incrementAndGet(increment);<br>                &#125;<br>            &#125; <span class="hljs-keyword">finally</span> &#123;<br>                count.countDown();<br>            &#125;<br>        &#125;);<br>    &#125;<br>    threadPool.shutdown();<br>    count.await();<br>    log.info(<span class="hljs-string">&quot;&#123;&#125;&quot;</span>, increment);<br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>原子操作增强类：</p>
+<ul>
+<li>DoubleAccumulator</li>
+<li>DoubleAdder</li>
+<li>LongAccumulator：使用给定的累加器函数和初始值创建新实例</li>
+<li>LongAdder：创建一个初始总和为0的新加法器；当多个线程更新用于收集统计信息但不用于细粒度同步控制的目的公共和时，此类通常优于AtomicLong，在低更新争用下，两个类具有相似特征，但在高争用情况下，本类的预期吞吐量明显更高，但代价是空间消耗更多</li>
+</ul>
+<p>性能比较示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Getter</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">LikeClick</span> &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-type">long</span> <span class="hljs-variable">number</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">private</span> <span class="hljs-type">AtomicLong</span> <span class="hljs-variable">atomicLong</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">AtomicLong</span>();<br>    <span class="hljs-keyword">private</span> <span class="hljs-type">LongAdder</span> <span class="hljs-variable">longAdder</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">LongAdder</span>();<br>    <span class="hljs-keyword">private</span> <span class="hljs-type">LongAccumulator</span> <span class="hljs-variable">longAccumulator</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">LongAccumulator</span>((a, b) -&gt; a + b, <span class="hljs-number">0</span>);<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">synchronized</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">clickBySynchronized</span><span class="hljs-params">()</span> &#123;<br>        number++;<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">clickByAtomicLong</span><span class="hljs-params">()</span> &#123;<br>        atomicLong.getAndIncrement();<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">clickByLongAdder</span><span class="hljs-params">()</span> &#123;<br>        longAdder.increment();<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">clickByLongAccumulator</span><span class="hljs-params">()</span> &#123;<br>        longAccumulator.accumulate(<span class="hljs-number">1</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">LikeClick</span> <span class="hljs-variable">likeClick</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">LikeClick</span>();<br><span class="hljs-type">int</span> <span class="hljs-variable">threadNum</span> <span class="hljs-operator">=</span> <span class="hljs-number">50</span>;<br><span class="hljs-type">int</span> <span class="hljs-variable">clickNum</span> <span class="hljs-operator">=</span> <span class="hljs-number">1000000</span>;<br><span class="hljs-type">ExecutorService</span> <span class="hljs-variable">threadPool</span> <span class="hljs-operator">=</span> Executors.newFixedThreadPool(<span class="hljs-number">50</span>);<br><span class="hljs-type">TimeInterval</span> <span class="hljs-variable">timer</span> <span class="hljs-operator">=</span> DateUtil.timer();<br><span class="hljs-type">CountDownLatch</span> <span class="hljs-variable">count1</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">CountDownLatch</span>(threadNum);<br><span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">50</span>; i++) &#123;<br>    threadPool.submit(() -&gt; &#123;<br>        <span class="hljs-keyword">try</span> &#123;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">j</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; j &lt; clickNum; j++) &#123;<br>                likeClick.clickBySynchronized();<br>            &#125;<br>        &#125; <span class="hljs-keyword">finally</span> &#123;<br>            count1.countDown();<br>        &#125;<br>    &#125;);<br>&#125;<br>count1.await();<br>log.info(<span class="hljs-string">&quot;clickBySynchronized 结果：&#123;&#125; 耗时&#123;&#125;ms&quot;</span>, likeClick.getNumber(), timer.intervalRestart());<br><span class="hljs-type">CountDownLatch</span> <span class="hljs-variable">count2</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">CountDownLatch</span>(threadNum);<br><span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">50</span>; i++) &#123;<br>    threadPool.submit(() -&gt; &#123;<br>        <span class="hljs-keyword">try</span> &#123;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">j</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; j &lt; clickNum; j++) &#123;<br>                likeClick.clickByAtomicLong();<br>            &#125;<br>        &#125; <span class="hljs-keyword">finally</span> &#123;<br>            count2.countDown();<br>        &#125;<br>    &#125;);<br>&#125;<br>count2.await();<br>log.info(<span class="hljs-string">&quot;clickByAtomicLong 结果：&#123;&#125; 耗时&#123;&#125;ms&quot;</span>, likeClick.getAtomicLong(), timer.intervalRestart());<br><span class="hljs-type">CountDownLatch</span> <span class="hljs-variable">count3</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">CountDownLatch</span>(threadNum);<br><span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">50</span>; i++) &#123;<br>    threadPool.submit(() -&gt; &#123;<br>        <span class="hljs-keyword">try</span> &#123;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">j</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; j &lt; clickNum; j++) &#123;<br>                likeClick.clickByLongAdder();<br>            &#125;<br>        &#125; <span class="hljs-keyword">finally</span> &#123;<br>            count3.countDown();<br>        &#125;<br>    &#125;);<br>&#125;<br>count3.await();<br>log.info(<span class="hljs-string">&quot;clickByLongAdder 结果：&#123;&#125; 耗时&#123;&#125;ms&quot;</span>, likeClick.getLongAdder(), timer.intervalRestart());<br><span class="hljs-type">CountDownLatch</span> <span class="hljs-variable">count4</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">CountDownLatch</span>(threadNum);<br><span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">50</span>; i++) &#123;<br>    threadPool.submit(() -&gt; &#123;<br>        <span class="hljs-keyword">try</span> &#123;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">j</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; j &lt; clickNum; j++) &#123;<br>                likeClick.clickByLongAccumulator();<br>            &#125;<br>        &#125; <span class="hljs-keyword">finally</span> &#123;<br>            count4.countDown();<br>        &#125;<br>    &#125;);<br>&#125;<br>count4.await();<br>log.info(<span class="hljs-string">&quot;clickByLongAccumulator 结果：&#123;&#125; 耗时&#123;&#125;ms&quot;</span>, likeClick.getLongAccumulator(), timer.intervalRestart());<br>threadPool.shutdown();<br></code></pre></td></tr></table></figure>
+<p>结果：<br>
+<img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/ffa48f749bfea7c80b52ead2d578ad6b.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h4 id="LongAdder类原理解析"><a class="header-anchor" href="#LongAdder类原理解析"></a>LongAdder类原理解析</h4>
+<p>继承体系图：</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/6f30c1fa745015694d4c7a5bfcf3cce0.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>Striped64类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">abstract</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Striped64</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Number</span> &#123;<br>    <br>    <span class="hljs-comment">/** Number of CPUS, to place bound on table size CPU数量，cells数组的最大长度  */</span><br>    <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">NCPU</span> <span class="hljs-operator">=</span> Runtime.getRuntime().availableProcessors();<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * Table of cells. When non-null, size is a power of 2.</span><br><span class="hljs-comment">     * cells数组，长度是2的幂</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">transient</span> <span class="hljs-keyword">volatile</span> Cell[] cells;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * Base value, used mainly when there is no contention, but also as</span><br><span class="hljs-comment">     * a fallback during table initialization races. Updated via CAS.</span><br><span class="hljs-comment">     * 基础value值，当并发较低时，只累加该值，主要用于没有竞争的情况，通过cas更新</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">transient</span> <span class="hljs-keyword">volatile</span> <span class="hljs-type">long</span> base;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * Spinlock (locked via CAS) used when resizing and/or creating Cells.</span><br><span class="hljs-comment">     * 在调整单元格大小和/或创建单元格时使用自旋锁（通过 CAS 锁定）</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">transient</span> <span class="hljs-keyword">volatile</span> <span class="hljs-type">int</span> cellsBusy;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>Cell内部类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@sun</span>.misc.Contended <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Cell</span> &#123;<br>    <span class="hljs-keyword">volatile</span> <span class="hljs-type">long</span> value;<br>    Cell(<span class="hljs-type">long</span> x) &#123; value = x; &#125;<br>    <span class="hljs-keyword">final</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">cas</span><span class="hljs-params">(<span class="hljs-type">long</span> cmp, <span class="hljs-type">long</span> val)</span> &#123;<br>        <span class="hljs-keyword">return</span> UNSAFE.compareAndSwapLong(<span class="hljs-built_in">this</span>, valueOffset, cmp, val);<br>    &#125;<br>    <span class="hljs-comment">// Unsafe mechanics</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> sun.misc.Unsafe UNSAFE;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">long</span> valueOffset;<br>    <span class="hljs-keyword">static</span> &#123;<br>        <span class="hljs-keyword">try</span> &#123;<br>            UNSAFE = sun.misc.Unsafe.getUnsafe();<br>            Class&lt;?&gt; ak = Cell.class;<br>            valueOffset = UNSAFE.objectFieldOffset<br>                (ak.getDeclaredField(<span class="hljs-string">&quot;value&quot;</span>));<br>        &#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(e);<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>LongAdder的基本思路就是<code>分散热点</code>，将value值分散个一个<code>Cell数组</code>中，不同线程会命中到数据的不同槽中，各个线程只对自己槽中的那个值进行CAS操作，如此热点就被分散了，冲突的概率就会减小很多。当获取真正的long值时，将各个槽的变量值累加返回。</p>
+<h5 id="基本原理"><a class="header-anchor" href="#基本原理"></a>基本原理</h5>
+<p>LongAdder在无竞争的情况下和AtomicLong一样，对<code>base</code>变量进行cas操作。当出现竞争关系时采用<code>分散热点</code>的方式，用空间换时间，用一个<code>cells数组</code>，将一个value拆分进这个数组。多线程需要同时对value进行操作时，可以对线程id进行hash得到hash值，再根据hash值映射到这个cells数组的某个下标，再对该下标锁对应的值进行自增操作。当所有线程操作完毕，将cells数组的所有值和base都加起来作为最终结果。</p>
+<h5 id="源码解析"><a class="header-anchor" href="#源码解析"></a>源码解析</h5>
+<ul>
+<li>
+<p>add方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">add</span><span class="hljs-params">(<span class="hljs-type">long</span> x)</span> &#123;<br>    <span class="hljs-comment">// as为cells</span><br>    <span class="hljs-comment">// b为base值</span><br>    <span class="hljs-comment">// v为期望值</span><br>    <span class="hljs-comment">// m为cells数组长度</span><br>    <span class="hljs-comment">// a为当前线程对应cell</span><br>    Cell[] as; <span class="hljs-type">long</span> b, v; <span class="hljs-type">int</span> m; Cell a;<br>    <span class="hljs-comment">// 进入if语句的条件：cells不为空或casBase操作失败（说明出现了竞争情况）</span><br>    <span class="hljs-keyword">if</span> ((as = cells) != <span class="hljs-literal">null</span> || !casBase(b = base, b + x)) &#123;<br>        <span class="hljs-comment">// 判断是否出现冲突的标识符，出现冲突后可能要扩容</span><br>        <span class="hljs-type">boolean</span> <span class="hljs-variable">uncontended</span> <span class="hljs-operator">=</span> <span class="hljs-literal">true</span>;<br>        <span class="hljs-comment">// 进入if语句调用longAccumulate的条件</span><br>        <span class="hljs-comment">// cells为空，创建一个长度为2的cells数组</span><br>        <span class="hljs-comment">// 数组长度小于0，不太可能出现</span><br>        <span class="hljs-comment">// 通过getProbe方法获取线程hash值，再计算得到线程对应cells数组的下标，获取线程对应数组中的cell，cell为空，说明当前线程还没有更新过cell，需要初始化cell</span><br>        <span class="hljs-comment">// cell中进行cas操作出现冲突，可能需要扩容</span><br>        <span class="hljs-keyword">if</span> (as == <span class="hljs-literal">null</span> || (m = as.length - <span class="hljs-number">1</span>) &lt; <span class="hljs-number">0</span> ||<br>            (a = as[getProbe() &amp; m]) == <span class="hljs-literal">null</span> ||<br>            !(uncontended = a.cas(v = a.value, v + x)))<br>            <span class="hljs-comment">// 调用Striped64中的longAccumulate方法</span><br>            longAccumulate(x, <span class="hljs-literal">null</span>, uncontended);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p>longAccumulate方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">final</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">longAccumulate</span><span class="hljs-params">(<span class="hljs-type">long</span> x, LongBinaryOperator fn,</span><br><span class="hljs-params">                          <span class="hljs-type">boolean</span> wasUncontended)</span> &#123;<br>    <span class="hljs-type">int</span> h;<br>   	<span class="hljs-comment">// 随机数未初始化</span><br>    <span class="hljs-keyword">if</span> ((h = getProbe()) == <span class="hljs-number">0</span>) &#123;<br>        <span class="hljs-comment">// 强制初始化随机数</span><br>        ThreadLocalRandom.current(); <span class="hljs-comment">// force initialization</span><br>        <span class="hljs-comment">// 获取当前线程hash值</span><br>        h = getProbe();<br>        wasUncontended = <span class="hljs-literal">true</span>;<br>    &#125;<br>    <span class="hljs-comment">// 是否需要扩容的标志</span><br>    <span class="hljs-type">boolean</span> <span class="hljs-variable">collide</span> <span class="hljs-operator">=</span> <span class="hljs-literal">false</span>;                <span class="hljs-comment">// True if last slot nonempty</span><br>    <span class="hljs-keyword">for</span> (;;) &#123;<br>        Cell[] as; Cell a; <span class="hljs-type">int</span> n; <span class="hljs-type">long</span> v;<br>        <span class="hljs-comment">// cells数组已被初始化</span><br>        <span class="hljs-keyword">if</span> ((as = cells) != <span class="hljs-literal">null</span> &amp;&amp; (n = as.length) &gt; <span class="hljs-number">0</span>) &#123;<br>            <span class="hljs-comment">// 线程对应数组中的cell，cell为空，说明当前线程还没有更新过cell，需要初始化cell</span><br>            <span class="hljs-keyword">if</span> ((a = as[(n - <span class="hljs-number">1</span>) &amp; h]) == <span class="hljs-literal">null</span>) &#123;<br>                <span class="hljs-keyword">if</span> (cellsBusy == <span class="hljs-number">0</span>) &#123;       <span class="hljs-comment">// Try to attach new Cell</span><br>                    <span class="hljs-type">Cell</span> <span class="hljs-variable">r</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Cell</span>(x);   <span class="hljs-comment">// Optimistically create</span><br>                    <span class="hljs-comment">// 没有加锁并尝试加锁</span><br>                    <span class="hljs-keyword">if</span> (cellsBusy == <span class="hljs-number">0</span> &amp;&amp; casCellsBusy()) &#123;<br>                        <span class="hljs-type">boolean</span> <span class="hljs-variable">created</span> <span class="hljs-operator">=</span> <span class="hljs-literal">false</span>;<br>                        <span class="hljs-keyword">try</span> &#123;               <span class="hljs-comment">// Recheck under lock</span><br>                            Cell[] rs; <span class="hljs-type">int</span> m, j;<br>                            <span class="hljs-keyword">if</span> ((rs = cells) != <span class="hljs-literal">null</span> &amp;&amp;<br>                                (m = rs.length) &gt; <span class="hljs-number">0</span> &amp;&amp;<br>                                rs[j = (m - <span class="hljs-number">1</span>) &amp; h] == <span class="hljs-literal">null</span>) &#123;<br>                                <span class="hljs-comment">// 将刚才new的cell放到数组对应下标</span><br>                                rs[j] = r;<br>                                created = <span class="hljs-literal">true</span>;<br>                            &#125;<br>                        &#125; <span class="hljs-keyword">finally</span> &#123;<br>                            cellsBusy = <span class="hljs-number">0</span>;<br>                        &#125;<br>                        <span class="hljs-keyword">if</span> (created)<br>                            <span class="hljs-keyword">break</span>;<br>                        <span class="hljs-keyword">continue</span>;           <span class="hljs-comment">// Slot is now non-empty</span><br>                    &#125;<br>                &#125;<br>                collide = <span class="hljs-literal">false</span>;<br>            &#125;<br>            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (!wasUncontended)       <span class="hljs-comment">// CAS already known to fail</span><br>                <span class="hljs-comment">// 标记为没有竞争，重新获取hash值</span><br>                wasUncontended = <span class="hljs-literal">true</span>;      <span class="hljs-comment">// Continue after rehash</span><br>            <span class="hljs-comment">// 调用cell的cas方法进行累加</span><br>            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (a.cas(v = a.value, ((fn == <span class="hljs-literal">null</span>) ? v + x :<br>                                         fn.applyAsLong(v, x))))<br>                <span class="hljs-keyword">break</span>;<br>            <span class="hljs-comment">// 当前数组长度大于等于CPU数时不再扩容</span><br>            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (n &gt;= NCPU || cells != as)<br>                collide = <span class="hljs-literal">false</span>;            <span class="hljs-comment">// At max size or stale</span><br>            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (!collide)<br>                <span class="hljs-comment">// 设置为允许扩容</span><br>                collide = <span class="hljs-literal">true</span>;<br>            <span class="hljs-comment">// 没有加锁并尝试加锁</span><br>            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (cellsBusy == <span class="hljs-number">0</span> &amp;&amp; casCellsBusy()) &#123;<br>                <span class="hljs-keyword">try</span> &#123;<br>                    <span class="hljs-keyword">if</span> (cells == as) &#123;      <span class="hljs-comment">// Expand table unless stale</span><br>                        <span class="hljs-comment">// 左移1位，即扩容为原长度的2倍</span><br>                        Cell[] rs = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Cell</span>[n &lt;&lt; <span class="hljs-number">1</span>];<br>                        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; n; ++i)<br>                            rs[i] = as[i];<br>                        cells = rs;<br>                    &#125;<br>                &#125; <span class="hljs-keyword">finally</span> &#123;<br>                    cellsBusy = <span class="hljs-number">0</span>;<br>                &#125;<br>                collide = <span class="hljs-literal">false</span>;<br>                <span class="hljs-keyword">continue</span>;                   <span class="hljs-comment">// Retry with expanded table</span><br>            &#125;<br>			<span class="hljs-comment">// 重新计算hash值</span><br>            h = advanceProbe(h);<br>        &#125;<br>        <span class="hljs-comment">// cells没有加锁且没有初始化，尝试对它加锁，并初始化cells数组</span><br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (cellsBusy == <span class="hljs-number">0</span> &amp;&amp; cells == as &amp;&amp; casCellsBusy()) &#123;<br>            <span class="hljs-type">boolean</span> <span class="hljs-variable">init</span> <span class="hljs-operator">=</span> <span class="hljs-literal">false</span>;<br>            <span class="hljs-keyword">try</span> &#123;                           <span class="hljs-comment">// Initialize table</span><br>                <span class="hljs-keyword">if</span> (cells == as) &#123;<br>                    Cell[] rs = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Cell</span>[<span class="hljs-number">2</span>]; <span class="hljs-comment">// 创建一个长度为2的数组</span><br>                    rs[h &amp; <span class="hljs-number">1</span>] = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Cell</span>(x); <span class="hljs-comment">// 将值放到线程对应下标位置</span><br>                    cells = rs;<br>                    init = <span class="hljs-literal">true</span>;<br>                &#125;<br>            &#125; <span class="hljs-keyword">finally</span> &#123;<br>                cellsBusy = <span class="hljs-number">0</span>;<br>            &#125;<br>            <span class="hljs-keyword">if</span> (init)<br>                <span class="hljs-keyword">break</span>;<br>        &#125;<br>        <span class="hljs-comment">// cells正在进行初始化，则尝试直接在base上进行累加</span><br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (casBase(v = base, ((fn == <span class="hljs-literal">null</span>) ? v + x :<br>                                    fn.applyAsLong(v, x))))<br>            <span class="hljs-keyword">break</span>;                          <span class="hljs-comment">// Fall back on using base</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/0adc66e65a7047290078a79b07120975.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+<li>
+<p>sum方法，只保证最终一致性</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-type">long</span> <span class="hljs-title function_">sum</span><span class="hljs-params">()</span> &#123;<br>    Cell[] as = cells; Cell a;<br>    <span class="hljs-type">long</span> <span class="hljs-variable">sum</span> <span class="hljs-operator">=</span> base;<br>    <span class="hljs-keyword">if</span> (as != <span class="hljs-literal">null</span>) &#123;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; as.length; ++i) &#123;<br>            <span class="hljs-keyword">if</span> ((a = as[i]) != <span class="hljs-literal">null</span>)<br>                sum += a.value;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> sum;<br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="ThreadLocal"><a class="header-anchor" href="#ThreadLocal"></a>ThreadLocal</h3>
+<p>该类提供线程局部变量。 这些变量与它们的正常对应物的不同之处在于，访问其中的每个线程（通过其get或set方法）具有其<code>自己的，独立初始化</code>的变量副本。 ThreadLocal实例通常是希望将状态与线程相关联的类中的<code>私有静态字段</code>（例如，用户ID或事务ID）。</p>
+<p>由于每个线程都有自己的变量副本，所以避免了线程安全问题。</p>
+<p>在线程使用完成后最好调用ThreadLocal对象的remove方法，去删除此线程局部变量的当前线程值，避免影响后续业务逻辑和造成内存泄露等问题</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java">objectThreadLocal.set(userInfo);<br><span class="hljs-keyword">try</span> &#123;<br> <span class="hljs-comment">// ...</span><br>&#125; <span class="hljs-keyword">finally</span> &#123;<br> objectThreadLocal.remove();<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="Thread、ThreadLocal、ThreadLocalMap关系"><a class="header-anchor" href="#Thread、ThreadLocal、ThreadLocalMap关系"></a>Thread、ThreadLocal、ThreadLocalMap关系</h4>
+<p>Thread类中包含ThreadLocal.ThreadLocalMap变量</p>
+<p>ThreadLocalMap类是ThreadLocal类的静态内部类</p>
+<p>ThreadLocalMap实际上就是一个以ThreadLocal实例为key，任意对象为value的Entry对象</p>
+<h4 id="源码分析"><a class="header-anchor" href="#源码分析"></a>源码分析</h4>
+<p>ThreadLocal的get方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> T <span class="hljs-title function_">get</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-comment">// 获取当前线程</span><br>    <span class="hljs-type">Thread</span> <span class="hljs-variable">t</span> <span class="hljs-operator">=</span> Thread.currentThread();<br>    <span class="hljs-comment">// 获取线程的threadLocals变量</span><br>    <span class="hljs-type">ThreadLocalMap</span> <span class="hljs-variable">map</span> <span class="hljs-operator">=</span> getMap(t);<br>    <span class="hljs-keyword">if</span> (map != <span class="hljs-literal">null</span>) &#123;<br>        <span class="hljs-comment">// 获取map中的值</span><br>        ThreadLocalMap.<span class="hljs-type">Entry</span> <span class="hljs-variable">e</span> <span class="hljs-operator">=</span> map.getEntry(<span class="hljs-built_in">this</span>);<br>        <span class="hljs-keyword">if</span> (e != <span class="hljs-literal">null</span>) &#123;<br>            <span class="hljs-meta">@SuppressWarnings(&quot;unchecked&quot;)</span><br>            <span class="hljs-type">T</span> <span class="hljs-variable">result</span> <span class="hljs-operator">=</span> (T)e.value;<br>            <span class="hljs-keyword">return</span> result;<br>        &#125;<br>    &#125;<br>    <span class="hljs-comment">// 未获取到时设置初始值</span><br>    <span class="hljs-keyword">return</span> setInitialValue();<br>&#125;<br><br>ThreadLocalMap <span class="hljs-title function_">getMap</span><span class="hljs-params">(Thread t)</span> &#123;<br>    <span class="hljs-keyword">return</span> t.threadLocals;<br>&#125;<br><br><span class="hljs-keyword">private</span> T <span class="hljs-title function_">setInitialValue</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">T</span> <span class="hljs-variable">value</span> <span class="hljs-operator">=</span> initialValue();<br>    <span class="hljs-type">Thread</span> <span class="hljs-variable">t</span> <span class="hljs-operator">=</span> Thread.currentThread();<br>    <span class="hljs-type">ThreadLocalMap</span> <span class="hljs-variable">map</span> <span class="hljs-operator">=</span> getMap(t);<br>    <span class="hljs-keyword">if</span> (map != <span class="hljs-literal">null</span>)<br>        map.set(<span class="hljs-built_in">this</span>, value);<br>    <span class="hljs-keyword">else</span><br>        createMap(t, value);<br>    <span class="hljs-keyword">return</span> value;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>ThreadLocalMap类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">static</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ThreadLocalMap</span> &#123;<br>    <span class="hljs-keyword">static</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Entry</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">WeakReference</span>&lt;ThreadLocal&lt;?&gt;&gt; &#123;<br>        <span class="hljs-comment">/** The value associated with this ThreadLocal. */</span><br>        Object value;<br>        Entry(ThreadLocal&lt;?&gt; k, Object v) &#123;<br>            <span class="hljs-built_in">super</span>(k);<br>            value = v;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>ThreadLocalMap是以ThreadLocal为键的map，不过ThreadLocal是经过两层包装的</p>
+<p>第一层使用WeakReference&lt;ThreadLocal&lt;?&gt;&gt;将ThreadLocal对象变为一个<code>弱引用对象</code></p>
+<p>第二层是定义了一个Entry类来拓展WeakReference&lt;ThreadLocal&lt;?&gt;&gt;</p>
+<h5 id="各种引用"><a class="header-anchor" href="#各种引用"></a>各种引用</h5>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/9791e3b267cbd18f09cb173170c60c51.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<ul>
+<li>
+<p>Reference：强引用</p>
+<ul>
+<li>
+<p>垃圾回收永远不会强引用的对象</p>
+</li>
+<li>
+<p>把一个对象赋给一个引用变量，这个引用变量就是一个强引用</p>
+</li>
+<li>
+<p>强引用是造成Java内存泄露的主要原因之一</p>
+</li>
+<li>
+<p>当一个对象不再使用，可以将引用赋值为null</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">MyObj</span> <span class="hljs-variable">myObj</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MyObj</span>();<br>log.info(<span class="hljs-string">&quot;before gc &#123;&#125;&quot;</span>, myObj);<br>myObj = <span class="hljs-literal">null</span>;<br>System.gc();<br>log.info(<span class="hljs-string">&quot;after gc &#123;&#125;&quot;</span>, myObj);<br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>
+<p>SoftReference：软引用</p>
+<ul>
+<li>
+<p>当系统内存充足时它不会被回收</p>
+</li>
+<li>
+<p>当系统内存不足时它会被回收</p>
+</li>
+<li>
+<p>需要用SoftReference类来实现</p>
+</li>
+<li>
+<p>软引用通常用在对内存敏感的程序中，如高速缓存就用到软引用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 添加JVM参数 -Xmx10m -Xms10m</span><br>SoftReference&lt;MyObj&gt; softReference = <span class="hljs-keyword">new</span> <span class="hljs-title class_">SoftReference</span>&lt;&gt;(<span class="hljs-keyword">new</span> <span class="hljs-title class_">MyObj</span>());<br>System.gc();<br>log.info(<span class="hljs-string">&quot;after gc &#123;&#125;&quot;</span>, softReference.get());<br><span class="hljs-keyword">try</span> &#123;<br>    <span class="hljs-type">byte</span>[] data = <span class="hljs-keyword">new</span> <span class="hljs-title class_">byte</span>[<span class="hljs-number">20</span> * <span class="hljs-number">1024</span> * <span class="hljs-number">1024</span>]; <span class="hljs-comment">// 20M对象</span><br>&#125; <span class="hljs-keyword">catch</span> (Exception e)&#123;<br>    e.printStackTrace();<br>&#125; <span class="hljs-keyword">finally</span> &#123;<br>    log.info(<span class="hljs-string">&quot;after gc &#123;&#125;&quot;</span>, softReference.get());<br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>
+<p>WeakReference：弱引用</p>
+<ul>
+<li>
+<p>用WeakReference类来实现，它比软引用生命周期更短</p>
+</li>
+<li>
+<p>对于弱引用的对象来说，只要一执行垃圾回收，不管JVM内存是否足够，都会回收该对象</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java">WeakReference&lt;MyObj&gt; weakReference = <span class="hljs-keyword">new</span> <span class="hljs-title class_">WeakReference</span>&lt;&gt;(<span class="hljs-keyword">new</span> <span class="hljs-title class_">MyObj</span>());<br>log.info(<span class="hljs-string">&quot;before gc &#123;&#125;&quot;</span>, weakReference.get());<br>System.gc();<br>log.info(<span class="hljs-string">&quot;after gc &#123;&#125;&quot;</span>, weakReference.get());<br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>
+<p>PhantomReference：虚引用</p>
+<ul>
+<li>
+<p>虚引用必须和ReferenceQueue（引用队列）联合使用</p>
+</li>
+<li>
+<p>若对象仅持有虚引用，那么它就和没有任何引用一样，在任何时候都可能被垃圾回收器回收</p>
+</li>
+<li>
+<p>get方法总是返回null</p>
+</li>
+<li>
+<p>虚引用的主要作用是跟踪对象被垃圾回收的状态，仅仅提供了一种确保对象被<code>finalize以后</code>，做某些事情的通知机制</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">MyObj</span> <span class="hljs-variable">myObj</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MyObj</span>();<br>ReferenceQueue&lt;MyObj&gt; referenceQueue = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ReferenceQueue</span>&lt;&gt;();<br>PhantomReference&lt;MyObj&gt; phantomReference = <span class="hljs-keyword">new</span> <span class="hljs-title class_">PhantomReference</span>&lt;&gt;(myObj, referenceQueue);<br>log.info(<span class="hljs-string">&quot;phantomReference.get() &#123;&#125;&quot;</span>, phantomReference.get());<br>List&lt;<span class="hljs-type">byte</span>[]&gt; data = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;();<br><span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(() -&gt; &#123;<br>    <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) &#123;<br>        data.add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">byte</span>[<span class="hljs-number">1</span> * <span class="hljs-number">1024</span> * <span class="hljs-number">1024</span>]);<br>        <span class="hljs-keyword">try</span> &#123;<br>            Thread.sleep(TimeUnit.SECONDS.toMillis(<span class="hljs-number">1</span>));<br>        &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>            e.printStackTrace();<br>        &#125;<br>        log.info(<span class="hljs-string">&quot;add 1m to data, phantomReference.get() &#123;&#125;&quot;</span>, phantomReference.get());<br>    &#125;<br>&#125;).start();<br><span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(() -&gt; &#123;<br>    <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) &#123;<br>        Reference&lt;? <span class="hljs-keyword">extends</span> <span class="hljs-title class_">MyObj</span>&gt; reference = referenceQueue.poll();<br>        <span class="hljs-keyword">if</span> (reference != <span class="hljs-literal">null</span>) &#123;<br>            log.info(<span class="hljs-string">&quot;虚对象被回收加入了引用队列 &#123;&#125;&quot;</span>, reference.get());<br>            <span class="hljs-keyword">break</span>;<br>        &#125;<br>    &#125;<br>&#125;).start();<br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>
+<p>软引用和弱引用的适用场景</p>
+<ul>
+<li>图片缓存：程序需要读取大量本地图片，若每次都从硬盘读取会严重影响性能，若一次性全部加载到内存又可能造成内存溢出，此时可以用软引用来解决这个问题
+<ul>
+<li>用一个Map保存图片路径和相应图片对象关联的软引用之间的映射关系，在内存不足时，JVM会自动回收这些缓存图片对象所占用的空间</li>
+<li>Map&lt;String, SoftReference&lt;BufferedImage&gt;&gt; imgCache = new HashMap&lt;&gt;();</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 <h3 id="写锁和读锁"><a class="header-anchor" href="#写锁和读锁"></a>写锁和读锁</h3>
 <p>写锁又被成为独占锁，读锁又被称为共享锁</p>
-<h3 id="自旋锁"><a class="header-anchor" href="#自旋锁"></a>自旋锁</h3>
 
                 
               </div>
