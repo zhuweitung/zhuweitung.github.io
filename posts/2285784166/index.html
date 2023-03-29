@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/dde1aa79137e2fc011dc0601a64929d9.png">
 <meta property="article:published_time" content="2022-10-11T06:49:26.000Z">
-<meta property="article:modified_time" content="2023-03-28T13:45:29.840Z">
+<meta property="article:modified_time" content="2023-03-29T13:52:12.183Z">
 <meta property="article:author" content="zhuweitung">
 <meta property="article:tag" content="java">
 <meta property="article:tag" content="jvm">
@@ -256,7 +256,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          29k 字
+          47k 字
         
       </span>
     
@@ -267,7 +267,7 @@
         
         
         
-          238 分钟
+          392 分钟
         
       </span>
     
@@ -1113,7 +1113,7 @@
 <p>默认情况下，初始内存大小：物理电脑内存大小 / 64</p>
 </li>
 <li>
-<p>默认情况下，初始内存大小：物理电脑内存大小 / 4</p>
+<p>默认情况下，最大内存大小：物理电脑内存大小 / 4</p>
 </li>
 </ul>
 <h5 id="新生代与老年代"><a class="header-anchor" href="#新生代与老年代"></a>新生代与老年代</h5>
@@ -1200,13 +1200,13 @@
 </li>
 <li>整堆收集（Full GC）：收集整个Java堆和方法区的垃圾收集</li>
 </ul>
-<p>GC策略处触发条件</p>
+<p>GC策略触发条件</p>
 <ul>
 <li>新生代GC（Minor GC）触发机制
 <ul>
 <li>当新生代空间不足时，就会触发Minor GC，这里的空间不足指的是eden区满，survivor区满不会引发GC</li>
 <li>因为Java对象大多都具备朝生夕灭的特性.，所以Minor GC非常频繁，一般回收速度也比较快</li>
-<li>Minor GC会引发STW（stop-the-word），暂停其它用户的线程，等垃圾回收结束，用户线程才恢复运行</li>
+<li>Minor GC会引发STW（stop-the-world），暂停其它用户的线程，等垃圾回收结束，用户线程才恢复运行</li>
 </ul>
 </li>
 <li>老年代GC（Major GC / Full GC）触发机制
@@ -1632,7 +1632,7 @@
 <h4 id="执行引擎"><a class="header-anchor" href="#执行引擎"></a>执行引擎</h4>
 <h5 id="概述-v6"><a class="header-anchor" href="#概述-v6"></a>概述</h5>
 <ul>
-<li>执行引擎（Execution Engine）属于JVM的下层，里面包括<strong>解释器、及时编译器、垃圾回收器</strong></li>
+<li>执行引擎（Execution Engine）属于JVM的下层，里面包括<strong>解释器、即时编译器、垃圾回收器</strong></li>
 <li>执行引擎是Java虚拟机核心的组成部分之一</li>
 <li>“虚拟机”是一个相对于“物理机”的概念，这两种机器都有代码执行能力，其区别是物理机的执行引擎是直接建立在处理器、缓存、指令集和操作系统层面上的，而<strong>虚拟机的执行引擎则是由软件自行实现的</strong>，因此可以不受物理条件制约地定制指令集与执行引擎的结构体系，<strong>能够执行那些不被硬件直接支持的指令集格式</strong></li>
 <li>JVM的主要任务是负责装载字节码到其内部，但字节码并不能够直接运行在操作系统之上，因为字节码指令并非等价于本地机器指令，它内部包含的仅仅只是一些能够被JVM所识别的字节码指令、符号表，以及其他辅助信息</li>
@@ -1736,11 +1736,1043 @@
 </li>
 </ul>
 <h5 id="JIT编译器"><a class="header-anchor" href="#JIT编译器"></a>JIT编译器</h5>
+<p><strong>HotSpot JVM执行方式</strong></p>
+<p>当虚拟机启动的时候，<strong>解释器可以首先发挥作用</strong>，而不必等待即时编译器全部编译完成再执行，这样可以省去许多不必要的编译时间。并且随着程序运行时间的推移，即时编译器逐渐发挥作用，根据热点探测功能，<strong>将有价值的字节码编译为本地机器指令</strong>，以换取更高的程序执行效率</p>
+<p><strong>概念解释</strong></p>
+<ul>
+<li>前端编译器：将Java文件编译为字节码文件</li>
+<li>JIT编译器：将字节码文件转为机器码</li>
+<li>AOT编译器：直接把Java文件编译为本地机器码
+<ul>
+<li>优点：Java虚拟机加载已经预编译的二进制库，可以直接执行，不需要JIT编译器预热</li>
+<li>缺点：
+<ul>
+<li>不跨平台</li>
+<li>降低了Java链接过程的动态性，加载的代码在编译期就必须全部已知</li>
+<li>支持的平台少</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>热点代码及探测技术</strong></p>
+<ul>
+<li>
+<p>需要被编译为本地代码的字节码被称为<code>热点代码</code>，，JIT编译器在运行时会针对那些频繁被调用的热点代码做出深度优化，将其直接编译为对应平台的本地机器指令，以此提升Java程序的执行性能</p>
+</li>
+<li>
+<p>一个被多次调用的方法，或者是一个方法体内部循环次数较多的循环体都可以被称之为热点代码。由于这种编译方式发生在方法的执行过程中，因此被称之为栈上替换，或简称为<strong>OSR（On Stack Replacement）编译</strong></p>
+</li>
+<li>
+<p>热点代码的判断标准要依靠<strong>热点探测</strong>功能</p>
+</li>
+<li>
+<p>目前HotSpot VM所采用的热点探测方式是<strong>基于计数器的热点探测</strong></p>
+</li>
+<li>
+<p>采用基于计数器的热点探测，HotSpot VM将会为每一个方法都建立2个不同类型的计数器，分别为方法调用计数器（Invocation Counter）和回边计数器（Back Edge Counter）</p>
+<ul>
+<li>
+<p><strong>方法调用计数器</strong>用于统计<strong>方法的调用次数</strong></p>
+<ul>
+<li>
+<p>默认阀值在Client模式下是1500次，在Server模式下是10000次，超过这个阈值，就会触发JIT编译</p>
+</li>
+<li>
+<p>通过<code>-XX:CompileThreshold</code>参数设定阈值</p>
+</li>
+<li>
+<p>当一个方法被调用时先检查是否被JIT编译过，若存在则优先使用编译后的本地代码执行，若不存在则计数器加1，并判断计数器值是否超过阈值，若超过阈值则向JIT编译器提交一个该方法的代码编译请求</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/c5db60e693676dd0233e4adb133759f1.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>回边计数器</strong>则用于统计循环体执行的<strong>循环次数</strong></p>
+</li>
+</ul>
+</li>
+<li>
+<p>热点衰减</p>
+<ul>
+<li>若没有任何设置，方法调用计数器统计的并不是方法被调用的绝对次数，而是一个相对的执行频率，即<strong>一段时间之内方法被调用的次数</strong>，当超过<strong>一定时间限度</strong>，若方法的调用次数没有超过阈值，该方法的计数器值会<strong>减少一半</strong>，此过程就是热点衰减，此时间段就为<strong>半衰周期</strong></li>
+<li>进行热度衰减的动作是在虚拟机进行垃圾收集时顺便进行的，使用<code>-XX:-UseCounterDecay</code>参数来关闭热度衰减</li>
+<li>使用<code>-XX:CounterHalfLifeTime</code>参数设置半衰周期的时间，单位是秒</li>
+</ul>
+</li>
+</ul>
+<p><strong>HotSpotVM 可以设置程序执行方法</strong></p>
+<ul>
+<li>默认情况下HotSpot VM是采用解释器与即时编译器并存的架构</li>
+<li>使用<code>-Xint</code>参数完全采用解释器模式执行程序</li>
+<li>使用<code>-Xcomp</code>参数完全采用即时编译器模式执行程序。如果即时编译出现问题，解释器会介入执行</li>
+<li>使用<code>-Xmixed</code>参数采用解释器+即时编译器的混合模式共同执行程序</li>
+</ul>
+<p><strong>HotSpotVM中 JIT 分类</strong></p>
+<ul>
+<li>JIT的编译器分为了两种，分别是C1和C2，在HotSpot VM中内嵌有两个JIT编译器，分别为Client Compiler和Server Compiler，一般简称为C1编译器 和 C2编译器</li>
+<li><code>-client</code>：指定Java虚拟机运行在Client模式下，并使用C1编译器；C1编译器会对字节码进行简单和可靠的优化，耗时短，以达到更快的编译速度</li>
+<li><code>-server</code>：指定Java虚拟机运行在server模式下，并使用C2编译器。C2进行耗时较长的优化，以及激进优化，但优化的代码执行效率更高</li>
+<li>分层编译（Tiered Compilation）策略：程序解释执行（不开启性能监控）可以触发C1编译，将字节码编译成机器码，可以进行简单优化，也可以加上性能监控，C2编译会根据性能监控信息进行激进优化，Java7及之后若显式使用-server参数则默认开启分层编译策略</li>
+<li>C1编译器优化策略
+<ul>
+<li>方法内联：将引用的函数代码编译到引用点处，这样可以减少栈帧的生成，减少参数传递以及跳转过程</li>
+<li>去虚拟化：对唯一的实现类进行内联</li>
+<li>冗余消除：在运行期间把一些不会执行的代码折叠掉</li>
+</ul>
+</li>
+<li>C2编译器优化策略（基于逃逸分析）
+<ul>
+<li>标量替换：用标量值代替聚合对象的属性值</li>
+<li>栈上分配：对于未逃逸的对象分配对象在栈而不是堆</li>
+<li>同步消除：清除同步操作，通常指synchronized</li>
+</ul>
+</li>
+</ul>
 <h4 id="StringTable"><a class="header-anchor" href="#StringTable"></a>StringTable</h4>
+<h5 id="概述-v7"><a class="header-anchor" href="#概述-v7"></a>概述</h5>
+<ul>
+<li>字符串常量池不会存储相同内容的字符串</li>
+<li>字符串常量池是一个固定大小的hashtable，若放进池中的字符串很多，就会造成hash冲突，从而导致链表变很长，进而造成调用String.intern时性能大幅下降</li>
+<li>使用<code>-XX:StringTablesize</code>参数设置长度
+<ul>
+<li>jdk6默认长度为1009，参数设置的值没有要求</li>
+<li>jdk7默认长度为60013，参数设置的值没有要求</li>
+<li>jdk8默认长度为60013，参数设置的值最小为1009</li>
+</ul>
+</li>
+</ul>
+<h5 id="内存分配"><a class="header-anchor" href="#内存分配"></a>内存分配</h5>
+<ul>
+<li>字符串常量池的使用方式有两种
+<ul>
+<li>直接使用双引号声明出来的String对象会直接存储在常量池中</li>
+<li>如果不是用双引号声明的String对象，可以使用String提供的intern()方法</li>
+</ul>
+</li>
+<li>Java6及以前，字符串常量池存放在永久代</li>
+<li>Java7及之后，将字符串常量池的位置调整到Java堆内</li>
+</ul>
+<h5 id="字符串拼接操作"><a class="header-anchor" href="#字符串拼接操作"></a>字符串拼接操作</h5>
+<ul>
+<li>常量与常量的拼接结果在常量池，原理是编译期优化</li>
+<li>只要其中有一个是变量，结果就在堆中，变量拼接的原理是StringBuilder（StringBuilder的toString不会在常量池中保存对应的字符串）</li>
+<li>如果拼接的结果调用intern()方法，则主动将常量池中还没有的字符串对象放入池中，并返回此对象地址</li>
+<li>不使用final修饰，即为变量，会通过new StringBuilder进行拼接</li>
+<li>使用final修饰，即为常量，会在编译器进行代码优化，在实际开发中，能够使用final的，尽量使用</li>
+<li>StringBuilder空参构造器的初始化大小为16，若知道拼接次数，就应该直接使用带参构造器指定capacity，以减少扩容的次数</li>
+</ul>
+<h5 id="intern-的使用"><a class="header-anchor" href="#intern-的使用"></a>intern()的使用</h5>
+<ul>
+<li>
+<p>若字符串在字符串常量池中不存在，则将字符串放到字符串常量池中，并返回字符串常量池中的地址，若存在则直接返回字符串常量池中的地址</p>
+</li>
+<li>
+<p>intern()保证变量指向字符串常量池中的数据</p>
+</li>
+<li>
+<p>JDK6与JDK7/8的不同</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">String</span> <span class="hljs-variable">s3</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>(<span class="hljs-string">&quot;1&quot;</span>) + <span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>(<span class="hljs-string">&quot;1&quot;</span>); <span class="hljs-comment">// 不会在字符串常量池中保存&quot;11&quot;</span><br><span class="hljs-comment">// jdk7中会把s3引用地址复制到池中</span><br>s3.intern();<br><span class="hljs-type">String</span> <span class="hljs-variable">s4</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;11&quot;</span>; <span class="hljs-comment">// 池中存在&quot;11&quot;，且与指向s3指向一致</span><br>System.out.println(s3==s4);<br><span class="hljs-comment">//jdk6 false</span><br><span class="hljs-comment">//jdk7/8 true</span><br></code></pre></td></tr></table></figure>
+<ul>
+<li>若字符串常量池中已存在，则不会放入，返回字符串常量池中的地址</li>
+<li>若字符串常量池中不存在
+<ul>
+<li>jdk6中会把字符串复制一份，放到字符串常量池中，并返回字符串常量池中的地址</li>
+<li>jdk7及之后会把字符串对象的引用地址复制一份，放到字符串常量池中，并返回这个引用地址</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>对于程序中大量使用存在的字符串时，尤其存在很多已经重复的字符串时，使用intern()方法能够节省内存空间</p>
+</li>
+</ul>
+<h5 id="StringTable的垃圾回收"><a class="header-anchor" href="#StringTable的垃圾回收"></a>StringTable的垃圾回收</h5>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">StringGCTest</span> &#123;<br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * -Xms15m -Xmx15m -XX:+PrintGCDetails</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">100000</span>; i++) &#123;<br>            String.valueOf(i).intern();<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>StringTable是会发生垃圾回收的</p>
 <h4 id="垃圾回收概述"><a class="header-anchor" href="#垃圾回收概述"></a>垃圾回收概述</h4>
+<h5 id="什么是垃圾"><a class="header-anchor" href="#什么是垃圾"></a>什么是垃圾</h5>
+<ul>
+<li>垃圾是指在运行程序中<strong>没有任何指针指向的对象</strong>，这个对象就是需要被回收的垃圾</li>
+<li>如果不及时对内存中的垃圾进行清理，那么，这些垃圾对象所占的内存空间会一直保留到应用程序的结束，被保留的空间无法被其它对象使用，甚至可能导致<strong>内存溢出</strong></li>
+</ul>
+<h5 id="为什么需要回收"><a class="header-anchor" href="#为什么需要回收"></a>为什么需要回收</h5>
+<ul>
+<li>如果不进行垃圾回收，<strong>内存</strong>迟早都会被消耗完</li>
+<li>除了释放没用的对象，垃圾回收也可以清除内存里的记录碎片，<strong>碎片整理</strong>将所占用的堆内存移到堆的一端，以便JVM将整理出的内存分配给新的对象</li>
+<li>随着应用程序所应付的业务越来越庞大、复杂，用户越来越多，没有GC就不能保证应用程序的正常进行</li>
+</ul>
+<h5 id="早期垃圾回收"><a class="header-anchor" href="#早期垃圾回收"></a>早期垃圾回收</h5>
+<ul>
+<li>在早期的C/C++时代，垃圾回收基本上是手工进行的，开发人员可以使用new关键字进行内存申请，并使用delete关键字进行内存释放
+<ul>
+<li>这种方式可以灵活控制内存释放的时间，但是会给开发人员带来频繁申请和释放内存的管理负担</li>
+<li>若由于编码问题忘记回收，那么就会产生内存泄露问题</li>
+</ul>
+</li>
+</ul>
+<h5 id="Java垃圾回收机制"><a class="header-anchor" href="#Java垃圾回收机制"></a>Java垃圾回收机制</h5>
+<ul>
+<li>自动内存管理，无需开发人员手动参与内存的分配与回收，这样降低内存泄漏和内存溢出的风险</li>
+<li>自动内存管理机制，将程序员从繁重的内存管理中释放出来，可以更专心地专注于业务开发</li>
+<li>GC主要关注区域为堆和方法区，其中堆是GC工作的重点区域
+<ul>
+<li>频繁收集Young区</li>
+<li>较少收集Old区</li>
+<li>基本不收集Perm区（元空间）</li>
+</ul>
+</li>
+</ul>
 <h4 id="垃圾回收相关算法"><a class="header-anchor" href="#垃圾回收相关算法"></a>垃圾回收相关算法</h4>
+<ul>
+<li>标记阶段需要区分出内存中哪些是存活对象，哪些是已经死亡的对象，只有被标记为己经死亡的对象，GC才会在执行垃圾回收时，释放掉其所占用的内存空间，因此这个过程我们可以称为垃圾标记阶段</li>
+<li>当一个对象已经不再被任何的存活对象继续引用时，就可以宣判为已经死亡</li>
+<li>判断对象存活一般有两种方式：<strong>引用计数算法</strong>和<strong>可达性分析算法</strong></li>
+</ul>
+<h5 id="标记阶段：引用计数算法"><a class="header-anchor" href="#标记阶段：引用计数算法"></a>标记阶段：引用计数算法</h5>
+<ul>
+<li>对每个对象保存一个整型的引用计数器属性，用于记录对象被引用的情况</li>
+<li>对于一个对象A，只要有任何一个对象引用了A，则A的引用计数器就加1，当引用失效时，引用计数器就减1，只要对象A的引用计数器的值为0，即表示对象A不可能再被使用，可进行回收</li>
+<li>优点：
+<ul>
+<li>实现简单，垃圾对象便于辨识</li>
+<li>判定效率高，回收没有延迟性</li>
+</ul>
+</li>
+<li>缺点：
+<ul>
+<li>它需要单独的字段存储计数器，这样的做法增加了<strong>存储空间的开销</strong></li>
+<li>每次赋值都需要更新计数器，伴随着加法和减法操作，这增加了<strong>时间开销</strong></li>
+<li>引用计数器有一个严重的问题，即<strong>无法处理循环引用</strong>的情况，这是一条致命缺陷，导致在Java的垃圾回收器中没有使用这类算法</li>
+</ul>
+</li>
+</ul>
+<h5 id="标记阶段：可达性分析算法"><a class="header-anchor" href="#标记阶段：可达性分析算法"></a>标记阶段：可达性分析算法</h5>
+<ul>
+<li>可达性分析算法又称为根搜索算法或追踪性垃圾收集</li>
+<li>相比于引用计数算法有效地解决在引用计数算法中循环引用的问题，防止内存泄漏的发生</li>
+<li>所谓&quot;GC Roots”根集合就是一组必须活跃的引用</li>
+<li>算法基本思路
+<ul>
+<li>以根对象集合（GC Roots）为起始点，按照从上至下的方式搜索被根对象集合所连接的目标对象是否可达</li>
+<li>使用可达性分析算法后，内存中的存活对象都会被根对象集合直接或间接连接着，搜索所走过的路径称为<strong>引用链</strong>（Reference Chain）</li>
+<li>如果目标对象没有任何引用链相连，则是不可达的，就意味着该对象己经死亡，可以标记为垃圾对象</li>
+<li>只有能够被根对象集合直接或者间接连接的对象才是存活对象</li>
+</ul>
+</li>
+<li>GC Roots包括以下几类元素
+<ul>
+<li>虚拟机栈中引用的对象，如各个线程被调用的方法中使用到的参数、局部变量</li>
+<li>本地方法栈内JNI（通常说的本地方法）引用的对象</li>
+<li>方法区中类静态属性引用的对象，如Java类的引用类型静态变量</li>
+<li>方法区中常量引用的对象，如字符串常量池里的引用</li>
+<li>所有被同步锁synchronized持有的对象</li>
+<li>Java虚拟机内部的引用，如基本数据类型对应的Class对象，一些常驻的异常对象（如：NullPointerException、OutOfMemoryError），系统类加载器</li>
+<li>反映java虚拟机内部情况的JMXBean、JVMTI中注册的回调、本地代码缓存等</li>
+<li>除了以上这些固定的以外，根据用户所选用的垃圾收集器以及当前回收的内存区域不同，还可以有其他对象“临时性”地加入，共同构成完整GC Roots集合。比如：分代收集和局部回收（PartialGC）
+<ul>
+<li>如果只针对Java堆中的某一块区域进行垃圾回收（比如：典型的只针对新生代），必须考虑到内存区域是虚拟机自己的实现细节，更不是孤立封闭的，这个区域的对象完全有可能被其他区域的对象所引用，这时候就需要一并将关联的区域对象也加入GCRoots集合中去考虑，才能保证可达性分析的准确性</li>
+</ul>
+</li>
+<li>判断的小技巧：由于Root采用栈方式存放变量和指针，所以如果一个指针，它保存了堆内存里面的对象，但是自己又不存放在堆内存里面，那它就是一个Root</li>
+</ul>
+</li>
+<li>可达性分析工作必须在一个能保障一致性的快照中进行
+<ul>
+<li>所以GC进行时必须STW（stop-the-world）</li>
+</ul>
+</li>
+</ul>
+<h5 id="对象的finalization机制"><a class="header-anchor" href="#对象的finalization机制"></a>对象的finalization机制</h5>
+<ul>
+<li>Java语言提供了对象终止（finalization）机制来允许开发人员提供对象被销毁之前的自定义处理逻辑</li>
+<li>对象被回收之前会调用对象的finalize()方法</li>
+<li>通常在这个方法中进行一些资源释放和清理的工作，比如关闭文件、套接字和数据库连接等</li>
+<li>永远不要主动去调用某个对象的finalize()方法
+<ul>
+<li>在finalize()时可能会导致对象复活</li>
+<li>finalize()方法的执行时间是没有保障的，它完全由GC线程决定，极端情况下，若不发生GC，则finalize()方法将没有执行机会</li>
+<li>一个糟糕的finalize()会严重影响GC的性能</li>
+</ul>
+</li>
+<li>由于finalize()方法的存在，<strong>虚拟机中的对象一般处于三种可能的状态</strong>
+<ul>
+<li>可触及的：从根节点开始，可以到达这个对象</li>
+<li>可复活的：对象的所有引用都被释放，但是对象有可能在finalize()中复活</li>
+<li>不可触及的：对象的finalize()被调用，并且没有复活，那么就会进入不可触及状态。不可触及的对象不可能被复活，因为finalize()只会被调用一次</li>
+</ul>
+</li>
+<li>对象回收判定过程
+<ul>
+<li>若对象到GC Roots没有引用链，进行第一次标记</li>
+<li>判断对象是否有必要执行finalize()方法
+<ul>
+<li>若对象没有重写finalize()方法，或finalize()方法已经被虚拟机调用过，则对象被判定为不可触及的</li>
+<li>若对象重写了finalize()方法，且还未执行过，那么对象将被放入F-Queue队列中，由一个虚拟机自动创建的、低优先级的<strong>Finalizer线程</strong>触发其finalize()方法执行</li>
+<li><strong>finalize()方法是对象逃脱死亡的最后机会</strong>，稍后GC会对F-Queue队列中的对象进行第二次标记，如果对象在finalize()方法中与引用链上的任何一个对象建立了联系，那么在第二次标记时，对象会被移出“即将回收”集合，若之后对象再次出现没有引用存在的情况，则它的finalize()方法不会再调用，直接判定为不可触及的，即一个对象的finalize方法只会被调用一次</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="GC-Roots查看"><a class="header-anchor" href="#GC-Roots查看"></a>GC Roots查看</h5>
+<p>使用MemoryAnalyzer（MAT）软件查看</p>
+<ul>
+<li>
+<p>先获取dump文件</p>
+<ul>
+<li>使用命令jmap获取进程的dump文件</li>
+<li>使用jvisualvm获取</li>
+<li>使用<code>-XX:+HeapDumpOnOutOfMemoryError</code>参数在发生OOM时生成dump文件到程序目录下</li>
+</ul>
+</li>
+<li>
+<p>使用MAT打开dump文件，通过下图所示方式查看GC Roots</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/11301672d0ea824aa1f92b26d15e1be5.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+</ul>
+<p>使用jprofiler进行GC Roots溯源</p>
+<h5 id="清除阶段"><a class="header-anchor" href="#清除阶段"></a>清除阶段</h5>
+<p>当成功区分出内存中存活对象和死亡对象后，GC接下来的任务就是执行垃圾回收，释放掉无用对象所占用的内存空间，以便有足够的可用内存空间为新对象分配内存</p>
+<p>目前在JVM中比较常见的三种垃圾收集算法是标记一清除算法（Mark-Sweep）、复制算法（copying）、标记-压缩算法（Mark-Compact）</p>
+<h5 id="清除阶段：标记-清除算法（Mark-Sweep）"><a class="header-anchor" href="#清除阶段：标记-清除算法（Mark-Sweep）"></a>清除阶段：标记-清除算法（Mark-Sweep）</h5>
+<ul>
+<li>
+<p>当堆中的有效内存空间（available memory）被耗尽的时候，就会<strong>停止整个程序</strong>（也被称为stop the world），然后进行两项工作，第一项则是标记，第二项则是清除</p>
+</li>
+<li>
+<p>执行过程</p>
+<ul>
+<li>
+<p><strong>标记</strong>：Collector从引用根节点开始遍历，标记所有被引用的对象。一般是在对象的Header中记录为可达对象</p>
+</li>
+<li>
+<p><strong>清除</strong>：Collector对堆内存从头到尾进行线性的遍历，如果发现某个对象在其Header中没有标记为可达对象，则将其回收</p>
+<ul>
+<li>这里所谓的清除并不是真的置空，而是把需要清除的对象地址保存在空闲的地址列表里。下次有新对象需要加载时，判断垃圾的位置空间是否够，如果够，就存放覆盖原有的地址</li>
+</ul>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/3dce22af122ee254398cb9deb0a589f7.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+</ul>
+</li>
+<li>
+<p>缺点</p>
+<ul>
+<li>标记清除算法的效率不算高</li>
+<li>在进行GC的时候，需要停止整个应用程序，用户体验较差</li>
+<li>这种方式清理出来的空闲内存是不连续的，产生内碎片，需要维护一个空闲列表</li>
+</ul>
+</li>
+</ul>
+<h5 id="清除阶段：复制算法（Copying）"><a class="header-anchor" href="#清除阶段：复制算法（Copying）"></a>清除阶段：复制算法（Copying）</h5>
+<ul>
+<li>
+<p>核心思想：将活着的内存空间分为两块，每次只使用其中一块，在垃圾回收时将正在使用的内存中的存活对象复制到未被使用的内存块中，之后清除正在使用的内存块中的所有对象，交换两个内存的角色，最后完成垃圾回收</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/9fd8fb922dd5b89f1d8467c2b304cac5.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+<li>
+<p>优点</p>
+<ul>
+<li>没有标记和清除过程，实现简单，运行高效</li>
+<li>复制过去以后保证空间的连续性，不会出现“碎片”问题</li>
+</ul>
+</li>
+<li>
+<p>缺点</p>
+<ul>
+<li>此算法的缺点也是很明显的，就是需要两倍的内存空间</li>
+<li>对于G1这种分拆成为大量region的GC，复制而不是移动，意味着GC需要维护region之间对象引用关系，不管是内存占用或者时间开销也不小</li>
+</ul>
+</li>
+<li>
+<p>应用场景</p>
+<ul>
+<li>在新生代，对常规应用的垃圾回收，一次通常可以回收70% - 99% 的内存空间。回收性价比很高。所以现在的商业虚拟机都是用这种收集算法回收新生代</li>
+<li>也就是适合于垃圾对象占比较大的场景（减小复制的开销）</li>
+</ul>
+</li>
+</ul>
+<h5 id="清除阶段：标记-压缩算法（Mark-Compact）"><a class="header-anchor" href="#清除阶段：标记-压缩算法（Mark-Compact）"></a>清除阶段：标记-压缩算法（Mark-Compact）</h5>
+<ul>
+<li>
+<p>也称为标记-整理算法</p>
+</li>
+<li>
+<p>执行过程</p>
+<ul>
+<li>第一阶段和标记清除算法一样，从根节点开始标记所有被引用对象</li>
+<li>第二阶段将所有的存活对象压缩到内存的一端，按顺序排放</li>
+<li>之后，清理边界外所有的空间</li>
+</ul>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/4fdae1bb4debd1c4e2307d3d19b3f0e1.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+<li>
+<p>标记-压缩算法的最终效果等同于标记-清除算法执行完成后，再进行一次<strong>内存碎片整理</strong>，因此，也可以把它称为标记-清除-压缩（Mark-Sweep-Compact）算法</p>
+</li>
+<li>
+<p>优点</p>
+<ul>
+<li>消除了标记-清除算法当中，内存区域分散的缺点，我们需要给新对象分配内存时，JVM只需要持有一个内存的起始地址即可</li>
+<li>消除了复制算法当中，内存减半的高额代价</li>
+</ul>
+</li>
+<li>
+<p>缺点</p>
+<ul>
+<li>从效率上来说，标记-整理算法要低于复制算法</li>
+<li>移动对象的同时，如果对象被其他对象引用，则还需要调整引用的地址</li>
+<li>移动过程中，需要全程暂停用户应用程序（STW）</li>
+</ul>
+</li>
+</ul>
+<h5 id="三种算法对比"><a class="header-anchor" href="#三种算法对比"></a>三种算法对比</h5>
+<table>
+<thead>
+<tr>
+<th>算法名称</th>
+<th>速度</th>
+<th>空间开销</th>
+<th>移动对象</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>标记-清除算法</td>
+<td>中等</td>
+<td>少（会堆积内存碎片）</td>
+<td>否</td>
+</tr>
+<tr>
+<td>复制算法</td>
+<td>最快</td>
+<td>需要存活对象的2倍大小（不堆积内存碎片）</td>
+<td>是</td>
+</tr>
+<tr>
+<td>标记-压缩算法</td>
+<td>慢</td>
+<td>少（不堆积内存碎片）</td>
+<td>是</td>
+</tr>
+</tbody>
+</table>
+<p>三种算法各有优缺点，所以没有最优的算法，只有最合适的算法</p>
+<h5 id="分代收集算法"><a class="header-anchor" href="#分代收集算法"></a>分代收集算法</h5>
+<ul>
+<li>不同的对象的生命周期是不一样的。因此，不同生命周期的对象可以采取不同的收集方式，以便提高回收效率。一般是把Java堆分为新生代和老年代，这样就可以根据各个年代的特点使用不同的回收算法，以提高垃圾回收的效率</li>
+<li>新生代特点：空间相对老年代较小，对象生命周期短、存活率低，回收频繁
+<ul>
+<li>这种情况使用复制算法进行垃圾回收，速度是最快的</li>
+</ul>
+</li>
+<li>老年代特点：空间较大，对象生命周期场、存活率高，回收没有新生代频繁
+<ul>
+<li>一般是由标记-清除算法或标记-压缩算法混合实现</li>
+<li>标记阶段的开销与存活对象的数量成正比</li>
+<li>清除阶段的开销与所管理空间大小成正比</li>
+<li>压缩阶段的开销与存活对象的数量成正比</li>
+</ul>
+</li>
+<li>以HotSpot中的CMS回收器为例，CMS是基于Mark-Sweep实现的，对于对象的回收效率很高。而对于碎片问题，CMS采用基于Mark-Compact算法的Serial Old回收器作为补偿措施：当内存回收不佳（碎片导致的Concurrent Mode Failure时），将采用Serial Old执行Full GC以达到对老年代内存的整理</li>
+</ul>
+<h5 id="增量收集算法、分区算法"><a class="header-anchor" href="#增量收集算法、分区算法"></a>增量收集算法、分区算法</h5>
+<ul>
+<li>增量收集算法
+<ul>
+<li>为了解决STW问题诞生了增量收集（Incremental Collecting）算法</li>
+<li>基本思想
+<ul>
+<li>如果一次性将所有的垃圾进行处理，需要造成系统长时间的停顿，那么就可以让垃圾收集线程和应用程序线程交替执行。每次，<strong>垃圾收集线程只收集一小片区域的内存空间，接着切换到应用程序线程。依次反复，直到垃圾收集完成</strong></li>
+<li>增量收集算法的基础仍是传统的标记-清除和复制算法。增量收集算法通过<strong>对线程间冲突的妥善处理，允许垃圾收集线程以分阶段的方式完成标记、清理或复制工作</strong></li>
+</ul>
+</li>
+<li>缺点：因为线程切换和上下文转换的消耗，会使得垃圾回收的总体成本上升，<strong>造成系统吞吐量的下降</strong></li>
+</ul>
+</li>
+<li>分区算法
+<ul>
+<li>也是为了解决STW问题</li>
+<li>一般来说，在相同条件下，堆空间越大，一次Gc时所需要的时间就越长，有关GC产生的停顿也越长。为了更好地控制GC产生的停顿时间，将一块大的内存区域分割成多个小块，根据目标的停顿时间，每次合理地回收若干个小区间，而不是整个堆空间，从而减少一次GC所产生的停顿</li>
+<li>分区算法将按照对象的生命周期长短划分成两个部分，分区算法将整个堆空间划分成连续的不同小区间</li>
+<li>每一个小区间都独立使用，独立回收。这种算法的好处是可以控制一次回收多少个小区间</li>
+</ul>
+</li>
+</ul>
 <h4 id="垃圾回收相关概念"><a class="header-anchor" href="#垃圾回收相关概念"></a>垃圾回收相关概念</h4>
+<h5 id="System-gc-的理解"><a class="header-anchor" href="#System-gc-的理解"></a>System.gc()的理解</h5>
+<ul>
+<li>
+<p>底层是Runtime.getRuntime().gc()</p>
+</li>
+<li>
+<p>在默认情况下，通过system.gc()的调用，会显式触发<code>Full GC</code>，同时对老年代和新生代进行回收，尝试释放被丢弃对象占用的内存</p>
+</li>
+<li>
+<p>无法保证对垃圾收集器的调用（不能确保立即生效）</p>
+</li>
+</ul>
+<h5 id="内存溢出与内存泄露"><a class="header-anchor" href="#内存溢出与内存泄露"></a>内存溢出与内存泄露</h5>
+<ul>
+<li>内存溢出（OOM）
+<ul>
+<li>javadoc中对OutOfMemoryError的解释是，没有空闲内存，并且垃圾收集器也无法提供更多内存</li>
+<li>没有空闲内存的情况说明Java虚拟机的堆内存不够，原因如下
+<ul>
+<li>Java虚拟机的堆内存设置不够</li>
+<li>代码中创建了大量大对象，并且长时间不能被垃圾收集器收集（存在被引用）</li>
+</ul>
+</li>
+<li>在抛出OutOfMemoryError之前，通常垃圾收集器会被触发，尽其所能去清理出空间</li>
+<li>也不是在任何情况下垃圾收集器都会被触发，如分配一个超大对象，超过堆的最大值，JVM判断GC并不能解决这个问题，所以直接抛出OOM</li>
+</ul>
+</li>
+<li>内存泄露（Memory Leak）
+<ul>
+<li>只有对象不会再被程序用到了，但是GC又不能回收他们的情况，才叫内存泄漏</li>
+<li>实际开发中由于一些不太好的实践（或疏忽）会导致对象的生命周期变得很长甚至导致OOM，也可以叫做宽泛意义上的“内存泄漏”</li>
+<li>内存泄漏并不会立刻引起程序崩溃，但是一旦发生内存泄漏，程序中的可用内存就会被逐步蚕食，直至耗尽所有内存，最终出现OutOfMemory异常，导致程序崩溃</li>
+<li><strong>常见的内存泄露案例</strong>
+<ul>
+<li>单例模式：单例的生命周期和应用程序一样长，当单例只持有对外部对象的引用时，这个外部对象不会被回收，可能会导致内存泄露</li>
+<li>一些closeable的资源未及时关闭，如数据库连接，网络连接和io操作</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="stop-the-world"><a class="header-anchor" href="#stop-the-world"></a>stop-the-world</h5>
+<ul>
+<li>
+<p>指的是GC事件发生过程中，会产生应用程序的停顿，停顿产生时整个应用程序线程都会被暂停，没有任何响应</p>
+</li>
+<li>
+<p>所有的GC都有这个事件</p>
+</li>
+<li>
+<p>STW是JVM在后台自动发起和自动完成的</p>
+</li>
+<li>
+<p>开发中不要用System.gc()会导致Stop-the-World的发生</p>
+</li>
+</ul>
+<h5 id="垃圾回收的并行与并发"><a class="header-anchor" href="#垃圾回收的并行与并发"></a>垃圾回收的并行与并发</h5>
+<ul>
+<li>并发（Concurrent）：一个处理器上“同时”处理多个任务，这个同时并不是真正意义上的同时，只是CPU执行速度很快，感觉上像是同时进行</li>
+<li>并行（Parallel）：多个处理器执行多个任务，任务之间不会互相抢占资源，同时进行
+<ul>
+<li>决定并行的因素不是CPU的数量，而是CPU的核心数</li>
+</ul>
+</li>
+<li>并行垃圾回收（Parallel）
+<ul>
+<li><strong>多条垃圾回收线程</strong>并行工作，此时用户线程仍处于等待状态</li>
+<li>ParNew、Parallel Scavenge、Parallel Old</li>
+</ul>
+</li>
+<li>串行垃圾回收（Serial）
+<ul>
+<li>单线程执行</li>
+<li>若内存不够，则程序暂停，启动JVM垃圾回收器进行垃圾回收，回收完，再启动程序的线程</li>
+</ul>
+</li>
+<li>并发垃圾回收（Concurrent）
+<ul>
+<li>用户线程与垃圾收集线程同时执行（但不一定是并行的，可能会交替执行），垃圾回收线程在执行时不会停顿用户程序的运行，而垃圾收集程序线程运行于另一个CPU上</li>
+<li>CMS、G1</li>
+</ul>
+</li>
+</ul>
+<h5 id="安全点与安全区域"><a class="header-anchor" href="#安全点与安全区域"></a>安全点与安全区域</h5>
+<p><strong>安全点</strong></p>
+<ul>
+<li>程序执行时并非在所有地方都能停顿下来开始GC，只有在特定的位置才能停顿下来开始GC，这些位置称为<strong>安全点（Safepoint）</strong></li>
+<li>安全点若太少可能导致GC等待的时间太长，若太多可能会导致运行时的性能问题</li>
+<li>一般选择一些执行时间较长的指令作为安全点，如<strong>方法调用、循环跳转和异常跳转</strong>等</li>
+<li>检查所有线程都跑道安全点的方法
+<ul>
+<li>抢先式中断（目前没有虚拟机采用）：首先中断所有线程，如果还有线程不在安全点，就恢复线程，让线程跑到安全点</li>
+<li>主动式中断：设置一个中断标志，各个线程运行到Safe Point的时候主动<strong>轮询</strong>这个标志，如果中断标志为真，则将自己进行中断挂起</li>
+</ul>
+</li>
+</ul>
+<p><strong>安全区域</strong></p>
+<ul>
+<li>
+<p>安全点机制保证了程序执行时，在不太长的时间内就会遇到可进入GC的安全点，但若线程处于Sleep或Blocked状态时，无法响应JVM的中断请求，去安全点进行中断挂起，JVM不能等待线程被唤醒，此时就需要安全区域（Safe Region）来解决</p>
+</li>
+<li>
+<p><strong>安全区域是指在一段代码片段中，对象的引用关系不会发生变化，在这个区域中的任何位置开始GC都是安全的</strong></p>
+</li>
+<li>
+<p>可以把安全区域看做是扩展了安全点</p>
+</li>
+<li>
+<p>执行过程</p>
+<ul>
+<li>当线程运行到Safe Region的代码时，首先标识已经进入了Safe Relgion，如果这段时间内发生GC，JVM会忽略标识为Safe Region状态的线程</li>
+<li>当线程即将离开Safe Region时，会检查JVM是否已经完成GC，如果完成了，则继续运行，否则线程必须等待直到收到可以安全离开Safe Region的信号为止</li>
+</ul>
+</li>
+</ul>
+<h5 id="强引用"><a class="header-anchor" href="#强引用"></a>强引用</h5>
+<ul>
+<li>最传统引用的定义，在程序代码之中普遍存在的引用赋值，如“Object obj = new Object()”这种引用关系</li>
+<li>在任何情况下，只要强引用关系还存在，就不会被垃圾回收</li>
+<li>强引用可以直接访问目标对象</li>
+<li>强引用是造成Java内存泄漏的主要原因之一</li>
+</ul>
+<h5 id="软引用"><a class="header-anchor" href="#软引用"></a>软引用</h5>
+<ul>
+<li>在系统将要发生内存溢出之前，将会把这些对象列入回收范围之中进行第二次回收。如果这次回收后还没有足够的内存，才会抛出内存流出异常</li>
+<li>软引用通常用来实现内存敏感的缓存，如果还有空闲内存，就可以暂时保留缓存，当内存不足时清理掉，这样就保证了使用缓存的同时，不会耗尽内存</li>
+</ul>
+<h5 id="弱引用"><a class="header-anchor" href="#弱引用"></a>弱引用</h5>
+<ul>
+<li>只被弱引用关联的对象只能生存到下一次垃圾收集发生为止</li>
+<li>由于垃圾回收器的线程通常优先级很低，因此，并不一定能很快地发现持有弱引用的对象，在这种情况下，弱引用对象可以存在较长的时间</li>
+<li>软引用、弱引用都非常适合来保存那些可有可无的缓存数据</li>
+<li>对于弱引用对象，GC总是进行回收</li>
+</ul>
+<h5 id="虚引用"><a class="header-anchor" href="#虚引用"></a>虚引用</h5>
+<ul>
+<li>一个对象是否有虚引用的存在，完全不会对其生存时间构成影响，也无法通过虚引用来获得一个对象的实例</li>
+<li>为一个对象设置虚引用关联的唯一目的就是能在这个对象被收集器回收时收到一个系统通知</li>
+</ul>
+<h5 id="终结期引用"><a class="header-anchor" href="#终结期引用"></a>终结期引用</h5>
+<ul>
+<li>它用于实现对象的finalize() 方法，也可以称为终结器引用</li>
+<li>无需手动编码，其内部配合引用队列使用</li>
+<li>在GC时，终结器引用入队。由Finalizer线程通过终结器引用找到被引用对象调用它的finalize()方法，第二次GC时才回收被引用的对象</li>
+</ul>
 <h4 id="垃圾回收器"><a class="header-anchor" href="#垃圾回收器"></a>垃圾回收器</h4>
+<h5 id="GC分类与性能指标"><a class="header-anchor" href="#GC分类与性能指标"></a>GC分类与性能指标</h5>
+<ul>
+<li>
+<p>垃圾回收器分类</p>
+<ul>
+<li>按<strong>线程数</strong>分，可以分为串行垃圾回收器和并行垃圾回收器</li>
+<li>按<strong>工作模式</strong>分，可以分为并发式垃圾回收器和独占式垃圾回收器
+<ul>
+<li>并发式垃圾回收器与应用程序线程交替工作，以尽可能减少应用程序的停顿时间</li>
+<li>独占式垃圾回收器（Stop the world）一旦运行，就停止应用程序中的所有用户线程，直到垃圾回收过程完全结束</li>
+</ul>
+</li>
+<li>按<strong>碎片处理方式</strong>分，可分为压缩式垃圾回收器和非压缩式垃圾回收器
+<ul>
+<li>压缩式垃圾回收器会在回收完成后，对存活对象进行压缩整理，消除回收后的碎片</li>
+<li>非压缩式的垃圾回收器不进行这步操作</li>
+</ul>
+</li>
+<li>按<strong>工作的内存区间</strong>分，又可分为新生代垃圾回收器和老年代垃圾回收器</li>
+</ul>
+</li>
+<li>
+<p>评估GC的性能指标</p>
+<ul>
+<li>
+<p><strong>吞吐量</strong>：运行用户代码的时间占总运行时间的比例（总运行时间 = 程序的运行时间 + 内存回收的时间）</p>
+<ul>
+<li>
+<p>如虚拟机总共运行了100分钟，其中垃圾收集花掉1分钟，那吞吐量就是99%</p>
+</li>
+<li>
+<p>吞吐量优先，意味着在单位时间内，STW的时间最短</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/f624582442431ebe1aabec8234ea08ad.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+</ul>
+</li>
+<li>
+<p>垃圾收集开销：吞吐量的补数，垃圾收集所用时间与总运行时间的比例</p>
+</li>
+<li>
+<p><strong>暂停时间</strong>：执行垃圾收集时，程序的工作线程被暂停的时间</p>
+<ul>
+<li>暂停时间优先，意味着尽可能让<strong>单次</strong>STW的时间最短</li>
+</ul>
+</li>
+<li>
+<p>收集频率：相对于应用程序的执行，收集操作发生的频率</p>
+</li>
+<li>
+<p><strong>内存占用</strong>：Java堆区所占的内存大小</p>
+</li>
+<li>
+<p>快速：一个对象从诞生到被回收所经历的时间</p>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="不同的垃圾回收器概述"><a class="header-anchor" href="#不同的垃圾回收器概述"></a>不同的垃圾回收器概述</h5>
+<ul>
+<li>
+<p>7种经典的垃圾收集器</p>
+<ul>
+<li>串行回收器：Serial、Serial Old</li>
+<li>并行回收器：ParNew、Parallel Scavenge、Parallel old</li>
+<li>并发回收器：CMS（Concurrent Mark Sweep）、G1</li>
+</ul>
+</li>
+<li>
+<p>7种经典的垃圾收集器与垃圾分代之间的关系</p>
+<ul>
+<li>新生代收集器：Serial、ParNew、Parallel Scavenge</li>
+<li>老年代收集器：Serial Old、Parallel Old、CMS</li>
+<li>整堆收集器：G1</li>
+</ul>
+</li>
+<li>
+<p>垃圾收集器的组合关系</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/775df45d2d510eb74d0476b150ec88ac.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<ul>
+<li>两个收集器间有连线，表明它们可以搭配使用</li>
+<li>其中Serial Old作为CMS出现&quot;Concurrent Mode Failure&quot;失败的后备预案</li>
+<li>红色虚线表示由于维护和兼容性测试的成本，在JDK8时将组合声明为废弃，并在JDK9中移除</li>
+<li>绿色虚线表示在JDK14移除</li>
+<li>蓝色虚框表示在JDK14移除</li>
+</ul>
+</li>
+<li>
+<p>JDK8默认使用ParallelGC（Parallel Scavenge）和ParallelOldGC</p>
+</li>
+<li>
+<p>JDK9及以上默认使用G1GC</p>
+</li>
+</ul>
+<h5 id="Serial回收器：串行回收"><a class="header-anchor" href="#Serial回收器：串行回收"></a>Serial回收器：串行回收</h5>
+<ul>
+<li>Serial采用复制算法、串行回收和STW机制的方式执行内存回收</li>
+<li>Serial用于新生代，Serial Old用于老年代</li>
+<li>Serial Old采用<strong>标记-压缩</strong>算法、串行回收和STW机制执行内存回收
+<ul>
+<li>在clinet模式下是默认的老年代垃圾收集器</li>
+<li>在server模式下有两个用途：
+<ul>
+<li>与新生代的Parallel Scavenge组合使用</li>
+<li>作为老年代CMS收集器的后备方案</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>是单线程收集器，它在进行垃圾回收时会暂停其他所有的工作线程，直到它收集结束</li>
+<li>优势
+<ul>
+<li>简单而高效（与其他收集器的单线程相比），没有切换线程交互的开销</li>
+<li>在内存不大的场景下，可以在较短时间内完成垃圾回收，只要频繁发生，使用串行收集器是可以接受的</li>
+<li>使用<code>-XX:+UseSerialGC</code>参数可以指定新生代和老年代都使用串行收集器</li>
+</ul>
+</li>
+</ul>
+<h5 id="ParNew回收器：并行回收"><a class="header-anchor" href="#ParNew回收器：并行回收"></a>ParNew回收器：并行回收</h5>
+<ul>
+<li>ParNew除了采用并行回收的方式执行内存回收外，其他与Serial几乎没有区别，即也是使用复制算法、STW机制</li>
+<li>在多核环境下，ParNew可以充分利用多CPU、多核心等物理硬件资源优势，可以更快速地完成垃圾收集，提升程序的吞吐量</li>
+<li>在单核环境下，ParNew不比Serial更高效</li>
+<li>可以与Serial Old和CMS组合使用</li>
+<li>使用<code>-XX:+UseParNewGC</code>参数指定使用ParNew作为新生代的垃圾收集器</li>
+<li>使用<code>-XX:ParallelGCThreads</code>参数限制线程数量，默认开启和CPU数相同的线程数</li>
+</ul>
+<h5 id="Parallel回收器：吞吐量优先"><a class="header-anchor" href="#Parallel回收器：吞吐量优先"></a>Parallel回收器：吞吐量优先</h5>
+<ul>
+<li>
+<p>Parallel Scavenge与ParNew一样采用复制算法、并行回收和STW机制</p>
+</li>
+<li>
+<p>与ParNew不同的是</p>
+<ul>
+<li>Parallel Scavenge的目标是达到一个<strong>可控制的吞吐量</strong>，它被视为一个吞吐量优先的垃圾收集器</li>
+<li>自适应调节策略与ParNew不同</li>
+</ul>
+</li>
+<li>
+<p>高吞吐量可以高效率地利用CPU时间，尽快完成程序的运算任务，适合在后台运算而不需要太多交互的任务</p>
+</li>
+<li>
+<p>还提供了Parallel Old来代替老年代的Serial Old</p>
+</li>
+<li>
+<p>Parallel Old采用<strong>标记-压缩</strong>算法、并行回收和STW机制</p>
+</li>
+<li>
+<p>参数配置</p>
+<ul>
+<li>
+<p><code>-XX:+UseParallelGC</code>手动指定新生代使用Parallel并行收集器执行内存回收任务（jdk8默认开启）</p>
+</li>
+<li>
+<p><code>-XX:+UseParallelOldGC</code>手动指定老年代都是使用并行回收收集器</p>
+</li>
+<li>
+<p>上面两个，默认开启一个，另一个也会被开启（互相激活）</p>
+</li>
+<li>
+<p><code>-XX:ParallelGCThreads</code>设置新生代并行收集器的线程数，一般与CPU数相等，避免过多时影响垃圾收集性能</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/91d260debd331b2e165f9c247741ec05.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+<li>
+<p><code>-XX:MaxGCPauseMillis</code>设置垃圾收集器最大停顿时间（即STw的时间），单位是毫秒</p>
+<ul>
+<li>为了尽可能地把停顿时间控制在MaxGCPauseMills以内，收集器在工作时会调整Java堆大小或者其他一些参数</li>
+<li>该参数使用需谨慎</li>
+</ul>
+</li>
+<li>
+<p><code>-XX:GCTimeRatio</code>设置垃圾收集时间占总时间的比例（=1/（N+1）），用于衡量吞吐量的大小</p>
+<ul>
+<li>取值范围（0, 100）。默认值99，也就是垃圾回收时间不超过1%</li>
+<li>与前一个-XX:MaxGCPauseMillis参数有一定矛盾性，暂停时间越长，Radio参数就容易超过设定的比例</li>
+</ul>
+</li>
+<li>
+<p><code>-XX:+UseAdaptivesizePolicy</code>设置Parallel Scavenge收集器具有自适应调节策略（默认开启）</p>
+<ul>
+<li>在这种模式下，新生代的大小、Eden和Survivor的比例、晋升老年代的对象年龄等参数会被自动调整，已达到在堆大小、吞吐量和停顿时间之间的平衡点</li>
+<li>在手动调优比较困难的场合，可以直接使用这种自适应的方式，仅指定虚拟机的最大堆、目标的吞吐量（GCTimeRatio）和停顿时间（MaxGCPauseMills），让虚拟机自己完成调优工作</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="CMS回收器：低延迟"><a class="header-anchor" href="#CMS回收器：低延迟"></a>CMS回收器：低延迟</h5>
+<ul>
+<li>
+<p>CMS（Concurrent-Mark-Sweep）收集器是HotSpot虚拟机中第一款真正意义上的<strong>并发</strong>收集器，它第一次实现了让垃圾收集线程与用户线程同时工作</p>
+</li>
+<li>
+<p>CMS收集器的关注点是尽可能缩短垃圾收集时用户线程的停顿时间</p>
+</li>
+<li>
+<p>CMS的垃圾收集算法采用<strong>标记-清除</strong>算法和STW机制</p>
+</li>
+<li>
+<p>与新生代的Serial和<strong>ParNew</strong>组合使用</p>
+</li>
+<li>
+<p>工作原理</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/a8a413e1d87241cd9a37401ef913035b.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<ul>
+<li>整个过程分为4个主要阶段，即初始标记阶段、并发标记阶段、重新标记阶段和并发清除阶段</li>
+<li>初始标记阶段：所有线程都由于STW机制出现短暂的暂停，此阶段<strong>仅仅是标记出GC Roots能直接关联到的对象</strong>，由于直接关联对象比较小，所以这个阶段暂停时间非常短</li>
+<li>并发标记阶段：从GC Roots的直接关联对象开始<strong>遍历整个对象图</strong>的过程，这个过程耗时较长但是<strong>不需要停顿用户线程</strong>，可以与垃圾收集线程一起并发运行</li>
+<li>重新标记阶段：为了<strong>修正并发标记期间，因用户程序继续运作而导致标记产生变动的那一部分对象的标记记录</strong>，这个阶段暂停时间比初始标记阶段稍长，但比并发标记阶段时间短</li>
+<li>并发清除阶段：此阶段<strong>清理删除掉标记阶段判断的已经死亡的对象，释放内存空间</strong>，由于不需要移动存活对象，所以这个阶段也是可以与用户线程同时并发的</li>
+</ul>
+</li>
+<li>
+<p>由于最耗费时间的并发标记与并发清除阶段都不需要暂停工作，所以<strong>整体的回收是低停顿</strong>的</p>
+</li>
+<li>
+<p>由于在垃圾收集阶段用户线程没有中断，所以<strong>在CMS回收过程中，还应该确保应用程序用户线程有足够的内存可用</strong></p>
+<ul>
+<li>不能像其他收集器一样能老年代满了再进行收集，而是<strong>当堆内存使用率达到某一阈值时，便开始进行回收</strong></li>
+<li>若在CMS运行期间预留的内存无法满足程序需要，就会出现一次“Concurrent Mode Failure” 失败，此时虚拟机启动后备预案，临时启用Serial Old来重新进行老年代的垃圾收集</li>
+</ul>
+</li>
+<li>
+<p>由于使用标记-清除算法，垃圾回收后会产生<strong>内存碎片</strong>，为新对象分配空间时只能选择<strong>空闲列表</strong>来执行内存分配</p>
+<ul>
+<li>由于执行并发清理阶段时，用户线程没有暂停，无法整理内存中的碎片，即无法使用标记-压缩算法</li>
+</ul>
+</li>
+<li>
+<p>优点：</p>
+<ul>
+<li>并发收集</li>
+<li>低延迟</li>
+</ul>
+</li>
+<li>
+<p>缺点：</p>
+<ul>
+<li>会产生内存碎片，在无法分配大对象时不得不提前触发Full GC</li>
+<li>对CPU资源非常敏感，由于占用了一部分线程而导致应用程序变慢，总吞吐量会降低</li>
+<li>无法处理浮动垃圾，重新标记阶段修正的是标记产生变动的标记记录，没有对并发标记阶段中新产生的垃圾进行标记，这些垃圾就是浮动垃圾，只能留到下次GC处理</li>
+</ul>
+</li>
+<li>
+<p>参数设置</p>
+<ul>
+<li><code>-XX:+UseConcMarkSweepGC</code>手动指定使用CMS收集器执行内存回收
+<ul>
+<li>启该参数后会自动将<code>-XX:+UseParNewGC</code>打开</li>
+</ul>
+</li>
+<li><code>-XX:CMSInitiatingOccupanyFraction</code>设置堆内存使用率的阈值，一旦达到该阈值，便开始进行回收
+<ul>
+<li>JDK5及以前版本的默认值为68，即当老年代的空间使用率达到68%时，会执行一次CMS回收。JDK6及以上版本默认值为92%</li>
+<li>如果内存增长缓慢，则可以设置一个稍大的值，大的阀值可以有效降低CMS的触发频率，减少老年代回收的次数可以较为明显地改善应用程序性能</li>
+<li>反之，如果应用程序内存使用率增长很快，则应该降低这个阈值，以避免频繁触发老年代串行收集器。因此通过该选项便可以有效降低Full Gc的执行次数</li>
+</ul>
+</li>
+<li><code>-XX:+UseCMSCompactAtFullCollection</code>用于指定在执行完Full GC后对内存空间进行压缩整理，以此避免内存碎片的产生
+<ul>
+<li>开启此参数会造成停顿时间变得更长</li>
+</ul>
+</li>
+<li><code>-XX:CMSFullGCsBeforeCompaction</code>设置在执行多少次Full GC后对内存空间进行压缩整理</li>
+<li><code>-XX:ParallelCMSThreads</code>设置CMS的线程数量
+<ul>
+<li>CMS默认启动的线程数是(ParallelGCThreads+3)/4，ParallelGCThreads是新生代并行收集器的线程数，当CPU资源比较紧张时，受到CMS收集器线程的影响，应用程序的性能在垃圾回收阶段可能会非常糟糕</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="小结"><a class="header-anchor" href="#小结"></a>小结</h5>
+<ul>
+<li>若想要最小化地使用内存和并行开销，选择Serial</li>
+<li>若想要最大化应用程序的吞吐量，选择Parallel</li>
+<li>若想要最小化GC的中断或停顿时间，选择CMS</li>
+</ul>
+<h5 id="G1回收器：区域化分代式"><a class="header-anchor" href="#G1回收器：区域化分代式"></a>G1回收器：区域化分代式</h5>
+<p><strong>概述</strong></p>
+<ul>
+<li>G1（Garbage First）是在Java7之后引入的，适应现在不断扩大的内存和不断增加的处理器数量，进一步降低暂停时间，同时兼顾良好的吞吐量</li>
+<li><strong>方给G1设定的目标是在延迟可控的情况下获得尽可能高的吞吐量，所以才担当起“全功能收集器”的重任与期望</strong></li>
+<li>G1是一个并行回收器，将堆内存分割为很多不相关的区域（Region）（物理上不连续的）
+<ul>
+<li>使用不同的Region来表示Eden、幸存者0区，幸存者1区，老年代等</li>
+</ul>
+</li>
+<li>G1 GC有计划地避免在整个Java堆中进行全区域的垃圾收集
+<ul>
+<li>G1跟踪各个Region里面的垃圾堆积的价值大小（回收所获得的空间大小以及回收所需时间的经验值），在后台维护一个优先列表，<strong>每次根据允许的收集时间，优先回收价值最大的Region</strong></li>
+</ul>
+</li>
+<li>由于这种方式的侧重点在于回收垃圾最大量的区间（Region），所以我们给G1一个名字：垃圾优先（Garbage First）</li>
+<li>是一款面向服务端应用的垃圾收集器，<strong>主要针对配备多核CPU及大容量内存的机器</strong>，以极高概率满足GC停顿时间的同时，还兼具高吞吐量的性能特征</li>
+<li>是jdk9及之后的默认垃圾回收器</li>
+<li>在jdk8中需要使用<code>-XX:+UseG1GC</code>来启用</li>
+</ul>
+<p><strong>特点</strong></p>
+<ul>
+<li>
+<p>并行与并发</p>
+<ul>
+<li>并行性：G1在回收期间，可以有多个GC线程同时工作，有效利用多核计算能力，此时用户线程STW</li>
+<li>并发性：G1拥有与应用程序交替执行的能力，部分工作可以和应用程序同时执行，因此，一般来说，不会在整个回收阶段发生完全阻塞应用程序的情况</li>
+</ul>
+</li>
+<li>
+<p>分代收集</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/f856369a9da95dc52b6e5a2952c6e2a8.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<ul>
+<li>从分代上看，<strong>G1依然属于分代型垃圾回收器</strong>，它会区分新生代和老年代，新生代依然有Eden区和Survivor区。但从堆的结构上看，它不要求整个Eden区、新生代或者老年代都是连续的，也不再坚持固定大小和固定数量</li>
+<li>将<strong>堆空间分为若干个区域（Region）</strong>，这些区域中<strong>包含了逻辑上的新生代和老年代</strong></li>
+<li>和之前的各类回收器不同，它同时<strong>兼顾新生代和老年代</strong>。对比其他回收器，或者工作在新生代，或者工作在老年代</li>
+</ul>
+</li>
+<li>
+<p>空间整合</p>
+<ul>
+<li>G1将内存划分为一个个的region，内存的回收是以region作为基本单位的，<strong>Region之间是复制算法</strong>，但整体上实际可看作是<strong>标记-压缩（Mark-Compact）算法</strong>，两种算法都可以避免内存碎片。这种特性有利于程序长时间运行，分配大对象时不会因为无法找到连续内存空间而提前触发下一次GC。尤其是当Java堆非常大的时候，G1的优势更加明显</li>
+</ul>
+</li>
+<li>
+<p>可预测的停顿时间模型（软实时 soft real-time）</p>
+<ul>
+<li>G1除了追求低停顿外，还能建立可预测的停顿时间模型，能让使用者明确指定在一个长度为M毫秒的时间片段内，消耗在垃圾收集上的时间不得超过N毫秒</li>
+<li>由于分区的原因，G1可以只选取部分区域进行内存回收，这样缩小了回收的范围，因此对于全局停顿情况的发生也能得到较好的控制</li>
+<li>G1跟踪各个Region里面的垃圾堆积的价值大小（回收所获得的空间大小以及回收所需时间的经验值），在后台维护一个优先列表，<strong>每次根据允许的收集时间，优先回收价值最大的Region</strong>。保证了G1收集器在有限的时间内可以获取尽可能高的收集效率</li>
+<li>相比于CMS，G1未必能做到CMS在最好情况下的延时停顿，但是最差情况要好很多</li>
+</ul>
+</li>
+</ul>
+<p><strong>缺点</strong></p>
+<ul>
+<li>在用户程序运行过程中，G1无论是为了垃圾收集产生的内存占用（Footprint）还是程序运行时的额外执行负载（Overload）都要比CMS要高</li>
+<li>在小内存应用上CMS的表现大概率会优于G1，而G1在大内存应用上则发挥其优势，平衡点在6-8GB之间</li>
+</ul>
+<p><strong>参数设置</strong></p>
+<ul>
+<li>
+<p><code>-XX:+UseG1GC</code>：手动指定使用G1垃圾收集器执行内存回收任务</p>
+</li>
+<li>
+<p><code>-XX:G1HeapRegionSize</code> 设置每个Region的大小。值是2的幂，范围是1MB到32MB之间，目标是根据最小的Java堆大小划分出约2048个区域。默认是堆内存的1/2000</p>
+</li>
+<li>
+<p><code>-XX:MaxGCPauseMillis</code>设置期望达到的最大GC停顿时间指标（JVM会尽力实现，但不保证达到），默认值是200ms（人的平均反应速度）</p>
+</li>
+<li>
+<p><code>-XX:+ParallelGCThread</code> 设置STW时GC工作线程数的值</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/91d260debd331b2e165f9c247741ec05.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+<li>
+<p><code>-XX:ConcGCThreads</code>设置并发标记的线程数。将n设置为并行垃圾回收线程数（ParallelGCThreads）的1/4左右</p>
+</li>
+<li>
+<p><code>-XX:InitiatingHeapOccupancyPercent</code>设置触发并发GC周期的Java堆占用率阈值，超过此值，就触发GC，默认值是45</p>
+</li>
+</ul>
+<p><strong>G1回收器调优</strong></p>
+<p>G1的设计原则就是简化JVM性能调优，开发人员只需要简单的三步即可完成调优</p>
+<ol>
+<li>开启G1垃圾收集器</li>
+<li>设置堆的最大内存</li>
+<li>设置最大的停顿时间</li>
+</ol>
+<p>G1中提供了三种垃圾回收模式：Young GC、Mixed GC和Full GC，在不同的条件下被触发</p>
+<p><strong>适用场景</strong></p>
+<ul>
+<li>面向服务端应用，针对具有大内存、多处理器的机器</li>
+<li>最主要的应用是需要低GC延迟，并具有大堆的应用程序提供解决方案
+<ul>
+<li>如：在堆大小约6GB或更大时，可预测的暂停时间可以低于0.5秒</li>
+</ul>
+</li>
+<li>用来替换掉JDK1.5中的CMS收集器，在下面的情况时，使用G1可能比CMS好
+<ul>
+<li>超过50%的Java堆被活动数据占用</li>
+<li>对象分配频率或年代提升频率变化很大</li>
+<li>GC停顿时间过长（长于0.5至1秒）</li>
+</ul>
+</li>
+<li>HotSpot垃圾收集器里，除了G1以外，其他的垃圾收集器使用内置的JVM线程执行GC的多线程操作，而G1可以采用应用线程承担后台运行的GC工作，即当JVM的GC线程处理速度慢时，系统会调用应用程序线程帮助加速垃圾回收过程</li>
+</ul>
+<p><strong>分区Region：化整为零</strong></p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/f856369a9da95dc52b6e5a2952c6e2a8.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<ul>
+<li>所有的Region大小相同，且在JVM生命周期内不会被改变</li>
+<li>一个region有可能属于Eden，Survivor或者Old/Tenured内存区域，但是一个region只可能属于一个角色</li>
+<li>G1垃圾收集器还增加了一种新的内存区域，叫做<strong>Humongous</strong>内存区域，主要用于存储大对象，如果超过1.5个region，就放到H</li>
+<li>设置H区的原因：对于堆中的对象，默认直接会被分配到老年代，但是如果它是一个短期存在的大对象就会对垃圾收集器造成负面影响。为了解决这个问题，G1划分了一个Humongous区，它用来专门存放大对象。如果一个H区装不下一个大对象，那么G1会寻找<strong>连续的H区</strong>来存储。为了能找到连续的H区，有时候不得不启动Full GC。G1的大多数行为都把H区作为老年代的一部分来看待</li>
+<li>每个Region内都是通过指针碰撞来分配空间</li>
+</ul>
+<p><strong>垃圾回收过程</strong></p>
+<p>GC的垃圾回收过程主要包括如下三个环节：</p>
+<ul>
+<li>新生代GC（Young GC）</li>
+<li>老年代并发标记过程（Concurrent Marking）</li>
+<li>混合回收（Mixed GC）</li>
+<li>单线程、独占式、高强度的Full GC兜底</li>
+</ul>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/5873f8c93cc9e3384a05a323c5d4141f.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>详细过程</p>
+<ul>
+<li>当年轻代的Eden区用尽时开始年轻代回收过程；G1的年轻代收集阶段是一个<strong>并行的独占式</strong>收集器。在年轻代回收期，G1暂停所有应用程序线程，启动多线程执行年轻代回收。然后<strong>从年轻代区间移动存活对象到Survivor区间或者老年区间，也有可能是两个区间都会涉及</strong></li>
+<li>当堆内存使用达到一定值（默认45%）时，开始老年代并发标记过程</li>
+<li>标记完成马上开始混合回收过程。对于一个混合回收期，G1 GC从老年区间移动存活对象到空闲区间，这些空闲区间也就成为了老年代的一部分。和年轻代不同，老年代的G1回收器和其他GC不同，<strong>G1的老年代回收器不需要整个老年代被回收，一次只需要扫描/回收一小部分老年代的Region就可以了</strong>。同时，这个老年代Region是和年轻代一起被回收的</li>
+</ul>
+<p><strong>垃圾回收过程：Remembered Set</strong></p>
+<p>存在问题：</p>
+<ul>
+<li>一个对象被不同区域引用的问题</li>
+<li>一个Region不可能是孤立的，一个Region中的对象可能被其他任意Region中对象引用，判断对象存活时，是否需要扫描整个Java堆才能保证准确？</li>
+<li>在其他的分代收集器，也存在这样的问题（而G1更突出）回收新生代也不得不同时扫描老年代？</li>
+<li>这样的话会降低MinorGC的效率</li>
+</ul>
+<p>解决方法：</p>
+<ul>
+<li>无论G1还是其他分代收集器，JVM都是使用Remembered Set来避免全局扫描</li>
+<li>每个Region都有一个对应的Remembered Set</li>
+<li>每次引用类型数据写操作时，都会产生一个写屏障（Write Barrier）暂时中断操作</li>
+<li>然后检查将要写入的引用指向的对象是否和该引用类型数据在不同的Region（其他收集器：检查老年代对象是否引用了新生代对象）</li>
+<li>若不同，通过CardTable把相关引用信息记录到引用指向对象的所在Region对应的Remembered Set中</li>
+<li>当进行垃圾收集时，在GC根节点的枚举范围加入Remembered Set；就可以保证<strong>不进行全局扫描</strong>，也<strong>不会有遗漏</strong></li>
+</ul>
+<h5 id="垃圾回收器总结"><a class="header-anchor" href="#垃圾回收器总结"></a>垃圾回收器总结</h5>
+<h5 id="GC日志分析"><a class="header-anchor" href="#GC日志分析"></a>GC日志分析</h5>
+<h5 id="垃圾回收器的新发展"><a class="header-anchor" href="#垃圾回收器的新发展"></a>垃圾回收器的新发展</h5>
 <h3 id="字节码与类的加载"><a class="header-anchor" href="#字节码与类的加载"></a>字节码与类的加载</h3>
 <h3 id="性能监控与调优"><a class="header-anchor" href="#性能监控与调优"></a>性能监控与调优</h3>
 
