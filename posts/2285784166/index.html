@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/dde1aa79137e2fc011dc0601a64929d9.png">
 <meta property="article:published_time" content="2022-10-11T06:49:26.000Z">
-<meta property="article:modified_time" content="2023-03-29T13:52:12.183Z">
+<meta property="article:modified_time" content="2023-03-30T14:11:59.856Z">
 <meta property="article:author" content="zhuweitung">
 <meta property="article:tag" content="java">
 <meta property="article:tag" content="jvm">
@@ -256,7 +256,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          47k 字
+          61k 字
         
       </span>
     
@@ -267,7 +267,7 @@
         
         
         
-          392 分钟
+          507 分钟
         
       </span>
     
@@ -2627,7 +2627,7 @@
 <p><strong>概述</strong></p>
 <ul>
 <li>G1（Garbage First）是在Java7之后引入的，适应现在不断扩大的内存和不断增加的处理器数量，进一步降低暂停时间，同时兼顾良好的吞吐量</li>
-<li><strong>方给G1设定的目标是在延迟可控的情况下获得尽可能高的吞吐量，所以才担当起“全功能收集器”的重任与期望</strong></li>
+<li><strong>官方给G1设定的目标是在延迟可控的情况下获得尽可能高的吞吐量，所以才担当起“全功能收集器”的重任与期望</strong></li>
 <li>G1是一个并行回收器，将堆内存分割为很多不相关的区域（Region）（物理上不连续的）
 <ul>
 <li>使用不同的Region来表示Eden、幸存者0区，幸存者1区，老年代等</li>
@@ -2749,11 +2749,11 @@
 <p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/5873f8c93cc9e3384a05a323c5d4141f.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>详细过程</p>
 <ul>
-<li>当年轻代的Eden区用尽时开始年轻代回收过程；G1的年轻代收集阶段是一个<strong>并行的独占式</strong>收集器。在年轻代回收期，G1暂停所有应用程序线程，启动多线程执行年轻代回收。然后<strong>从年轻代区间移动存活对象到Survivor区间或者老年区间，也有可能是两个区间都会涉及</strong></li>
+<li>当新生代的Eden区用尽时开始新生代回收过程；G1的新生代收集阶段是一个<strong>并行的独占式</strong>收集器。在新生代回收期，G1暂停所有应用程序线程，启动多线程执行新生代回收。然后<strong>从新生代区间移动存活对象到Survivor区间或者老年区间，也有可能是两个区间都会涉及</strong></li>
 <li>当堆内存使用达到一定值（默认45%）时，开始老年代并发标记过程</li>
-<li>标记完成马上开始混合回收过程。对于一个混合回收期，G1 GC从老年区间移动存活对象到空闲区间，这些空闲区间也就成为了老年代的一部分。和年轻代不同，老年代的G1回收器和其他GC不同，<strong>G1的老年代回收器不需要整个老年代被回收，一次只需要扫描/回收一小部分老年代的Region就可以了</strong>。同时，这个老年代Region是和年轻代一起被回收的</li>
+<li>标记完成马上开始混合回收过程。对于一个混合回收期，G1 GC从老年区间移动存活对象到空闲区间，这些空闲区间也就成为了老年代的一部分。和新生代不同，老年代的G1回收器和其他GC不同，<strong>G1的老年代回收器不需要整个老年代被回收，一次只需要扫描/回收一小部分老年代的Region就可以了</strong>。同时，这个老年代Region是和新生代一起被回收的</li>
 </ul>
-<p><strong>垃圾回收过程：Remembered Set</strong></p>
+<p><strong>垃圾回收过程：Remembered Set（RSet）</strong></p>
 <p>存在问题：</p>
 <ul>
 <li>一个对象被不同区域引用的问题</li>
@@ -2770,10 +2770,1035 @@
 <li>若不同，通过CardTable把相关引用信息记录到引用指向对象的所在Region对应的Remembered Set中</li>
 <li>当进行垃圾收集时，在GC根节点的枚举范围加入Remembered Set；就可以保证<strong>不进行全局扫描</strong>，也<strong>不会有遗漏</strong></li>
 </ul>
+<p><strong>垃圾回收过程：新生代GC</strong></p>
+<ul>
+<li>当Eden空间耗尽时，G1会启动一次新生代垃圾回收过程</li>
+<li>新生代垃圾回收只会回收Eden区和Survivor区</li>
+<li>首先G1停止应用程序的执行（Stop-The-World），G1创建回收集（Collection Set），回收集是指需要被回收的内存分段的集合，新生代回收过程的回收集包含新生代Eden区和Survivor区所有的内存分段</li>
+<li>详细回收过程
+<ol>
+<li>扫描根：扫描GC Roots</li>
+<li>更新RSet：处理dirty card queue中的card，更新RSet，更新之后，RSet可以准确的反映老年代对所在的内存分段中对象的引用</li>
+<li>处理RSet：识别被老年代对象指向的Eden中的对象，这些被指向的Eden中的对象被认为是存活的对象</li>
+<li>复制对象：遍历对象树，Eden区内存段中存活的对象会被复制到Survivor区中空的内存分段，Survivor区内存段中存活的对象如果年龄未达阈值，年龄会加1，达到阀值会被会被复制到Old区中空的内存分段。如果Survivor空间不够，Eden空间的部分数据会直接晋升到老年代空间</li>
+<li>处理引用：处理软、弱、虚、终极引用</li>
+</ol>
+</li>
+</ul>
+<p><strong>垃圾回收过程：并发标记过程</strong></p>
+<ol>
+<li>初始标记：标记从根节点直接可达的对象，这个阶段是STW的，并且会触发一次新生代GC</li>
+<li>根区域扫描：扫描Survivor区直接可达的老年代区域对象，并标记被引用的对象，这一过程必须在YoungGC之前完成</li>
+<li>并发标记：在整个堆中进行并发标记，此过程可能被YoungGC中断。在并发标记阶段，<strong>若发现区域对象中的所有对象都是垃圾，那这个区域会被立即回收</strong>。同时，并发标记过程中，会计算每个区域的对象活性（区域中存活对象的比例）</li>
+<li>再次标记：修正上一次的标记结果，是STW的，G1中采用了比CMS更快的初始快照算法：snapshot-at-the-beginning（SATB）</li>
+<li>独占清理：计算各个区域的存活对象和GC回收比例，并进行排序，识别可以混合回收的区域，是STW的，这个阶段并不会实际上去做垃圾的收集，给下一个阶段做铺垫</li>
+<li>并发清理：识别并清理完全空闲的区域</li>
+</ol>
+<p><strong>垃圾回收过程：混合回收</strong></p>
+<ul>
+<li>此过程回收部分老年代，而不是全部老年代</li>
+<li>并发标记结束以后，老年代中百分百为垃圾的内存分段被回收了，部分为垃圾的内存分段被计算了出来。默认情况下，这些老年代的内存分段会分8次（可以通过<code>-XX:G1MixedGCCountTarget</code>设置）被回收</li>
+<li>混合回收的回收集（Collection Set）包括八分之一的老年代内存分段，Eden区内存分段，Survivor区内存分段，回收算法与新生代的回收算法一样</li>
+<li>由于老年代中的内存分段默认分8次回收，G1会优先回收垃圾多的内存分段。并且有一个阈值会决定内存分段是否被回收，<code>-XX:G1MixedGCLiveThresholdPercent</code>，默认为65%，意思是垃圾占内存分段比例要达到65%才会被回收</li>
+<li>混合回收并不一定要进行8次。有一个阈值<code>-XX:G1HeapWastePercent</code>，默认值为10%，意思是允许整个堆内存中有10%的空间被浪费，意味着如果发现可以回收的垃圾占堆内存的比例低于10%，则不再进行混合回收</li>
+</ul>
+<p><strong>垃圾回收过程：兜底Full GC</strong></p>
+<ul>
+<li>导致G1 Full GC的原因
+<ul>
+<li>回收时没有足够的内存空间来存放晋升的对象</li>
+<li>并发处理过程完成前空间耗尽</li>
+</ul>
+</li>
+</ul>
+<p><strong>G1回收器优化建议</strong></p>
+<ul>
+<li>年轻代大小
+<ul>
+<li>避免使用-Xmn或-XX:NewRatio等相关选项显式设置年轻代大小</li>
+<li>固定年轻代的大小会覆盖暂停时间目标</li>
+</ul>
+</li>
+<li>暂停时间目标不要太过严苛
+<ul>
+<li>G1 GC的吞吐量目标是90%的应用程序时间和10%的垃圾回收时间</li>
+<li>评估G1 GC的吞吐量时，暂停时间目标不要太严苛。目标太过严苛表示你愿意承受更多的垃圾回收开销，而这些会直接影响到吞吐量</li>
+</ul>
+</li>
+</ul>
 <h5 id="垃圾回收器总结"><a class="header-anchor" href="#垃圾回收器总结"></a>垃圾回收器总结</h5>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/f375400b78981bd45d1aaf57ea9f637a.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h5 id="GC日志分析"><a class="header-anchor" href="#GC日志分析"></a>GC日志分析</h5>
+<ul>
+<li>
+<p>通过阅读Gc日志，我们可以了解Java虚拟机内存分配与回收策略</p>
+</li>
+<li>
+<p>内存分配与垃圾回收的参数列表</p>
+<ul>
+<li>
+<p>-XX:+PrintGC 输出GC日志。类似：-verbose:gc</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs log">[GC (Allocation Failure)  16334K-&gt;14650K(59392K), 0.0027508 secs]<br>[GC (Allocation Failure)  30934K-&gt;30905K(59392K), 0.0030729 secs]<br>[Full GC (Ergonomics)  30905K-&gt;30652K(59392K), 0.0062041 secs]<br>[Full GC (Ergonomics)  46981K-&gt;46848K(59392K), 0.0062492 secs]<br></code></pre></td></tr></table></figure>
+<ul>
+<li>GC、Full GC：GC的类型，前者只在新生代上进行，后者在新生代、老年代、永久代/元空间上进行</li>
+<li>Allocation Failure：GC发生的原因，分配失败</li>
+<li>16334K-&gt;14650K：堆在GC前后的占用大小</li>
+<li>59392K：现在堆的大小</li>
+<li>0.0027508 secs：GC持续时间</li>
+</ul>
+</li>
+<li>
+<p>-XX:+PrintGCDetails 输出GC的详细日志</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/04411cf86a4a4042b5112898cead62fe.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<ul>
+<li>PSYoungGen：使用了Parallel Scavenge并行垃圾收集器的新生代GC前后占用大小的变化</li>
+<li>ParOldGen：使用了Parallel Old并行垃圾收集器的老年代GC前后占用大小的变化</li>
+<li>Metaspace： 元数据区GC前后大小的变化，JDK1.8中引入了元数据区以替代永久代</li>
+<li>Times：
+<ul>
+<li>user：指的是垃圾收集器花费的所有CPU时间</li>
+<li>sys：花费在等待系统调用或系统事件的时间</li>
+<li>real：GC从开始到结束的时间，包括其他进程占用时间片的实际时间</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>-XX:+PrintGCTimeStamps输出GC的时间戳（以基准时间的形式）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs log">0.101: [GC (Allocation Failure)...<br>0.104: [GC (Allocation Failure)...<br>0.107: [Full GC (Ergonomics)... <br>0.114: [Full GC (Ergonomics)...<br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p>-XX:+PrintGCDateStamps 输出GC的时间戳（以日期的形式，如2013-05-04T21：53：59.234+0800）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs log">2022-10-23T12:17:35.854+0800: [GC (Allocation Failure)...<br>2022-10-23T12:17:35.857+0800: [GC (Allocation Failure)...<br>2022-10-23T12:17:35.860+0800: [Full GC (Ergonomics)... <br>2022-10-23T12:17:35.867+0800: [Full GC (Ergonomics)...<br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p>-XX:+PrintHeapAtGC 在进行GC的前后打印出堆的信息</p>
+</li>
+<li>
+<p>-Xloggc:/opt/logs/gc.log 日志文件的输出路径</p>
+</li>
+<li>
+<p>补充说明</p>
+<ul>
+<li>
+<p>“[GC”、“[Full GC&quot;说明了这次垃圾收集的停顿类型，如果有&quot;Full&quot;则说明GC发生了&quot;Stop The World”</p>
+</li>
+<li>
+<p>使用Serial收集器在新生代的名字是Default New Generation，因此显示的是&quot;[DefNew&quot;</p>
+</li>
+<li>
+<p>使用ParNew收集器在新生代的名字会变成&quot;[ParNew&quot;，意思是&quot;Parallel New Generation&quot;</p>
+</li>
+<li>
+<p>使用Parallel scavenge收集器在新生代的名字是&quot;[PSYoungGen&quot;</p>
+</li>
+<li>
+<p>老年代的收集和新生代道理一样，名字也是收集器决定的</p>
+</li>
+<li>
+<p>使用G1收集器的话，会显示为&quot;garbage-first heap&quot;</p>
+</li>
+<li>
+<p>Allocation Failure 表明本次引起GC的原因是因为在年轻代中没有足够的空间能够存储新的数据了</p>
+</li>
+<li>
+<p>[PSYoungGen: 16334K-&gt;2040K(18432K)] 16334K-&gt;14654K(59392K) ：[新生代GC前占用大小-&gt;GC后占用大小(总大小)] 堆空间GC前占用大小-&gt;GC后占用大小(总大小)</p>
+</li>
+<li>
+<p>user代表用户态回收耗时，sys内核态回收耗时，rea实际耗时。由于多核的原因，时间总和可能会超过real时间</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>新生代GC日志</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/05440b1b8acc86fe7f84d27ea4fad4a9.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+<li>
+<p>Full GC日志</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/4b35e0257572d24a782d5e7c994eaf1f.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+<li>
+<p>日志分析工具</p>
+<ul>
+<li>gcviewer</li>
+<li>gceasy</li>
+</ul>
+</li>
+</ul>
 <h5 id="垃圾回收器的新发展"><a class="header-anchor" href="#垃圾回收器的新发展"></a>垃圾回收器的新发展</h5>
+<ul>
+<li>目前的默认选项G1 GC在不断的进行改进</li>
+<li>JDK11出现了Epsilon垃圾回收器，&quot;No-Op（无操作）&quot;回收器</li>
+<li>JDK11出现ZGC（可伸缩的低延迟垃圾回收器，处于实验性阶段）
+<ul>
+<li>在尽可能对吞吐量影响不大的前提下，实现在任意堆内存大小下都可以把垃圾收集的停颇时间限制在十毫秒以内的低延迟</li>
+<li>基于Region内存布局，（暂时）不设分代的，使用了读屏障、染色指针和内存多重映射等技术来实现可<strong>并发</strong>的<strong>标记-压缩算法</strong>的，以低延迟为首要目标</li>
+<li>工作过程可以分为4个阶段：并发标记，并发预备重分配，并发重分配，并发重映射</li>
+<li>除了<strong>初始标记的是STW的</strong>，其余都是并发执行，所以停顿时间非常短</li>
+</ul>
+</li>
+<li>JDK12出现Shenandoash GC，低停顿时间的GC（实验性），由oracle公司团队领导开发</li>
+<li>阿里巴巴JVM团队基于G1算法，面向大堆（LargeHeap）应用场景开发了AliGC</li>
+</ul>
 <h3 id="字节码与类的加载"><a class="header-anchor" href="#字节码与类的加载"></a>字节码与类的加载</h3>
+<p><a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html">官方文档</a></p>
+<h4 id="字节码文件结构"><a class="header-anchor" href="#字节码文件结构"></a>字节码文件结构</h4>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs java">ClassFile &#123;<br>    u4             magic;<br>    u2             minor_version;<br>    u2             major_version;<br>    u2             constant_pool_count;<br>    cp_info        constant_pool[constant_pool_count-<span class="hljs-number">1</span>];<br>    u2             access_flags;<br>    u2             this_class;<br>    u2             super_class;<br>    u2             interfaces_count;<br>    u2             interfaces[interfaces_count];<br>    u2             fields_count;<br>    field_info     fields[fields_count];<br>    u2             methods_count;<br>    method_info    methods[methods_count];<br>    u2             attributes_count;<br>    attribute_info attributes[attributes_count];<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/3891be483cb868ba072878f63c0a5456.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<ul>
+<li>u1、u2、u4、u8表示无符号的1字节、2字节、4字节、8字节</li>
+<li>所有的表都以&quot;_info&quot;结尾，由于表没有固定长度，所以通常会在其前面加上个数说明</li>
+</ul>
+<h5 id="魔数"><a class="header-anchor" href="#魔数"></a>魔数</h5>
+<ul>
+<li>每个Class文件开头的4个字节的无符号整数称为魔数</li>
+<li>魔数是Class文件的标识符</li>
+<li>魔数值固定为0xCAFEBABE</li>
+<li>使用魔数而不是扩展名来进行识别主要是基于安全方面的考虑，因为文件扩展名可以随意地改动</li>
+</ul>
+<h5 id="字节码文件版本号"><a class="header-anchor" href="#字节码文件版本号"></a>字节码文件版本号</h5>
+<ul>
+<li>
+<p>魔数后面4个字节为文件的版本号，前2个字节为副版本号（minor_version），后两个字节为主版本号（major_version）</p>
+</li>
+<li>
+<p>编译器版本与文件版本对应关系</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/151908189212dfe5dac34adc57350748.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+<li>
+<p>高版本的Java虚拟机可以执行由低版本编译器生成的Class文件，但是低版本的Java虚拟机不能执行由高版本编译器生成的Class文件</p>
+</li>
+</ul>
+<h5 id="常量池"><a class="header-anchor" href="#常量池"></a>常量池</h5>
+<ul>
+<li>
+<p>常量池是Class文件中内容最为丰富的区域之一</p>
+</li>
+<li>
+<p>常量池对于Class文件中的字段和方法解析也有着至关重要的作用</p>
+</li>
+<li>
+<p>常量池计数器的计数从1开始，而不是从0开始</p>
+<ul>
+<li>这是为了满足后面某些指向常量池的索引值的数据在特定情况下需要表达“不引用任何一个常量池项目”的含义，这种情况可用索引值0来表示</li>
+</ul>
+</li>
+<li>
+<p><strong>常量池表项</strong>中，用于存放编译时期生成的各种<strong>字面量</strong>和<strong>符号引用</strong>，这部分内容将在类加载后进入方法区的<strong>运行时常量池</strong>中存放</p>
+<ul>
+<li>
+<p>它包含了class文件结构及其子结构中引用的所有字符串常量、类或接口名、字段名和其他常量</p>
+</li>
+<li>
+<p><strong>字面量包括：文本字符串、声明为final的常量值</strong></p>
+</li>
+<li>
+<p><strong>符号引用包括：类和接口的全限定名、字段的名称和描述符、方法的名称和描述符</strong></p>
+<ul>
+<li>
+<p>全限定名：如&quot;com/zhuweitung/jvm/Sample;“，为了使连续的多个全限定名之间不产生混淆，在使用时最后一般会加入一个”;&quot;表示全限定名结束</p>
+</li>
+<li>
+<p>名称：指没有类型和参数修饰的方法或者字段名称</p>
+</li>
+<li>
+<p>描述符：描述符的作用是用来描述字段的数据类型、方法的参数列表（包括数量、类型以及顺序）和返回值</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/0cbef8983a24754bd2d05bfe4826f9d9.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+</ul>
+</li>
+<li>
+<p>常量池中的每一项都具备相同的特征，第1个字节作为类型标记，用于确定该项的格式，这个字节称为tag byte（标记字节、标签字节）</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/0cbcc828370c2549b61ee2c3d4c8ea01.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<ul>
+<li>15、16、18的常量项类型是用来支持动态语言调用的（jdk1.7时才加入的）</li>
+<li>在Class文件中不会保存各个方法、字段的最终内存布局信息，因此这些字段、方法的符号引用不经过运行期转换的话无法得到真正的内存入口地址，也就无法直接被虚拟机使用</li>
+<li>当虚拟机运行时，需要从常量池获得对应的符号引用，再在类创建时或运行时解析、翻译到具体的内存地址之中</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="访问标识"><a class="header-anchor" href="#访问标识"></a>访问标识</h5>
+<ul>
+<li>
+<p>在常量池后，紧跟着访问标记</p>
+</li>
+<li>
+<p>用于识别一些类或者接口层次的访问信息</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/f7789e3ea7635fc4e4d6e367ff9ef166.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+<li>
+<p>每个类都会有ACC_SUPER标志</p>
+<ul>
+<li>ACC_SUPER标志是为了向后兼容由旧Java编译器所编译的代码而设计的</li>
+</ul>
+</li>
+<li>
+<p>ACC_SYNTHETIC标志意味着该类或接口是由编译器生成的，而不是由源代码生成的</p>
+</li>
+</ul>
+<h5 id="类索引、父类索引、接口索引集合"><a class="header-anchor" href="#类索引、父类索引、接口索引集合"></a>类索引、父类索引、接口索引集合</h5>
+<ul>
+<li>
+<p>在访问标记后，会指定该类的类别、父类类别以及实现的接口</p>
+</li>
+<li>
+<p>格式如下</p>
+<table>
+<thead>
+<tr>
+<th>长度</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>u2</td>
+<td>this_class</td>
+</tr>
+<tr>
+<td>u2</td>
+<td>super_class</td>
+</tr>
+<tr>
+<td>u2</td>
+<td>interfaces_count</td>
+</tr>
+<tr>
+<td>u2</td>
+<td>interfaces[interfaces_count]</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>这些索引确定了类的继承关系</p>
+<ul>
+<li>类索引用于确定这个类的全限定名</li>
+<li>父类索引用于确定这个类的父类的全限定名</li>
+<li>接口索引集合就用来描述这个类实现了哪些接口</li>
+</ul>
+</li>
+</ul>
+<h5 id="字段表集合"><a class="header-anchor" href="#字段表集合"></a>字段表集合</h5>
+<ul>
+<li>
+<p><a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.5">官方文档</a></p>
+</li>
+<li>
+<p>用于描述接口或类中声明的变量</p>
+</li>
+<li>
+<p>包括类级变量以及实例级变量，但是不包括方法内部、代码块内部声明的局部变量</p>
+</li>
+<li>
+<p>字段表集合中不会列出从父类或者实现的接口中继承而来的字段</p>
+</li>
+<li>
+<p>字段表数据项</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/024682a8d928ae0248513e74c21f6e7f.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+<li>
+<p>字段表访问标识</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/98ccbb3fd4d23f19bb8cbdb4ec7966cd.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+<li>
+<p>若一个字段还拥有一些属性，用于存储更多的额外信息，则将属性具体内容存放在属性表集合中</p>
+</li>
+</ul>
+<h5 id="方法表集合"><a class="header-anchor" href="#方法表集合"></a>方法表集合</h5>
+<ul>
+<li>
+<p><a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.6">官方文档</a></p>
+</li>
+<li>
+<p>methods：指向常量池索引集合，它完整描述了每个方法的签名</p>
+</li>
+<li>
+<p>在字节码文件中，每一个method_info项都对应着一个类或者接口中的方法信息。比如方法的访问修饰符（public、private或protected），方法的返回值类型以及方法的参数信息等</p>
+</li>
+<li>
+<p>方法表集合只当前类或接口中声明的方法，不包括从父类或父接口继承的方法</p>
+</li>
+<li>
+<p>方法表集合有可能会出现由编译器自动添加的方法，如初始化方法&lt;clinit&gt;和实例初始化方法&lt;init&gt;</p>
+</li>
+<li>
+<p>方法表数据项</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/5eb5cca04d7c08c6f27fa8b6a56bda50.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+<li>
+<p>方法表访问标识</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/5d12c1de4d69a06d95f1fb0bec8c0364.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+</ul>
+<h5 id="属性表集合"><a class="header-anchor" href="#属性表集合"></a>属性表集合</h5>
+<ul>
+<li>
+<p><a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.7">官方文档</a></p>
+</li>
+<li>
+<p>方法表集合之后的属性表集合，指的是class文件所携带的辅助信息，比如该class文件的源文件的名称</p>
+</li>
+<li>
+<p>这类信息通常被用于Java虚拟机的验证和运行，以及Java程序的调试</p>
+</li>
+<li>
+<p>字段表、方法表都可以有自己的属性表</p>
+</li>
+<li>
+<p>属性表数据项通用格式，不同属性类型info内容结构会不一样</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/d0960ae3680aaf2e9989ad9e096390f4.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+<li>
+<p>属性类型</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/6c666fd2d1615cce04b59f47a1916ed7.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+<li>
+<p>常见属性结构</p>
+<ul>
+<li>
+<p>ConstantValue：表示一个常量字段的值</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.7.2">官方文档</a></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java">ConstantValue_attribute &#123;<br>	u2 attribute_name_index;<br>	u4 attribute_length;<br>	u2 constantvalue_index; <span class="hljs-comment">// 字段值在常量池中的索引，常量池在该索引处的项给出该属性表示的常量值。（例如，值是1ong型的，在常量池中便是CONSTANT_Long）</span><br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p>Code</p>
+<ul>
+<li>Code属性就是存放方法体里面的代码</li>
+<li>接口或者抽象方法，没有具体的方法体，因此也就不会有Code属性</li>
+<li><a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.7.3">官方文档</a></li>
+</ul>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/85a612672cf3e743128528814b851bfc.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+<li>
+<p>LineNumberTable</p>
+<ul>
+<li>位于Code结构的属性表</li>
+<li>用来描述Java源码行号与字节码行号之间的对应关系</li>
+<li><a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.7.12">官方文档</a></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java">LineNumberTable_attribute &#123;<br>    u2 attribute_name_index;<br>    u4 attribute_length;<br>    u2 line_number_table_length;<br>    &#123;<br>        u2 start_pc;<br>        u2 line_number;<br>    &#125; line_number_table[line_number_table_length];<br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p>LocalVariableTable</p>
+<ul>
+<li>局部变量表</li>
+<li>位于Code结构的属性表</li>
+<li>用于确定方法在执行过程中局部变量的信息</li>
+<li><a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.7.13">官方文档</a></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java">LocalVariableTable_attribute &#123;<br>    u2 attribute_name_index;<br>    u4 attribute_length;<br>    u2 local_variable_table_length;<br>    &#123;<br>        u2 start_pc;<br>        u2 length;<br>        u2 name_index; <span class="hljs-comment">// 局部变量名索引</span><br>        u2 descriptor_index; <span class="hljs-comment">// 局部变量类型描述符索引</span><br>        u2 index; <span class="hljs-comment">// 槽位，可复用</span><br>    &#125; local_variable_table[local_variable_table_length];<br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p>SourceFile</p>
+<ul>
+<li>源代码文件名称</li>
+<li><a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.7.10">官方文档</a></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java">SourceFile_attribute &#123;<br>    u2 attribute_name_index;<br>    u4 attribute_length;<br>    u2 sourcefile_index; <span class="hljs-comment">// 源码文件索引</span><br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="字节码指令集"><a class="header-anchor" href="#字节码指令集"></a>字节码指令集</h4>
+<h5 id="概述-v8"><a class="header-anchor" href="#概述-v8"></a>概述</h5>
+<ul>
+<li>
+<p><a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-6.html#jvms-6.5">官方文档</a></p>
+</li>
+<li>
+<p>字节码指令由<strong>一个字节</strong>长度的、代表着某种特定操作含义的数字（称为操作码）以及跟随其后的0到多个代表此操作所需参数（操作数）构成</p>
+</li>
+<li>
+<p>大多数的指令都不包含操作数，只有一个操作码</p>
+</li>
+<li>
+<p>由于一个指令只有一个字节长度（0~2^8-1），所以指令集的操作码总数不超过256条</p>
+</li>
+<li>
+<p>对于大部分与数据类型相关的字节码指令，它们的操作码助记符中都有特殊的字符来表明专门为哪种数据类型服务</p>
+<ul>
+<li>i代表对int类型的数据操作</li>
+<li>l代表long</li>
+<li>f代表float</li>
+<li>d代表double</li>
+</ul>
+</li>
+</ul>
+<h5 id="加载与存储指令"><a class="header-anchor" href="#加载与存储指令"></a>加载与存储指令</h5>
+<ul>
+<li>加载和存储指令用于将数据从栈帧的局部变量表和操作数栈之间来回传递</li>
+<li>局部变量入栈指令：将一个局部变量加载到操作数栈
+<ul>
+<li>xload、xload_n</li>
+<li>x为i、l、f、d、a</li>
+<li>n为0到3，即指令中没有包含操作数，但是操作码中已经隐含了操作数</li>
+</ul>
+</li>
+<li>常量入栈指令
+<ul>
+<li>将一个常量加载到操作数栈</li>
+<li>bipush、sipush、ldc、ldc_w、ldc2_w、aconst_null、iconst_m1、iconst_0、lconst_0、fconst_0、dconst_0</li>
+<li>const系列
+<ul>
+<li>把简单数值类型入栈</li>
+<li>m1表示-1</li>
+<li>iconst范围为-1~5</li>
+<li>lconst范围为0~1</li>
+<li>fconst范围为0~2</li>
+<li>dconst范围为0~1</li>
+</ul>
+</li>
+<li>push系列
+<ul>
+<li>bipush将单字节常量入栈</li>
+<li>sipush将双字节常量入栈</li>
+</ul>
+</li>
+<li>ldc系列命令将数值常量或字符串常量从常量池入栈
+<ul>
+<li>ldc 1字节操作数，操作数为指向常量池中的int、float、String的索引</li>
+<li>ldcw 2字节操作数</li>
+<li>ldc2_w 2字节操作数，索引指向的数据类型是long或者double</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>出栈装入局部变量表指令
+<ul>
+<li>将一个数值从操作数栈存储到局部变量表</li>
+<li>xstore、xstore_n、xastore</li>
+</ul>
+</li>
+<li>出栈装入局部变量表指令
+<ul>
+<li>xstore_n，n为0~3</li>
+<li>astore_n，表示将引用类型或者returnAddress类型值存入局部变量</li>
+<li>xastore，表示将int、long、float、double、引用类型等存入数组</li>
+</ul>
+</li>
+</ul>
+<h5 id="算数指令"><a class="header-anchor" href="#算数指令"></a>算数指令</h5>
+<ul>
+<li>
+<p>算术指令用于对两个操作数栈上的值进行某种特定运算，并把结果重新压入操作数栈</p>
+</li>
+<li>
+<p>当一个操作产生溢出时，将会使用Infinity值表示，如果某个操作结果没有明确的数学定义的话，将会使用NaN值来表示</p>
+</li>
+<li>
+<p>可以分为两种：对整型数据进行运算的指令与对浮点类型数据进行运算的指令</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/365844a465c054778e63184180892ac4.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+<li>
+<p>fcmpg与fcmpl的区别在于对Nan值的处理</p>
+<ul>
+<li>若操作数1=操作数2，将0入栈</li>
+<li>若操作数1&gt;操作数2，将1入栈</li>
+<li>若操作数1&lt;操作数2，将-1入栈</li>
+<li>若遇到Nan值，fcmpg会将1入栈，fcmpl会将-1入栈</li>
+</ul>
+</li>
+</ul>
+<h5 id="类型转换指令"><a class="header-anchor" href="#类型转换指令"></a>类型转换指令</h5>
+<ul>
+<li>
+<p>类型转换指令可以将两种不同的<strong>数值</strong>类型进行相互转换</p>
+</li>
+<li>
+<p>一般用于实现用户代码中的显式类型转换操作，或者用来处理字节码指令集中数据类型相关指令无法与数据类型一一对应的问题</p>
+</li>
+<li>
+<p>宽化类型转换即类型提升，窄化类型转换（强制类型转换）则相反</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/8dd989300027cc383d54fb5601c669aa.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+<li>
+<p>从byte、char和 short类型到int类型的宽化类型转换实际上是不存在的</p>
+</li>
+<li>
+<p>若浮点值为Nan，转换为int或long类型的话就是0</p>
+</li>
+</ul>
+<h5 id="对象的创建于访问指令"><a class="header-anchor" href="#对象的创建于访问指令"></a>对象的创建于访问指令</h5>
+<ul>
+<li>
+<p>可分为创建指令、字段访问指令、数组操作指令、类型检查指令</p>
+</li>
+<li>
+<p>创建指令</p>
+<ul>
+<li>
+<p>创建类实例与数组使用不同的字节码指令</p>
+<table>
+<thead>
+<tr>
+<th>创建指令</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>new</td>
+<td>创建类实例</td>
+</tr>
+<tr>
+<td>newarray</td>
+<td>创建基本类型数组</td>
+</tr>
+<tr>
+<td>anewarray</td>
+<td>创建引用类型数组</td>
+</tr>
+<tr>
+<td>multilanewarray</td>
+<td>创建多维数组</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</li>
+<li>
+<p>字段访问指令</p>
+<table>
+<thead>
+<tr>
+<th>字段访问指令</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>getstatic、putstatic</td>
+<td>访问类字段（static字段，或者称为类变量）的指令</td>
+</tr>
+<tr>
+<td>getfield、 putfield</td>
+<td>访问类实例字段（非static字段，或者称为实例变量）的指令</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>数组操作指令</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/59ee76cfff3b788bb1f90afc0c257f17.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<ul>
+<li>取数组长度的指令：arraylength，该指令弹出栈顶的数组元素，获取数组的长度，将长度压入栈</li>
+<li>指令xaload表示将数组的元素压栈，要求操作数栈顶元素为数组索引，栈顶顺位第2个元素为数组引用</li>
+<li>xastore要求操作数栈顶要有3个元素：值、索引、数组引用</li>
+</ul>
+</li>
+<li>
+<p>类型检查指令</p>
+<table>
+<thead>
+<tr>
+<th>类型检查指令</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>instanceof</td>
+<td>判断给定对象是否是某一个类的实例</td>
+</tr>
+<tr>
+<td>checkcast</td>
+<td>检查类型强制转换是否可以进行</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>指令instanceof用来判断给定对象是否是某一个类的实例，它会将判断结果压入操作数栈</li>
+<li>指令checkcast用于检查类型强制转换是否可以进行。如果可以进行，那么checkcast指令不会改变操作数栈，否则它会抛出ClassCastException异常</li>
+</ul>
+</li>
+</ul>
+<h5 id="方法调用与返回指令"><a class="header-anchor" href="#方法调用与返回指令"></a>方法调用与返回指令</h5>
+<ul>
+<li>
+<p>方法调用指令：invokevirtual、invokeinterface、invokespecial、invokestatic、invokedynamic</p>
+<table>
+<thead>
+<tr>
+<th>方法调用指令</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>invokevirtual</td>
+<td>调用对象的实例方法</td>
+</tr>
+<tr>
+<td>invokeinterface</td>
+<td>调用接口方法</td>
+</tr>
+<tr>
+<td>invokespecial</td>
+<td>调用一些需要特殊处理的实例方法，包括实例初始化方法（构造器）、私有方法和父类方法</td>
+</tr>
+<tr>
+<td>invokestatic</td>
+<td>调用命名类中的类方法（static方法）</td>
+</tr>
+<tr>
+<td>invokedynamic</td>
+<td>调用动态绑定的方法</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>invokevirtual指令用于调用对象的实例方法，根据对象的实际类型进行分派（虚方法分派），支持多态，这也是Java语言中最常见的方法分派方式</li>
+<li>invokeinterface指令用于调用接口方法，它会在运行时搜索由特定对象所实现的这个接口方法，并找出适合的方法进行调用</li>
+<li>invokespecial指令用于调用一些需要特殊处理的实例方法，包括实例初始化方法（构造器）、私有方法和父类方法。这些方法都是静态类型绑定的，不会在调用时进行动态派发</li>
+<li>invokestatic指令用于调用命名类中的类方法（static方法），这是静态绑定的</li>
+<li>invokedynamic指令用于调用动态绑定的方法，这个是JDK1.7后新加入的指令。用于在运行时动态解析出调用点限定符所引用的方法，并执行该方法</li>
+<li>invokedynamic指令的分派逻辑是由用户所设定的引导方法决定的，而前面4条调用指令的分派逻辑都固化在java虚拟机内部</li>
+</ul>
+</li>
+<li>
+<p>方法返回指令是根据返回值的类型区分</p>
+<table>
+<thead>
+<tr>
+<th>方法返回指令</th>
+<th>void</th>
+<th>int</th>
+<th>long</th>
+<th>float</th>
+<th>double</th>
+<th>reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>xreturn</td>
+<td>return</td>
+<td>ireturn</td>
+<td>lreturn</td>
+<td>freutrn</td>
+<td>dreturn</td>
+<td>areturn</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>通过ireturn指令，将当前函数操作数栈的顶层元素弹出，并将这个元素压入调用者函数的操作数栈中（因为调用者非常关心函数的返回值），所有在当前函数操作数栈中的其他元素都会被丢弃</li>
+<li>如果当前返回的是synchronized方法，那么还会执行一个隐含的monitorexit指令，退出临界区</li>
+<li>最后，会丢弃当前方法的整个帧，恢复调用者的帧，并将控制权转交给调用者</li>
+</ul>
+</li>
+</ul>
+<h5 id="操作数栈管理指令"><a class="header-anchor" href="#操作数栈管理指令"></a>操作数栈管理指令</h5>
+<ul>
+<li>可以用于直接操作操作数栈</li>
+<li>将一个或两个元素从栈顶弹出，并且直接废弃：pop，pop2
+<ul>
+<li>pop：将栈顶的1个Slot数值出栈。例如1个short类型数值</li>
+<li>pop2：将栈顶的2个slot数值出栈。例如1个double类型数值，或者2个int类型数值</li>
+</ul>
+</li>
+<li>复制栈顶一个或两个数值并将复制值或双份的复制值重新压入栈顶：dup，dup2，dup_x1，dup2_x1，dup_x2，dup2_×2
+<ul>
+<li>不带_x的指令是复制栈顶数据并压入<strong>栈顶</strong></li>
+<li>dup后面的数字表示复制的操作数槽位</li>
+<li>对于带x的复制插入指令，只要将指令的dup和x的系数相加，结果即为需要插入的位置，即dup_x1表示在栈顶2个slot下面插入，dup2_×2表示栈顶4个slot下面插入</li>
+</ul>
+</li>
+<li>将栈最顶端的两个Slot数值位置交换：swap。Java虚拟机没有提供交换两个64位数据类型（long、double）数值的指令</li>
+<li>指令nop，是一个非常特殊的指令，它的字节码为0x00。和汇编语言中的nop一样，它表示什么都不做。这条指令一般可用于调试、占位等</li>
+</ul>
+<h5 id="控制转移指令"><a class="header-anchor" href="#控制转移指令"></a>控制转移指令</h5>
+<ul>
+<li>
+<p>比较指令</p>
+<ul>
+<li>dcmpg、dcmpl、fcmpg、fcmpl、lcmp</li>
+<li>数值类型的数据才能比较大小，boolean、引用数据类型不能比较大小</li>
+</ul>
+</li>
+<li>
+<p>条件跳转指令</p>
+<ul>
+<li>条件跳转指令通常和比较指令结合使用。在条件跳转指令执行前，一般可以先用比较指令进行栈顶元素的准备，然后进行条件跳转</li>
+<li>条件跳转指令有：ifeq，iflt，ifle，ifne，ifgt，ifge，ifnull，ifnonnull，接收两个字节的操作数，用于计算跳转的位置</li>
+<li>ifeq，iflt，ifle，ifne，ifgt，ifge与0进行比较</li>
+<li>过程：弹出<strong>栈顶</strong>元素，测试它是否满足某一条件，如果满足条件，则跳转到给定位置</li>
+</ul>
+</li>
+<li>
+<p>比较条件跳转指令</p>
+<ul>
+<li>较条件跳转指令类似于比较指令和条件跳转指令的结合体，它将比较和跳转两个步骤合二为一</li>
+<li>if_icmpeq、if_icmpne、if_icmplt、if_icmpgt、if_icmple、if_icmpge、if_acmpeq和if_acmpne
+<ul>
+<li>其中指令助记符加上“if_”后，以字符“i”开头的指令针对int型整数操作（也包括short和byte类型），以字符“a”开头的指令表示对象引用的比较</li>
+</ul>
+</li>
+<li>接收两个字节的操作数作为参数，用于计算跳转的位置</li>
+<li>同时在执行指令时，栈顶需要准备两个元素进行比较。指令执行完成后，栈顶的这两个元素被清空，且没有任何数据入栈。如果预设条件成立，则执行跳转，否则，继续执行下一条语句</li>
+</ul>
+</li>
+<li>
+<p>多条件分支跳转指令</p>
+<ul>
+<li>
+<p>多条件分支跳转指令是专为switch-case语句设计的，主要有tableswitch和lookupswitch</p>
+<table>
+<thead>
+<tr>
+<th>指令名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tableswitch</td>
+<td>用于switch条件跳转，case值连续</td>
+</tr>
+<tr>
+<td>lookupswitch</td>
+<td>用于switch条件跳转，case值不连续</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>tableswitch要求多个条件分支值是连续的，它内部只存放起始值和终止值，以及若干个跳转偏移量，通过给定的操作数index，可以立即定位到跳转偏移量位置，因此效率比较高</p>
+</li>
+<li>
+<p>lookupswitch内部存放着各个离散的case-offset对，每次执行都要搜索全部的case-offset对，找到匹配的case值，并根据对应的offset计算跳转地址，因此效率较低</p>
+</li>
+</ul>
+</li>
+<li>
+<p>无条件跳转指令</p>
+<ul>
+<li>
+<p>主要的无条件跳转指令为goto，接收两个字节的操作数，共同组成一个带符号的整数，用于指定指令的偏移量，指令执行的目的就是跳转到偏移量给定的位置处</p>
+</li>
+<li>
+<p>如果指令偏移量太大，超过双字节的带符号整数的范围，则可以使用指令goto_w，它和goto有相同的作用，但是它接收4个字节的操作数，可以表示更大的地址范围</p>
+</li>
+<li>
+<p>指令jsr、jsr_w、ret虽然也是无条件跳转的，但主要用于try-finally语句，且已经被虚拟机逐渐废弃，故不在这里介绍这两个指令</p>
+<table>
+<thead>
+<tr>
+<th>指令名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>goto</td>
+<td>无条件跳转</td>
+</tr>
+<tr>
+<td>goto_w</td>
+<td>无条件跳转（宽索引）</td>
+</tr>
+<tr>
+<td>jsr</td>
+<td>跳转至指定16位offset位置，并将jsr下一条指令地址压入栈顶</td>
+</tr>
+<tr>
+<td>jsr_w</td>
+<td>跳转至指定32位offer位置，并将jsr_w下一条指令地址压入栈顶</td>
+</tr>
+<tr>
+<td>ret</td>
+<td>返回至由指定的局部变量所给出的指令位置（一般与jsr、jsr_w联合使用）</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="异常处理指令"><a class="header-anchor" href="#异常处理指令"></a>异常处理指令</h5>
+<ul>
+<li>athrow指令：显式抛出异常的操作（throw语句）都是由athrow指令来实现
+<ul>
+<li>正常情况下，操作数栈的压入弹出都是一条条指令完成的。唯一的例外情况是在抛异常时，Java虚拟机会清除操作数栈上的所有内容，而后将异常实例压入调用者操作数栈上</li>
+</ul>
+</li>
+<li>处理异常：在Java虚拟机中，处理异常（catch语句）不是由字节码指令来实现的（早期使用jsr、ret指令），而是采用异常表来完成的</li>
+<li>异常表
+<ul>
+<li>如果一个方法定义了一个try-catch 或者try-finally的异常处理，就会创建一个异常表，它包含了每个异常处理或者finally块的信息。异常表保存了每个异常处理信息</li>
+<li><strong>当一个异常被抛出时，JVM会在当前的方法里寻找一个匹配的处理，如果没有找到，这个方法会强制结束并弹出当前栈帧</strong>，并且异常会重新抛给上层调用的方法（在调用方法栈帧）。如果在所有栈帧弹出前仍然没有找到合适的异常处理，这个线程将终止。如果这个异常在最后一个非守护线程里抛出，将会导致JVM自己终止，比如这个线程是个main线程</li>
+<li><strong>不管什么时候抛出异常，如果异常处理最终匹配了所有异常类型，代码就会继续执行</strong>。在这种情况下，如果方法结束后没有抛出异常，仍然执行finally块，在return前，它直接跳到finally块来完成目标</li>
+</ul>
+</li>
+</ul>
+<h5 id="同步控制指令"><a class="header-anchor" href="#同步控制指令"></a>同步控制指令</h5>
+<ul>
+<li>
+<p>同步方法</p>
+<ul>
+<li>是隐式的，即无须通过字节码指令来控制，它实现在方法调用和返回操作之中，虚拟机可以从方法常量池的方法表结构中的ACC_SYNCHRONIZED访问标志得知一个方法是否声明为同步方法</li>
+<li>当调用方法时，调用指令将会检查方法的<code>ACC_SYNCHRONIZED</code>访问标志是否设置</li>
+<li>如果设置了，执行线程将先持有同步锁，然后执行方法。最后在方法完成（无论是正常完成还是非正常完成）时释放同步锁</li>
+<li>在方法执行期间，执行线程持有了同步锁，其他任何线程都无法再获得同一个锁</li>
+<li>如果一个同步方法执行期间抛出了异常，并且在方法内部无法处理此异常，那这个同步方法所持有的锁将在异常抛到同步方法之外时自动释放</li>
+<li>对于同步方法而言，monitorenter和monitorexit指令是隐式存在的，并未直接出现在字节码中</li>
+</ul>
+</li>
+<li>
+<p>同步代码块</p>
+<ul>
+<li>当一个线程进入同步代码块时，它使用monitorenter指令请求进入。如果当前对象的监视器计数器为0，则它会被准许进入，若为1，则判断持有当前监视器的线程是否为自己，如果是，则进入，否则进行等待，直到对象的监视器计数器为0，才会被允许进入同步块</li>
+<li>当线程退出同步块时，需要使用monitorexit声明退出。在Java虚拟机中，任何对象都有一个监视器与之相关联，用来判断对象是否被锁定，当监视器被持有后，对象处于锁定状态</li>
+<li>指令monitorenter和monitorexit在执行时，都需要在操作数栈顶压入对象，之后monitorenter和monitorexit的锁定和释放都是针对这个对象的监视器进行的</li>
+<li>编译器必须确保无论方法通过何种方式完成，方法中调用过的每条monitorenter指令都必须执行其对应的monitorexit指令，而无论这个方法是正常结束还是异常结束</li>
+<li>为了保证在方法异常完成时monitorenter和monitorexit指令依然可以正确配对执行，编译器会自动产生一个异常处理器，这个异常处理器声明可处理所有的异常，它的目的就是用来执行monitorexit指令</li>
+</ul>
+</li>
+</ul>
+<h4 id="类的加载过程详解"><a class="header-anchor" href="#类的加载过程详解"></a>类的加载过程详解</h4>
+<h5 id="加载阶段"><a class="header-anchor" href="#加载阶段"></a>加载阶段</h5>
+<ul>
+<li>
+<p>加载的目的就是将Java类的字节码文件加载到机器内存中，并在内存中构建出Java类的原型——类模板对象</p>
+</li>
+<li>
+<p>可以分为三步</p>
+<ul>
+<li>
+<p>通过类的全名，获取类的二进制数据流，获取方式如下</p>
+<ul>
+<li>虚拟机可能通过文件系统读入一个class后缀的文件（最常见）</li>
+<li>读入jar、zip等归档数据包，提取类文件</li>
+<li>事先存放在数据库中的类的二进制数据</li>
+<li>使用类似于HTTP之类的协议通过网络进行加载</li>
+<li>在运行时生成一段class的二进制信息等</li>
+<li>在获取到类的二进制信息后，Java虚拟机就会处理这些数据，并最终转为一个java.lang.Class的实例</li>
+<li><em>如果输入数据不是ClassFile的结构，则会抛出ClassFormatError</em></li>
+</ul>
+</li>
+<li>
+<p>解析类的二进制数据流为方法区内的数据结构（Java类模型）</p>
+<ul>
+<li>加载的类在JVM中创建相应的类结构，类结构会存储在方法区</li>
+</ul>
+</li>
+<li>
+<p>创建java.lang.Class类的实例，表示该类型，作为方法区这个类的各种数据的访问入口</p>
+<ul>
+<li>在堆中创建一个Java.lang.Class对象，用来封装类位于方法区内的数据结构，该Class对象是在加载类的过程中创建的，每个类都对应有一个Class类型的对象</li>
+</ul>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/f07837206394e248276825ace268e11b.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+</ul>
+</li>
+<li>
+<p>数组类的加载</p>
+<ul>
+<li>创建数组类的情况稍微有些特殊，因为数组类本身并不是由类加载器负责创建，而是由JVM在运行时根据需要而直接创建的，但数组的元素类型仍然需要依靠类加载器去创建</li>
+<li>如果数组的元素类型是引用类型，那么就遵循定义的加载过程递归加载和创建数组A的元素类型，然后JVM使用指定的元素类型和数组维度来创建新的数组类</li>
+</ul>
+</li>
+</ul>
+<h5 id="链接阶段"><a class="header-anchor" href="#链接阶段"></a>链接阶段</h5>
+<ul>
+<li>
+<p>验证：目的是保证加载的字节码是合法、合理并符合规范的</p>
+<ul>
+<li>格式检查
+<ul>
+<li>魔数检查</li>
+<li>版本检查</li>
+<li>长度检查</li>
+</ul>
+</li>
+<li>语义检查
+<ul>
+<li>是否继承final</li>
+<li>是否有父类</li>
+<li>抽象方法是否有实现</li>
+</ul>
+</li>
+<li>字节码验证
+<ul>
+<li>跳转指令是否指向正确位置</li>
+<li>操作数类型是否合理</li>
+</ul>
+</li>
+<li>符号引用验证
+<ul>
+<li>符合引用的直接引用是否存在</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>准备：为类的<strong>静态变量</strong>分配内存，并将其初始化为默认值</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>默认初始值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>byte</td>
+<td>(byte)0</td>
+</tr>
+<tr>
+<td>short</td>
+<td>(short)0</td>
+</tr>
+<tr>
+<td>int</td>
+<td>0</td>
+</tr>
+<tr>
+<td>long</td>
+<td>0L</td>
+</tr>
+<tr>
+<td>float</td>
+<td>0.0f</td>
+</tr>
+<tr>
+<td>double</td>
+<td>0.0</td>
+</tr>
+<tr>
+<td>char</td>
+<td>\u0000</td>
+</tr>
+<tr>
+<td>boolean</td>
+<td>false</td>
+</tr>
+<tr>
+<td>reference</td>
+<td>null</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>final修饰的静态变量在编译阶段就已经赋默认值了，准备阶段进行显示赋值（字面量定义时）</li>
+</ul>
+</li>
+<li>
+<p>解析：将类、接口、字段和方法的符号引用转为直接引用</p>
+</li>
+</ul>
+<h5 id="初始化阶段"><a class="header-anchor" href="#初始化阶段"></a>初始化阶段</h5>
+<h5 id="使用阶段"><a class="header-anchor" href="#使用阶段"></a>使用阶段</h5>
+<h5 id="卸载阶段"><a class="header-anchor" href="#卸载阶段"></a>卸载阶段</h5>
+<h4 id="类的加载器"><a class="header-anchor" href="#类的加载器"></a>类的加载器</h4>
 <h3 id="性能监控与调优"><a class="header-anchor" href="#性能监控与调优"></a>性能监控与调优</h3>
 
                 
