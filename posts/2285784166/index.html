@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/dde1aa79137e2fc011dc0601a64929d9.png">
 <meta property="article:published_time" content="2022-10-11T06:49:26.000Z">
-<meta property="article:modified_time" content="2023-03-31T12:45:05.292Z">
+<meta property="article:modified_time" content="2023-04-01T10:49:01.819Z">
 <meta property="article:author" content="zhuweitung">
 <meta property="article:tag" content="java">
 <meta property="article:tag" content="jvm">
@@ -256,7 +256,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          67k 字
+          77k 字
         
       </span>
     
@@ -267,7 +267,7 @@
         
         
         
-          560 分钟
+          643 分钟
         
       </span>
     
@@ -4111,10 +4111,682 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MyClassLoader</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">ClassLoader</span> &#123;<br>    <span class="hljs-keyword">private</span> String classpath;<br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">MyClassLoader</span><span class="hljs-params">(String classpath)</span> &#123;<br>        <span class="hljs-built_in">this</span>.classpath = classpath;<br>    &#125;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">protected</span> Class&lt;?&gt; findClass(String name) <span class="hljs-keyword">throws</span> ClassNotFoundException &#123;<br>        <span class="hljs-type">String</span> <span class="hljs-variable">classfile</span> <span class="hljs-operator">=</span> classpath + File.separator + name + <span class="hljs-string">&quot;.class&quot;</span>;<br>        <span class="hljs-type">byte</span>[] bytes = <span class="hljs-keyword">new</span> <span class="hljs-title class_">byte</span>[<span class="hljs-number">0</span>];<br>        Class&lt;?&gt; result = <span class="hljs-literal">null</span>;<br>        <span class="hljs-keyword">try</span> (<span class="hljs-type">BufferedInputStream</span> <span class="hljs-variable">bis</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">BufferedInputStream</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">FileInputStream</span>(classfile))) &#123;<br>            bytes = IOUtils.readAllBytes(bis);<br>            result = defineClass(<span class="hljs-literal">null</span>, bytes, <span class="hljs-number">0</span>, bytes.length);<br>        &#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>            e.printStackTrace();<br>        &#125;<br>        <span class="hljs-keyword">if</span> (result == <span class="hljs-literal">null</span>) &#123;<br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ClassNotFoundException</span>(name);<br>        &#125;<br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 <h3 id="性能监控与调优"><a class="header-anchor" href="#性能监控与调优"></a>性能监控与调优</h3>
 <h4 id="概述-v10"><a class="header-anchor" href="#概述-v10"></a>概述</h4>
+<h5 id="调优概述"><a class="header-anchor" href="#调优概述"></a>调优概述</h5>
+<ul>
+<li>监控的依据
+<ul>
+<li>运行日志</li>
+<li>异常堆栈</li>
+<li>GC日志</li>
+<li>线程快照</li>
+<li>堆转储快照</li>
+</ul>
+</li>
+<li>调优的大方向
+<ul>
+<li>合理地编写代码</li>
+<li>充分并合理的使用硬件资源</li>
+<li>合理地进行JVM调优</li>
+</ul>
+</li>
+</ul>
+<h5 id="性能优化步骤"><a class="header-anchor" href="#性能优化步骤"></a>性能优化步骤</h5>
+<ul>
+<li>性能监控：发现问题
+<ul>
+<li>GC频繁</li>
+<li>cpu load过高</li>
+<li>OOM</li>
+<li>内存泄露</li>
+<li>死锁</li>
+<li>程序响应时间较长</li>
+</ul>
+</li>
+<li>性能分析：排查问题
+<ul>
+<li>打印GC日志，通过GCviewer或者 <a target="_blank" rel="noopener" href="http://gceasy.io/">http://gceasy.io</a> 来分析异常信息</li>
+<li>灵活运用命令行工具、jstack、jmap、jinfo等</li>
+<li>dump出堆文件，使用内存分析工具分析文件</li>
+<li>使用阿里Arthas、jconsole、JVisualVM来实时查看JVM状态</li>
+<li>jstack查看堆栈信息</li>
+</ul>
+</li>
+<li>性能调优：解决问题
+<ul>
+<li>适当增加内存，根据业务背景选择垃圾回收器</li>
+<li>优化代码，控制内存使用</li>
+<li>增加机器，分散节点压力</li>
+<li>合理设置线程池线程数量</li>
+<li>使用中间件提高程序效率，比如缓存、消息队列等</li>
+</ul>
+</li>
+</ul>
+<h5 id="性能指标"><a class="header-anchor" href="#性能指标"></a>性能指标</h5>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>响应时间</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>打开一个站点</td>
+<td>几秒</td>
+</tr>
+<tr>
+<td>数据库查询一条记录（有索引）</td>
+<td>十几毫秒</td>
+</tr>
+<tr>
+<td>机械磁盘一次寻址定位</td>
+<td>4毫秒</td>
+</tr>
+<tr>
+<td>从机械磁盘顺序读取1M数据</td>
+<td>2毫秒</td>
+</tr>
+<tr>
+<td>从SSD磁盘顺序读取1M数据</td>
+<td>0.3毫秒</td>
+</tr>
+<tr>
+<td>从远程分布式换成Redis 读取一个数据</td>
+<td>0.5毫秒</td>
+</tr>
+<tr>
+<td>从内存读取 1M数据</td>
+<td>十几微妙</td>
+</tr>
+<tr>
+<td>Java程序本地方法调用</td>
+<td>几微妙</td>
+</tr>
+<tr>
+<td>网络传输2Kb数据</td>
+<td>1 微妙</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>暂停时间：执行垃圾收集时，程序的工作线程被暂停的时间</li>
+<li>吞吐量
+<ul>
+<li>对单位时间内完成的工作量（请求）的量度</li>
+<li>在GC中：运行用户代码的事件占总运行时间的比例（总运行时间：程序的运行时间+内存回收的时间）</li>
+<li>吞吐量为1-1/(1+n)，其中-XX::GCTimeRatio=n</li>
+</ul>
+</li>
+<li>并发数：同一时刻，对服务器有实际交互的请求数</li>
+<li>内存占用：Java堆区所占的内存大小</li>
+</ul>
 <h4 id="监控及诊断工具之命令行"><a class="header-anchor" href="#监控及诊断工具之命令行"></a>监控及诊断工具之命令行</h4>
+<h5 id="jps：查看正在运行的Java进程"><a class="header-anchor" href="#jps：查看正在运行的Java进程"></a>jps：查看正在运行的Java进程</h5>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">jps -<span class="hljs-built_in">help</span><br>usage: jps [-<span class="hljs-built_in">help</span>]<br>       jps [-q] [-mlvV] [&lt;<span class="hljs-built_in">hostid</span>&gt;]<br></code></pre></td></tr></table></figure>
+<ul>
+<li>参数
+<ul>
+<li>-q：仅仅显示LVMID（local virtual machine id），即本地虚拟机唯一id。不显示主类的名称等</li>
+<li>-l：输出应用程序主类的全类名 或 如果进程执行的是jar包，则输出jar完整路径</li>
+<li>-m：输出虚拟机进程启动时传递给主类main()的参数</li>
+<li>-v：列出虚拟机进程启动时的JVM参数。比如：-Xms20m -Xmx50m是启动程序指定的jvm参数</li>
+<li>hostid：RMI注册表中注册的主机名。如果想要远程监控主机上的 java 程序，需要安装 jstatd</li>
+</ul>
+</li>
+<li>如果某 Java 进程关闭了默认开启的UsePerfData参数（即使用参数<code>-XX:-UsePerfData</code>），那么jps命令（以及下面介绍的jstat）将无法探知该Java 进程</li>
+</ul>
+<h5 id="jstat：查看JVM统计信息"><a class="header-anchor" href="#jstat：查看JVM统计信息"></a>jstat：查看JVM统计信息</h5>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs bash">jstat -<span class="hljs-built_in">help</span><br>Usage: jstat -<span class="hljs-built_in">help</span>|-options<br>       jstat -&lt;option&gt; [-t] [-h&lt;lines&gt;] &lt;vmid&gt; [&lt;interval&gt; [&lt;count&gt;]]<br><br>jstat -options<br>-class<br>-compiler<br>-gc<br>-gccapacity<br>-gccause<br>-gcmetacapacity<br>-gcnew<br>-gcnewcapacity<br>-gcold<br>-gcoldcapacity<br>-gcutil<br>-printcompilation<br></code></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>jstat（JVM Statistics Monitoring Tool）：用于监视虚拟机各种运行状态信息的命令行工具。它可以显示本地或者远程虚拟机进程中的类装载、内存、垃圾收集、JIT编译等运行数据。常用于检测垃圾回收问题以及内存泄漏问题</p>
+</li>
+<li>
+<p>参数</p>
+<ul>
+<li>
+<p>vmid：进程号</p>
+</li>
+<li>
+<p>-option</p>
+<ul>
+<li>
+<p>类装载相关选项</p>
+<ul>
+<li>
+<p>-class：显示ClassLoader的相关信息：类的装载、总空间、卸载数量、类装载所消耗的时间等</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/46b4e36f20128c5292edff85f9f34071.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+</ul>
+</li>
+<li>
+<p>垃圾回收相关选项</p>
+<ul>
+<li>
+<p>-gc：显示与GC相关的堆信息。包括Eden区、两个Survivor区、老年代、永久代等的容量、已用空间、GC时间合计等信息</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/fde42d3a90eec1dfc018839cd8816730.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<table>
+<thead>
+<tr>
+<th>表头</th>
+<th>含义（字节）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>EC</td>
+<td>Eden区的大小</td>
+</tr>
+<tr>
+<td>EU</td>
+<td>Eden区已使用的大小</td>
+</tr>
+<tr>
+<td>S0C</td>
+<td>幸存者0区的大小</td>
+</tr>
+<tr>
+<td>S1C</td>
+<td>幸存者1区的大小</td>
+</tr>
+<tr>
+<td>S0U</td>
+<td>幸存者0区已使用的大小</td>
+</tr>
+<tr>
+<td>S1U</td>
+<td>幸存者1区已使用的大小</td>
+</tr>
+<tr>
+<td>MC</td>
+<td>元空间的大小</td>
+</tr>
+<tr>
+<td>MU</td>
+<td>元空间已使用的大小</td>
+</tr>
+<tr>
+<td>OC</td>
+<td>老年代的大小</td>
+</tr>
+<tr>
+<td>OU</td>
+<td>老年代已使用的大小</td>
+</tr>
+<tr>
+<td>CCSC</td>
+<td>压缩类空间的大小</td>
+</tr>
+<tr>
+<td>CCSU</td>
+<td>压缩类空间已使用的大小</td>
+</tr>
+<tr>
+<td>YGC</td>
+<td>从应用程序启动到采样时young gc的次数</td>
+</tr>
+<tr>
+<td>YGCT</td>
+<td>从应用程序启动到采样时young gc消耗时间（秒）</td>
+</tr>
+<tr>
+<td>FGC</td>
+<td>从应用程序启动到采样时full gc的次数</td>
+</tr>
+<tr>
+<td>FGCT</td>
+<td>从应用程序启动到采样时的full gc的消耗时间（秒）</td>
+</tr>
+<tr>
+<td>GCT</td>
+<td>从应用程序启动到采样时gc的总时间</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>-gccapacity：显示内容与-gc基本相同，但输出主要关注Java堆各个区域使用到的最大、最小空间</p>
+</li>
+<li>
+<p>-gcutil：显示内容与-gc基本相同，但输出主要关注已使用空间占总空间的百分比</p>
+</li>
+<li>
+<p>-gccause：与-gcutil功能一样，但是会额外输出导致最后一次或当前正在发生的GC产生的原因</p>
+</li>
+<li>
+<p>-gcnew：显示新生代GC状况</p>
+</li>
+<li>
+<p>-gcnewcapacity：显示内容与-gcnew基本相同，输出主要关注使用到的最大、最小空间</p>
+</li>
+<li>
+<p>-geold：显示老年代GC状况</p>
+</li>
+<li>
+<p>-gcoldcapacity：显示内容与-gcold基本相同，输出主要关注使用到的最大、最小空间</p>
+</li>
+<li>
+<p>-gcpermcapacity：显示永久代使用到的最大、最小空间</p>
+</li>
+</ul>
+</li>
+<li>
+<p>JIT相关选项</p>
+<ul>
+<li>
+<p>-compiler：显示JIT编译器编译过的方法、耗时等信息</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/6ec5ec9381ab33a0ea6d0587d4cd0cd3.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+<li>
+<p>-printcompilation：输出已经被JIT编译的方法</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/7b0854d91064f531265bc9457108e7e6.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>interval：用于指定输出统计数据的周期，单位为毫秒。即：查询间隔</p>
+</li>
+<li>
+<p>count：用于指定查询的总次数</p>
+</li>
+<li>
+<p>-t：可以在输出信息前加上一个Timestamp列，显示程序的运行时间。单位：秒</p>
+</li>
+<li>
+<p>-h：可以在周期性数据输出时，输出多少行数据后输出一个表头信息</p>
+</li>
+</ul>
+</li>
+<li>
+<p>使用jstat判断是否内存泄露一般步骤</p>
+<ol>
+<li>在长时间运行的 Java 程序中，我们可以运行jstat命令连续获取多行性能数据，并取这几行数据中 OU 列（即已占用的老年代内存）的最小值</li>
+<li>然后，我们每隔一段较长的时间重复一次上述操作，来获得多组 OU 最小值。如果这些值呈上涨趋势，则说明该 Java 程序的老年代内存已使用量在不断上涨，这意味着无法回收的对象在不断增加，因此很有可能存在内存泄漏</li>
+</ol>
+</li>
+</ul>
+<h5 id="jinfo：实时查看和修改JVM配置参数"><a class="header-anchor" href="#jinfo：实时查看和修改JVM配置参数"></a>jinfo：实时查看和修改JVM配置参数</h5>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs bash">jinfo -<span class="hljs-built_in">help</span><br>Usage:<br>    jinfo [option] &lt;pid&gt;<br>        (to connect to running process)<br>    jinfo [option] &lt;executable &lt;core&gt;<br>        (to connect to a core file)<br>    jinfo [option] [server_id@]&lt;remote server IP or hostname&gt;<br>        (to connect to remote debug server)<br><span class="hljs-built_in">where</span> &lt;option&gt; is one of:<br>    -flag &lt;name&gt;         to <span class="hljs-built_in">print</span> the value of the named VM flag<br>    -flag [+|-]&lt;name&gt;    to <span class="hljs-built_in">enable</span> or <span class="hljs-built_in">disable</span> the named VM flag<br>    -flag &lt;name&gt;=&lt;value&gt; to <span class="hljs-built_in">set</span> the named VM flag to the given value<br>    -flags               to <span class="hljs-built_in">print</span> VM flags<br>    -sysprops            to <span class="hljs-built_in">print</span> Java system properties<br>    &lt;no option&gt;          to <span class="hljs-built_in">print</span> both of the above<br></code></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>参数</p>
+<ul>
+<li>
+<p>option</p>
+<ul>
+<li>
+<p>-flag name：输出对应名称的参数</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/cae63de8948b834a4a7aa3d6af8657e5.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+<li>
+<p>-flag [±]name：开启或者关闭对应名称的参数 只有被标记为manageable的参数才可以被动态修改</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/9baff36561142101146efafcfeafccf8.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+<li>
+<p>-flag name=value：设定对应名称的参数</p>
+</li>
+<li>
+<p>-flags：输出全部的参数</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/396eb087f086c7c594fed61f10c59295.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+<li>
+<p>-sysprops：输出系统属性</p>
+</li>
+<li>
+<p>no option：输出全部的参数和系统属性</p>
+</li>
+</ul>
+</li>
+<li>
+<p>pid：进程号</p>
+</li>
+</ul>
+</li>
+<li>
+<p>拓展</p>
+<ul>
+<li>java -XX:+PrintFlagsInitial 查看所有JVM参数启动的初始值</li>
+<li>java -XX:+PrintFlagsFinal 查看所有JVM参数的最终值</li>
+<li>java -XX:+PrintCommandLineFlags 查看哪些已经被用户或者JVM设置过的详细的XX参数的名称和值</li>
+</ul>
+</li>
+</ul>
+<h5 id="jmap：导出内存映像文件-内存使用情况"><a class="header-anchor" href="#jmap：导出内存映像文件-内存使用情况"></a>jmap：导出内存映像文件&amp;内存使用情况</h5>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash">jmap -h<br>Usage:<br>    jmap [option] &lt;pid&gt;<br>        (to connect to running process)<br>    jmap [option] &lt;executable &lt;core&gt;<br>        (to connect to a core file)<br>    jmap [option] [server_id@]&lt;remote server IP or hostname&gt;<br>        (to connect to remote debug server)<br></code></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>jmap（JVM Memory Map）：作用一方面是获取dump文件（堆转储快照文件，二进制文件），它还可以获取目标Java进程的内存相关信息，包括Java堆各区域的使用情况、堆中对象的统计信息、类加载信息等</p>
+</li>
+<li>
+<p>参数</p>
+<ul>
+<li>
+<p>option</p>
+<ul>
+<li>
+<p><strong>-dump</strong>：生成dump文件（Java堆转储快照），-dump:live只保存堆中的存活对象</p>
+<ul>
+<li>手动导出
+<ul>
+<li>jmap -dump:format=b,file=filename.hprof pid</li>
+<li>jmap -dump:live,format=b,file=filename.hprof pid</li>
+</ul>
+</li>
+<li>自动导出：程序出现OOM时自动导出
+<ul>
+<li>+XX:+HeapDumpOnOutOfMemory</li>
+<li>+XX:HeapDumpPath=filename.hprof</li>
+</ul>
+</li>
+<li>由jmap导出的堆快照必定是安全点位置的。这可能导致基于该堆快照的分析结果存在偏差
+<ul>
+<li>假如某些对象的生命周期在两个安全点之间，那么:live选项将无法探知到这些对象</li>
+<li>如果某个线程长时间无法跑到安全点，jmap将一直等下去</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>-heap</strong>：输出整个堆空间的详细信息，包括GC的使用、堆配置信息，以及内存的使用信息等</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/e675257c4e95bb331e16b13ec6c12600.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+<li>
+<p><strong>-histo</strong>：输出堆空间中对象的统计信息，包括类、实例数量和合计容量，-histo:live只统计堆中的存活对象</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/0e20cac363626abc121771d57acc30ac.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+<li>
+<p>-J flag：传递参数给jmap启动的jvm</p>
+</li>
+<li>
+<p>-finalizerinfo：显示在F-Queue中等待Finalizer线程执行finalize方法的对象，仅linux/solaris平台有效</p>
+</li>
+<li>
+<p>-permstat：以ClassLoader为统计口径输出永久代的内存状态信息，仅linux/solaris平台有效</p>
+</li>
+<li>
+<p>-F：当虚拟机进程对-dump选项没有任何响应时，强制执行生成dump文件，仅linux/solaris平台有效</p>
+</li>
+</ul>
+</li>
+<li>
+<p>pid：进程号</p>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="jhat：JDK自带堆分析工具"><a class="header-anchor" href="#jhat：JDK自带堆分析工具"></a>jhat：JDK自带堆分析工具</h5>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs bash">jhat -h<br>Usage:  jhat [-stack &lt;bool&gt;] [-refs &lt;bool&gt;] [-port &lt;port&gt;] [-baseline &lt;file&gt;] [-debug &lt;int&gt;] [-version] [-h|-<span class="hljs-built_in">help</span>] &lt;file&gt;<br><br>        -J&lt;flag&gt;          Pass &lt;flag&gt; directly to the runtime system. For<br>                          example, -J-mx512m to use a maximum heap size of 512MB<br>        -stack <span class="hljs-literal">false</span>:     Turn off tracking object allocation call stack.<br>        -refs <span class="hljs-literal">false</span>:      Turn off tracking of references to objects<br>        -port &lt;port&gt;:     Set the port <span class="hljs-keyword">for</span> the HTTP server.  Defaults to 7000<br>        -exclude &lt;file&gt;:  Specify a file that lists data members that should<br>                          be excluded from the reachableFrom query.<br>        -baseline &lt;file&gt;: Specify a baseline object dump.  Objects <span class="hljs-keyword">in</span><br>                          both heap dumps with the same ID and same class will<br>                          be marked as not being <span class="hljs-string">&quot;new&quot;</span>.<br>        -debug &lt;int&gt;:     Set debug level.<br>                            0:  No debug output<br>                            1:  Debug hprof file parsing<br>                            2:  Debug hprof file parsing, no server<br>        -version          Report version number<br>        -h|-<span class="hljs-built_in">help</span>          Print this <span class="hljs-built_in">help</span> and <span class="hljs-built_in">exit</span><br>        &lt;file&gt;            The file to <span class="hljs-built_in">read</span><br></code></pre></td></tr></table></figure>
+<ul>
+<li>jhat(JVM Heap Analysis Tool)：Sun JDK提供的jhat命令与jmap命令搭配使用，用于分析jmap生成的heap dump文件（堆转储快照）。jhat内置了一个微型的HTTP/HTML服务器，生成dump文件的分析结果后，用户可以在浏览器中查看分析结果（分析虚拟机转储快照信息）</li>
+<li>参数
+<ul>
+<li>option
+<ul>
+<li>-stack false|true：关闭：打开对象分配调用栈跟踪</li>
+<li>-refs false|true：关闭：打开对象引用跟踪</li>
+<li>-port port-number：设置jhat HTTP Server的端口号，默认7000</li>
+<li>-exclude exclude-file：执行对象查询时需要排除的数据成员</li>
+<li>-baseline exclude-file：指定一个基准堆转储</li>
+<li>-debug int：设置debug级别</li>
+<li>-version：启动后显示版本信息就退出</li>
+<li>-J flag：传入启动参数，比如-J-Xmx512m</li>
+</ul>
+</li>
+<li>file：jmap导出的dump文件</li>
+</ul>
+</li>
+</ul>
+<h5 id="jstack：打印JVM中线程快照"><a class="header-anchor" href="#jstack：打印JVM中线程快照"></a>jstack：打印JVM中线程快照</h5>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs bash">jstack -h<br>Usage:<br>    jstack [-l] &lt;pid&gt;<br>        (to connect to running process)<br>    jstack -F [-m] [-l] &lt;pid&gt;<br>        (to connect to a hung process)<br>    jstack [-m] [-l] &lt;executable&gt; &lt;core&gt;<br>        (to connect to a core file)<br>    jstack [-m] [-l] [server_id@]&lt;remote server IP or hostname&gt;<br>        (to connect to a remote debug server)<br></code></pre></td></tr></table></figure>
+<ul>
+<li>jstack（JVM Stack Trace）：用于生成虚拟机指定进程当前时刻的线程快照（虚拟机堆栈跟踪）。线程快照就是当前虚拟机内指定进程的每一条线程正在执行的方法堆栈的集合</li>
+<li>生成线程快照（thread dump）的作用：可用于定位线程出现长时间停顿的原因，如线程间死锁、死循环、请求外部资源导致的长时间等待等问题。这些都是导致线程长时间停顿的常见原因。当线程出现停顿时，就可以用jstack显示各个线程调用的堆栈情况</li>
+<li>需要留意以下内容
+<ul>
+<li>死锁，Deadlock（重点关注）</li>
+<li>等待资源，Waiting on condition（重点关注）</li>
+<li>等待获取监视器，Waiting on monitor entry（重点关注）</li>
+<li>阻塞，Blocked（重点关注）</li>
+<li>执行中，Runnable</li>
+<li>暂停，Suspended</li>
+<li>对象等待中，Object.wait() 或 TIMED＿WAITING</li>
+<li>停止，Parked</li>
+</ul>
+</li>
+<li>参数
+<ul>
+<li>option
+<ul>
+<li>-F：当正常输出的请求不被响应时，强制输出线程堆栈</li>
+<li>-l：除堆栈外，显示关于锁的附加信息</li>
+<li>-m：如果调用本地方法的话，可以显示C/C++的堆栈</li>
+</ul>
+</li>
+<li>pid：进程号</li>
+</ul>
+</li>
+</ul>
+<h5 id="jcmd：多功能命令行"><a class="header-anchor" href="#jcmd：多功能命令行"></a>jcmd：多功能命令行</h5>
+<ul>
+<li>
+<p>在JDK 1.7以后，新增了一个命令行工具jcmd。它是一个多功能的工具，可以用来实现前面除了jstat之外所有命令的功能。比如：用它来导出堆、内存使用、查看Java进程、导出线程信息、执行GC、JVM运行时间等</p>
+</li>
+<li>
+<p>jcmd拥有jmap的大部分功能，并且在Oracle的官方网站上也推荐使用jcmd命令代jmap命令</p>
+</li>
+<li>
+<p>jcmd -l：列出所有的JVM进程</p>
+</li>
+<li>
+<p>jcmd pid help：针对指定的进程，列出支持的所有具体命令</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/04b08baa462131b62f9383c17a6d140d.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+<li>
+<p>jcmd pid 具体命令：显示指定进程的指令命令的数据</p>
+<ul>
+<li>Thread.print 可以替换 jstack指令</li>
+<li>GC.class_histogram 可以替换 jmap中的-histo操作</li>
+<li>GC.heap_dump 可以替换 jmap中的-dump操作</li>
+<li>GC.run 可以查看GC的执行情况</li>
+<li>VM.uptime 可以查看程序的总执行时间，可以替换jstat指令中的-t操作</li>
+<li>VM.system_properties 可以替换 jinfo -sysprops 进程id</li>
+<li>VM.flags 可以获取JVM的配置参数信息</li>
+</ul>
+</li>
+</ul>
+<h5 id="jstatd：远程主机信息收集"><a class="header-anchor" href="#jstatd：远程主机信息收集"></a>jstatd：远程主机信息收集</h5>
+<ul>
+<li>之前的指令只涉及到监控本机的Java应用程序，而在这些工具中，一些监控工具也支持对远程计算机的监控（如jps、jstat）。为了启用远程监控，则需要配合使用jstatd 工具</li>
+<li>jstatd是一个RMI服务端程序，它的作用相当于代理服务器，建立本地计算机与远程监控工具的通信。jstatd服务器将本机的Java应用程序信息传递到远程计算机</li>
+</ul>
 <h4 id="监控及诊断工具之GUI工具"><a class="header-anchor" href="#监控及诊断工具之GUI工具"></a>监控及诊断工具之GUI工具</h4>
+<h5 id="概述-v11"><a class="header-anchor" href="#概述-v11"></a>概述</h5>
+<ul>
+<li>JDK自带的工具
+<ul>
+<li>jconsole：JDK自带的可视化监控工具。查看Java应用程序的运行概况、监控堆信息、永久区（或元空间）使用情况、类加载情况等</li>
+<li>jvisualvm：jvisualvm是一个工具，它提供了一个可视界面，用于查看Java虚拟机上运行的基于Java技术的应用程序的详细信息</li>
+<li>jmc Mission Control，内置Java Flight Recorder。能够以极低的性能开销收集Java虚拟机的性能数据</li>
+</ul>
+</li>
+<li>第三方工具
+<ul>
+<li>MAT：MAT（Memory Analyzer Tool）是基于Eclipse的内存分析工具，是一个快速、功能丰富的Java heap分析工具，它可以帮助我们查找内存泄漏和减少内存消耗</li>
+<li>JProfiler：商业软件，需要付费，功能强大</li>
+<li>Arthas：alibaba开源的Java诊断工具</li>
+</ul>
+</li>
+</ul>
+<h5 id="JConsole"><a class="header-anchor" href="#JConsole"></a>JConsole</h5>
+<ul>
+<li>用于对JVM中内存、线程和类等的监控，是一个基于JMX（java management extensions）的GUI性能监控工具</li>
+</ul>
+<h5 id="JVisualVm"><a class="header-anchor" href="#JVisualVm"></a>JVisualVm</h5>
+<ul>
+<li>主要功能
+<ul>
+<li>生成/读取堆内存/线程快照</li>
+<li>查看JVM参数和系统属性</li>
+<li>查看运行中的虚拟机进程</li>
+<li>程序资源的实时监控</li>
+<li>JMX代理连接、远程环境监控、CPU分析和内存分析</li>
+</ul>
+</li>
+<li>支持安装插件进行功能扩展，<a target="_blank" rel="noopener" href="https://visualvm.github.io/archive/uc/8u40/updates.xml.gz">插件中心</a></li>
+</ul>
+<h5 id="Eclipse-MAT"><a class="header-anchor" href="#Eclipse-MAT"></a>Eclipse MAT</h5>
+<ul>
+<li>
+<p>MAT（<a target="_blank" rel="noopener" href="https://www.eclipse.org/mat/downloads.php">Memory Analyzer Tool</a>）工具是一款功能强大的Java堆内存分析器。可以用于查找内存泄漏以及查看内存消耗情况</p>
+</li>
+<li>
+<p>MAT可以分析heap dump文件，可以直观地看到当前的内存信息，这些内存信息包含：</p>
+<ul>
+<li>所有的对象信息，包括对象实例、成员变量、存储于栈中的基本类型值和存储于堆中的其他对象的引用值。</li>
+<li>所有的类信息，包括classloader、类名称、父类、静态变量等</li>
+<li>GCRoot到所有的这些对象的引用路径</li>
+<li>线程信息，包括线程的调用栈及此线程的线程局部变量（TLS）</li>
+</ul>
+</li>
+<li>
+<p>histogram</p>
+<ul>
+<li>与jmap -histo效果类似</li>
+<li>展示各个类的实例数目以及这些实例的shallow heap（浅堆）总和</li>
+<li>还能计算retained heap（深堆），并支持基于实例数据或retained heap的排序方式</li>
+</ul>
+</li>
+<li>
+<p>thread overview</p>
+<ul>
+<li>查看系统中Java线程</li>
+<li>查看局部变量信息</li>
+</ul>
+</li>
+<li>
+<p>浅堆（shallow heap）</p>
+<ul>
+<li>是指一个对象所消耗的内存</li>
+<li>对象头（对象标记和类型指针）+基础数据类型（如int4字节、long8字节等）+引用类型（4字节）+对齐填充</li>
+<li>引用类型都是4字节，是指向地址的长度，与地址所对应数据长度无关</li>
+<li>对齐填充后最终的大小为8字节的倍数</li>
+</ul>
+</li>
+<li>
+<p>保留集（retained set）</p>
+<ul>
+<li>对象A的保留集指当对象A被垃圾回收后，可以被释放的所有的对象集合（包括对象A本身），即对象A的保留集可以被认为是<strong>只能通过对象A被直接或间接访问</strong>到的所有对象的集合</li>
+</ul>
+</li>
+<li>
+<p>深堆（retained heap）</p>
+<ul>
+<li>指对象的保留集中所有的对象的浅堆大小之和</li>
+</ul>
+</li>
+</ul>
+<h5 id="Arthas"><a class="header-anchor" href="#Arthas"></a>Arthas</h5>
+<ul>
+<li>
+<p>上述工具都必须在服务端项目进程中配置相关的监控参数，然后工具通过远程连接到项目进程，获取相关的数据。这样就会带来一些不便，比如线上环境的网络是隔离的，本地的监控工具根本连不上线上环境</p>
+</li>
+<li>
+<p><a target="_blank" rel="noopener" href="https://arthas.aliyun.com/doc/quick-start.html">Arthas</a>不需要远程连接，也不需要配置监控参数，同时也提供了丰富的性能监控数据</p>
+</li>
+<li>
+<p>遇到以下问题可以帮你解决：</p>
+<ul>
+<li>这个类从哪个 jar 包加载的？为什么会报各种类相关的 Exception？</li>
+<li>我改的代码为什么没有执行到？难道是我没 commit？分支搞错了？</li>
+<li>遇到问题无法在线上 debug，难道只能通过加日志再重新发布吗？</li>
+<li>线上遇到某个用户的数据处理有问题，但线上同样无法 debug，线下无法重现！</li>
+<li>是否有一个全局视角来查看系统的运行状况？</li>
+<li>有什么办法可以监控到JVM的实时运行状态？</li>
+<li>怎么快速定位应用的热点，生成火焰图？</li>
+</ul>
+</li>
+<li>
+<p>基础指令</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/d7fd1406d227b872a142df84f7e063e9.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+<li>
+<p>JVM相关指令</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/c3577a2c48f5c433f8856c64595277d6.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+<li>
+<p>class/classloader相关指令</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/7dd7eb3f13cb6b6d8a53adbd0bcf5954.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+<li>
+<p>monitor/watch/trace相关指令</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/9ed746945457635f9dc17a04440a31eb.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+<li>
+<p>其他指令</p>
+<p><img src="https://cdn.staticaly.com/gh/zhuweitung/picbed/main/c587bc2fa9c560c22701c1c150404b26.png" srcset="/img/loading.gif" lazyload alt=""></p>
+</li>
+</ul>
 <h4 id="JVM运行时参数"><a class="header-anchor" href="#JVM运行时参数"></a>JVM运行时参数</h4>
 <h4 id="分析GC日志"><a class="header-anchor" href="#分析GC日志"></a>分析GC日志</h4>
+<h4 id="常见内存泄露情况"><a class="header-anchor" href="#常见内存泄露情况"></a>常见内存泄露情况</h4>
+<ul>
+<li>
+<p>静态集合类</p>
+<ul>
+<li>
+<p>静态集合类，如HashMap、LinkedList等等。如果这些容器为静态的，那么它们的生命周期与JVM程序一致，则容器中的对象在程序结束之前将不能被释放，从而造成内存泄漏。简单而言，<strong>长生命周期的对象持有短生命周期对象的引用</strong>，尽管短生命周期的对象不再使用，但是因为长生命周期对象持有它的引用而导致不能被回收</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MemoryLeak</span> &#123;<br>    <span class="hljs-keyword">static</span> <span class="hljs-type">List</span> <span class="hljs-variable">list</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>();<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">oomTests</span><span class="hljs-params">()</span> &#123;<br>        Object obj＝<span class="hljs-keyword">new</span> <span class="hljs-title class_">Object</span>(); <span class="hljs-comment">// 局部变量</span><br>        list.add(obj);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>
+<p>单例模式</p>
+<ul>
+<li>单例模式，和静态集合导致内存泄露的原因类似，因为单例的静态特性，它的生命周期和 JVM 的生命周期一样长，所以如果单例对象如果持有外部对象的引用，那么这个外部对象也不会被回收，那么就会造成内存泄漏</li>
+</ul>
+</li>
+<li>
+<p>内部类持有外部类</p>
+<ul>
+<li>内部类持有外部类，如果一个外部类的实例对象的方法返回了一个内部类的实例对象。这个内部类对象被长期引用了，即使那个外部类实例对象不再被使用，但由于内部类持有外部类的实例对象，这个外部类对象将不会被垃圾回收，这也会造成内存泄漏</li>
+</ul>
+</li>
+<li>
+<p>各种连接，如数据库连接、网络连接和IO连接等</p>
+</li>
+<li>
+<p>变量不合理的作用域</p>
+<ul>
+<li>
+<p>一般而言，一个变量的定义的作用范围大于其使用范围，很有可能会造成内存泄漏。另一方面，如果没有及时地把对象设置为null，很有可能导致内存泄漏的发生</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">UsingRandom</span> &#123;<br>    <span class="hljs-keyword">private</span> String msg;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">receiveMsg</span><span class="hljs-params">()</span>&#123;<br>        readFromNet(); <span class="hljs-comment">// 从网络中接受数据保存到msg中</span><br>        saveDB(); <span class="hljs-comment">// 把msg保存到数据库中</span><br>        <span class="hljs-comment">// 上面执行完成后msg依旧被引用，无法回收，可以手动置为null或者将变量声明在方法内部以避免此情况</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>
+<p>改变哈希值</p>
+<ul>
+<li>当一个对象被存储进HashSet集合中以后，就不能修改这个对象中的那些参与计算哈希值的字段了</li>
+<li>否则，对象修改后的哈希值与最初存储进HashSet集合中时的哈希值就不同了，在这种情况下，即使在contains方法使用该对象的当前引用作为的参数去HashSet集合中检索对象，也将返回找不到对象的结果，这也会导致无法从HashSet集合中单独删除当前对象，造成内存泄漏</li>
+</ul>
+</li>
+<li>
+<p>缓存泄露</p>
+<ul>
+<li>如代码中加载一个表中的数据到缓存（内存）中，测试环境只有几百条数据，但是生产环境有几百万的数据</li>
+<li>对于这个问题，可以使用WeakHashMap代表缓存，此种Map的特点是，当除了自身有对key的引用外，此key没有其他引用那么此map会自动丢弃此值</li>
+</ul>
+</li>
+<li>
+<p>监听器和其他回调</p>
+<ul>
+<li>如果客户端在你实现的API中注册回调，却没有显示的取消，那么就会积聚</li>
+<li>需要确保回调立即被当作垃圾回收的最佳方法是只保存它的弱引用，例如将他们保存成为WeakHashMap中的键</li>
+</ul>
+</li>
+</ul>
 <h4 id="OOM常见常见及解决方案"><a class="header-anchor" href="#OOM常见常见及解决方案"></a>OOM常见常见及解决方案</h4>
 <h4 id="性能优化案例"><a class="header-anchor" href="#性能优化案例"></a>性能优化案例</h4>
 <h4 id="Java代码层面及其他层面调优"><a class="header-anchor" href="#Java代码层面及其他层面调优"></a>Java代码层面及其他层面调优</h4>
