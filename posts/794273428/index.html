@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="https://raw.gitmirror.com/zhuweitung/picbed/main/a894a628cfd6b9bb778f156b6efeb26b.png">
-  <link rel="icon" href="https://raw.gitmirror.com/zhuweitung/picbed/main/a894a628cfd6b9bb778f156b6efeb26b.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="https://fastly.img.kedr.cc/a894a628cfd6b9bb778f156b6efeb26b.png">
+  <link rel="icon" href="https://fastly.img.kedr.cc/a894a628cfd6b9bb778f156b6efeb26b.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -23,13 +23,13 @@
 <meta property="og:site_name" content="个人随笔">
 <meta property="og:description" content="记录下正则表达式的一些知识点。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://raw.gitmirror.com/zhuweitung/picbed/main/6cbbd6616ea587ef1b3abb974a797048.png">
+<meta property="og:image" content="https://fastly.img.kedr.cc/6cbbd6616ea587ef1b3abb974a797048.png">
 <meta property="article:published_time" content="2021-11-27T05:56:25.000Z">
-<meta property="article:modified_time" content="2023-12-23T10:24:35.202Z">
+<meta property="article:modified_time" content="2024-04-21T04:23:15.083Z">
 <meta property="article:author" content="zhuweitung">
 <meta property="article:tag" content="正则">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://raw.gitmirror.com/zhuweitung/picbed/main/6cbbd6616ea587ef1b3abb974a797048.png">
+<meta name="twitter:image" content="https://fastly.img.kedr.cc/6cbbd6616ea587ef1b3abb974a797048.png">
   
   
   
@@ -75,7 +75,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"blog.kedr.cc","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#96be66","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":"f2550b082b1ec518a726847e5f27e3c4","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"Rnyy6d3kzXonmFTiXC2DM2wM-gzGzoHsz","app_key":"ItzHQLPR4iIXylU6VCqf1j4f","server_url":"https://rnyy6d3k.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"blog.kedr.cc","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#96be66","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":"f2550b082b1ec518a726847e5f27e3c4","google":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"Rnyy6d3kzXonmFTiXC2DM2wM-gzGzoHsz","app_key":"ItzHQLPR4iIXylU6VCqf1j4f","server_url":"https://rnyy6d3k.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false},"gtag":null},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -99,8 +99,6 @@
         })();
       }
     </script>
-  
-
   
 
   
@@ -149,9 +147,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/">
+              <a class="nav-link" href="/" target="_self">
                 <i class="iconfont icon-home-fill"></i>
-                首页
+                <span>首页</span>
               </a>
             </li>
           
@@ -161,9 +159,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/archives/">
+              <a class="nav-link" href="/archives/" target="_self">
                 <i class="iconfont icon-archive-fill"></i>
-                归档
+                <span>归档</span>
               </a>
             </li>
           
@@ -173,9 +171,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/categories/">
+              <a class="nav-link" href="/categories/" target="_self">
                 <i class="iconfont icon-category-fill"></i>
-                分类
+                <span>分类</span>
               </a>
             </li>
           
@@ -185,9 +183,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/tags/">
+              <a class="nav-link" href="/tags/" target="_self">
                 <i class="iconfont icon-tags-fill"></i>
-                标签
+                <span>标签</span>
               </a>
             </li>
           
@@ -197,9 +195,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/about/">
+              <a class="nav-link" href="/about/" target="_self">
                 <i class="iconfont icon-user-fill"></i>
-                关于
+                <span>关于</span>
               </a>
             </li>
           
@@ -207,15 +205,16 @@
         
           <li class="nav-item" id="search-btn">
             <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
-              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+              <i class="iconfont icon-search"></i>
             </a>
           </li>
           
         
         
           <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
-                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
           </li>
         
       </ul>
@@ -255,7 +254,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.8k 字
+          1.9k 字
         
       </span>
     
@@ -266,7 +265,7 @@
         
         
         
-          24 分钟
+          16 分钟
         
       </span>
     
@@ -311,8 +310,7 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <!-- SEO header -->
-            <h1 style="display: none">极客时间《正则表达式入门课》笔记</h1>
+            <h1 id="seo-header">极客时间《正则表达式入门课》笔记</h1>
             
             
               <div class="markdown-body">
@@ -336,16 +334,16 @@
 <li>断言</li>
 </ul>
 <h4 id="特殊单字符"><a class="header-anchor" href="#特殊单字符"></a>特殊单字符</h4>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/f2802c45dce2d6c45297f1367ffbc4fd.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/f2802c45dce2d6c45297f1367ffbc4fd.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h4 id="空白符"><a class="header-anchor" href="#空白符"></a>空白符</h4>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/eba09124a18a5ed7515a1c8fff38198f.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/eba09124a18a5ed7515a1c8fff38198f.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h4 id="量词"><a class="header-anchor" href="#量词"></a>量词</h4>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/ea64f337c8b705193254769450900be7.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/ea64f337c8b705193254769450900be7.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h4 id="范围"><a class="header-anchor" href="#范围"></a>范围</h4>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/bf86e6bc0b96354deb476adbc8b7e651.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/bf86e6bc0b96354deb476adbc8b7e651.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h3 id="量词与贪婪"><a class="header-anchor" href="#量词与贪婪"></a>量词与贪婪</h3>
 <p>在正则中，表示次数的量词默认是<code>贪婪</code>的，在贪婪模式下，会尝试尽可能最大长度去匹配。</p>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/9bfc3702e435e9bacf6b155301ec53c5.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/9bfc3702e435e9bacf6b155301ec53c5.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h4 id="独占模式"><a class="header-anchor" href="#独占模式"></a>独占模式</h4>
 <p>不管是贪婪模式，还是非贪婪模式，都需要发生回溯才能完成相应的功能。但是在一些场景下，我们不需要回溯，匹配不上返回失败就好了，因此正则中还有另外一种模式，独占模式，<strong>它类似贪婪匹配，也会尽可能多的匹配，但匹配过程不会发生回溯，匹配不上就会返回失败，因此在一些场合下性能会更好。</strong></p>
 <p>例.</p>
@@ -354,19 +352,19 @@
 <p>text = “xyyz”</p>
 </blockquote>
 <p>贪婪模式下，y{1,3}会尽可能长的去匹配，及三个y，但字符串最后一个字符为z导致匹配不上，这时就会<code>向前回溯</code>，吐出当前字符 z，接着用正则中的 z 去匹配。</p>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/08bdf0457e8b31302576b0b6d973f371.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/08bdf0457e8b31302576b0b6d973f371.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>修改表达式为非贪婪模式</p>
 <blockquote>
 <p>regex = “xy{1,3}?z”</p>
 </blockquote>
 <p>非贪婪模式下，y{1,3}?会尽可能短的去匹配，当匹配了一个y后，正则会用z与字符串中的第三个字符y比较，发现不匹配，这时正则就会<code>向前回溯</code>。</p>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/efa2911bcc8ed685c4c4304bd5860ffd.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/efa2911bcc8ed685c4c4304bd5860ffd.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>独占模式就是在量词后面加上<code>+</code></p>
 <p>修改为独占模式</p>
 <blockquote>
 <p>regex = “xy{1,3}+yz”</p>
 </blockquote>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/63f0a3a5867dbc7442997caa42cb93ef.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/63f0a3a5867dbc7442997caa42cb93ef.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h4 id="TIPS"><a class="header-anchor" href="#TIPS"></a>TIPS</h4>
 <blockquote>
 <p>如果你有一个问题，你想到可以用正则来解决，那么你有两个问题了。</p>
@@ -378,15 +376,15 @@
 <p>在正则中使用<code>()</code>来分组，使用括号分组的表达式会保存子组（如果正则中出现了括号，那么我们就认为，这个子表达式在后续可能会再次被引用，会影响性能），每对括号会分配一个编号。</p>
 <p>在括号内使用<code>?:</code>就可以不保存子组（不保存子组可以提高正则的性能），不会被分配编号。</p>
 <p>在分组嵌套的情况下判断分组编号可以<strong>通过各分组左括号的顺序的判断</strong>。</p>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/a54eaecbf26848c0e810f3e4cbbf4d2b.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/a54eaecbf26848c0e810f3e4cbbf4d2b.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h4 id="引用"><a class="header-anchor" href="#引用"></a>引用</h4>
 <p>在知道了分组的编号后（number），可以使用<code>\number</code>来对分组进行引用。</p>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/12495e0dbf1fb3c0ef63bf1419b164c8.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/12495e0dbf1fb3c0ef63bf1419b164c8.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h5 id="使用分组引用来替换"><a class="header-anchor" href="#使用分组引用来替换"></a>使用分组引用来替换</h5>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/b3cd5224b5669a01719e1b0dfa4a3600.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/b3cd5224b5669a01719e1b0dfa4a3600.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">String</span> <span class="hljs-variable">date</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;2021-11-28 14:39:18&quot;</span>;<br>date.replaceAll(<span class="hljs-string">&quot;((\\d&#123;4&#125;)-(\\d&#123;2&#125;)-(\\d&#123;2&#125;)) ((\\d&#123;2&#125;):(\\d&#123;2&#125;):(\\d&#123;2&#125;))&quot;</span>,<span class="hljs-string">&quot;日期$1 时间$5   $2年$3月$4日 $6时$7分$8秒&quot;</span>);<br></code></pre></td></tr></table></figure>
 <h5 id="使用分组引用来查找"><a class="header-anchor" href="#使用分组引用来查找"></a>使用分组引用来查找</h5>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/6f9537527aca04bb76aa50a5d9b63dc5.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/6f9537527aca04bb76aa50a5d9b63dc5.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h3 id="匹配模式"><a class="header-anchor" href="#匹配模式"></a>匹配模式</h3>
 <p>所谓匹配模式，指的是正则中一些<strong>改变元字符匹配行为</strong>的方式，比如匹配时不区分英文字母大小写。常见的匹配模式有 4 种，分别是不区分大小写模式、点号通配模式、多行模式和注释模式。</p>
 <p>将模式修饰符放在正则表达式的前面就表示是此模式。模式修饰符是通过<code>(? 模式标识)</code> 的方式来表示的。</p>
@@ -419,7 +417,7 @@
 <p>(\w+)(?#word) \1(?#word repeat again)</p>
 </blockquote>
 <h4 id="总结"><a class="header-anchor" href="#总结"></a>总结</h4>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/34e5f9fb9cce22c8eab046b16a14b84b.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/34e5f9fb9cce22c8eab046b16a14b84b.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h3 id="断言"><a class="header-anchor" href="#断言"></a>断言</h3>
 <p>断言的定义为只用于匹配位置，而不是文本内容本身。</p>
 <p>常见的断言有三种：单词边界、行的开始或结束以及环视。</p>
@@ -469,7 +467,7 @@
 <p><em>左尖括号代表看左边，没有尖括号是看右边，感叹号是非的意思。</em></p>
 <p>注：环视正则表达式中的括号不会被视为子组。</p>
 <h4 id="总结-v2"><a class="header-anchor" href="#总结-v2"></a>总结</h4>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/1dda268858f3ac6c7fc9681702a10418.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/1dda268858f3ac6c7fc9681702a10418.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h3 id="正则转义"><a class="header-anchor" href="#正则转义"></a>正则转义</h3>
 <p>正则中使用<code>\</code>来进行转义。</p>
 <h4 id="元字符的转义"><a class="header-anchor" href="#元字符的转义"></a>元字符的转义</h4>
@@ -512,7 +510,7 @@
 </ul>
 <p>方括号中的其他元字符不再具有特殊含义，仅代表字符本身。</p>
 <h4 id="总结-v3"><a class="header-anchor" href="#总结-v3"></a>总结</h4>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/8b0a4a60f6bbbbf4a0d3f38caba61934.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/8b0a4a60f6bbbbf4a0d3f38caba61934.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h3 id="正则表达式流派"><a class="header-anchor" href="#正则表达式流派"></a>正则表达式流派</h3>
 <p>由于各种历史原因导致正则表达式有很多种流派，其中<code>POSIX 流派</code>与<code>PCRE 流派</code>是目前正则表达式流派中的两大最主要的流派。</p>
 <h4 id="POSIX流派"><a class="header-anchor" href="#POSIX流派"></a>POSIX流派</h4>
@@ -522,11 +520,11 @@
 <li>BRE 标准（Basic Regular Expression 基本正则表达式）</li>
 <li>ERE 标准（Extended Regular Expression 扩展正则表达式）</li>
 </ul>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/929ff92f68eff391d1661ccefbfeea08.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/929ff92f68eff391d1661ccefbfeea08.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p><strong>linux下的一些命令默认使用BRE标准，可以使用参数来使用ERE标准或PCRE标准。</strong></p>
 <h5 id="POSIX字符组"><a class="header-anchor" href="#POSIX字符组"></a>POSIX字符组</h5>
 <p>与一般的正则表达式不一样的是，POSIX定义了自己的字符组。</p>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/d0679bcb5d7c86c3467a1a3cfa0b4c62.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/d0679bcb5d7c86c3467a1a3cfa0b4c62.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h4 id="PCRE流派"><a class="header-anchor" href="#PCRE流派"></a>PCRE流派</h4>
 <p>目前绝大部分常用编程语言所采用的正则引擎，基本都属于 PCRE 流派。</p>
 <p>但是不同的编程语言还有兼容问题。</p>
@@ -535,7 +533,7 @@
 <li>间接兼容：java系、python系，JavaScript系、.net系等</li>
 </ul>
 <h4 id="总结-v4"><a class="header-anchor" href="#总结-v4"></a>总结</h4>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/2a3ee38afe52b9e1863e44b569c84b32.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/2a3ee38afe52b9e1863e44b569c84b32.png" srcset="/img/loading.gif" lazyload alt=""></p>
 
                 
               </div>
@@ -569,7 +567,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E6%AD%A3%E5%88%99/">#正则</a>
+        <a href="/tags/%E6%AD%A3%E5%88%99/" class="print-no-link">#正则</a>
       
     </div>
   
@@ -598,21 +596,23 @@
         </div>
       
       
-      <div class="license-meta-item">
-        <div>许可协议</div>
-        <div>
-          
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
             
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
             
-              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
-              <span class="hint--top hint--rounded" aria-label="BY - 署名">
-                <i class="iconfont icon-by"></i>
-              </span>
-              </a>
-            
-          
+          </div>
         </div>
-      </div>
+      
     </div>
     <div class="license-icon iconfont"></div>
   </div>
@@ -646,8 +646,10 @@
             </div>
 
             
-  <article id="comments" lazyload>
-    
+  
+  
+    <article id="comments" lazyload>
+      
     <div id="giscus" class="giscus"></div>
     <script type="text/javascript">
       Fluid.utils.loadComments('#giscus', function() {
@@ -684,7 +686,8 @@
     <noscript>Please enable JavaScript to view the comments</noscript>
 
 
-  </article>
+    </article>
+  
 
 
           </article>
@@ -696,7 +699,10 @@
       
   <aside class="sidebar" style="margin-left: -1rem">
     <div id="toc">
-  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
   <div class="toc-body" id="toc-body"></div>
 </div>
 
@@ -736,6 +742,14 @@
   <script>
   Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
     mermaid.initialize({"theme":"default"});
+
+    Fluid.utils.listenDOMLoaded(function() {
+      Fluid.events.registerRefreshCallback(function() {
+        if ('mermaid' in window) {
+          mermaid.init();
+        }
+      });
+    });
   });
 </script>
 
@@ -888,22 +902,34 @@
     var boardCtn = jQuery('#board-ctn');
     var boardTop = boardCtn.offset().top;
 
-    window.tocbot.init({
+    window.tocbot.init(Object.assign({
       tocSelector     : '#toc-body',
       contentSelector : '.markdown-body',
-      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
       linkClass       : 'tocbot-link',
       activeLinkClass : 'tocbot-active-link',
       listClass       : 'tocbot-list',
       isCollapsedClass: 'tocbot-is-collapsed',
       collapsibleClass: 'tocbot-is-collapsible',
-      collapseDepth   : CONFIG.toc.collapseDepth || 0,
       scrollSmooth    : true,
-      headingsOffset  : -boardTop
-    });
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
     if (toc.find('.toc-list-item').length > 0) {
       toc.css('visibility', 'visible');
     }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
   });
 </script>
 
@@ -932,6 +958,21 @@
       window.anchors.options.class = 'anchorjs-link-left';
     }
     window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
   });
 </script>
 

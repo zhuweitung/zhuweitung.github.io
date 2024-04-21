@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="https://raw.gitmirror.com/zhuweitung/picbed/main/a894a628cfd6b9bb778f156b6efeb26b.png">
-  <link rel="icon" href="https://raw.gitmirror.com/zhuweitung/picbed/main/a894a628cfd6b9bb778f156b6efeb26b.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="https://fastly.img.kedr.cc/a894a628cfd6b9bb778f156b6efeb26b.png">
+  <link rel="icon" href="https://fastly.img.kedr.cc/a894a628cfd6b9bb778f156b6efeb26b.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -62,7 +62,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"blog.kedr.cc","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#96be66","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":"f2550b082b1ec518a726847e5f27e3c4","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"Rnyy6d3kzXonmFTiXC2DM2wM-gzGzoHsz","app_key":"ItzHQLPR4iIXylU6VCqf1j4f","server_url":"https://rnyy6d3k.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"blog.kedr.cc","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#96be66","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":"f2550b082b1ec518a726847e5f27e3c4","google":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"Rnyy6d3kzXonmFTiXC2DM2wM-gzGzoHsz","app_key":"ItzHQLPR4iIXylU6VCqf1j4f","server_url":"https://rnyy6d3k.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false},"gtag":null},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -86,8 +86,6 @@
         })();
       }
     </script>
-  
-
   
 
   
@@ -136,9 +134,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/">
+              <a class="nav-link" href="/" target="_self">
                 <i class="iconfont icon-home-fill"></i>
-                首页
+                <span>首页</span>
               </a>
             </li>
           
@@ -148,9 +146,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/archives/">
+              <a class="nav-link" href="/archives/" target="_self">
                 <i class="iconfont icon-archive-fill"></i>
-                归档
+                <span>归档</span>
               </a>
             </li>
           
@@ -160,9 +158,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/categories/">
+              <a class="nav-link" href="/categories/" target="_self">
                 <i class="iconfont icon-category-fill"></i>
-                分类
+                <span>分类</span>
               </a>
             </li>
           
@@ -172,9 +170,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/tags/">
+              <a class="nav-link" href="/tags/" target="_self">
                 <i class="iconfont icon-tags-fill"></i>
-                标签
+                <span>标签</span>
               </a>
             </li>
           
@@ -184,9 +182,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/about/">
+              <a class="nav-link" href="/about/" target="_self">
                 <i class="iconfont icon-user-fill"></i>
-                关于
+                <span>关于</span>
               </a>
             </li>
           
@@ -194,15 +192,16 @@
         
           <li class="nav-item" id="search-btn">
             <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
-              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+              <i class="iconfont icon-search"></i>
             </a>
           </li>
           
         
         
           <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
-                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
           </li>
         
       </ul>
@@ -256,17 +255,17 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/2217974762/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/b9bfc975b0d111be5955d0ea33293f9c.png" srcset="/img/loading.gif" lazyload alt="Spring5知识回顾及查漏补缺">
+          <img src="https://fastly.img.kedr.cc/b9bfc975b0d111be5955d0ea33293f9c.png" srcset="/img/loading.gif" lazyload alt="Spring5知识回顾及查漏补缺">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/2217974762/" target="_self">
           Spring5知识回顾及查漏补缺
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/2217974762/" target="_self">
@@ -327,17 +326,17 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/3001875945/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/7773ff25ce9fe6574675da1d8c057d3b.png" srcset="/img/loading.gif" lazyload alt="JavaWeb知识回顾及查漏补缺">
+          <img src="https://fastly.img.kedr.cc/7773ff25ce9fe6574675da1d8c057d3b.png" srcset="/img/loading.gif" lazyload alt="JavaWeb知识回顾及查漏补缺">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/3001875945/" target="_self">
           JavaWeb知识回顾及查漏补缺
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/3001875945/" target="_self">
@@ -396,17 +395,17 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/2409515937/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/3749185af579f777d314ff2abaf86111.png" srcset="/img/loading.gif" lazyload alt="深入理解http协议">
+          <img src="https://fastly.img.kedr.cc/3749185af579f777d314ff2abaf86111.png" srcset="/img/loading.gif" lazyload alt="深入理解http协议">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/2409515937/" target="_self">
           深入理解http协议
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/2409515937/" target="_self">
@@ -472,22 +471,22 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/3265766969/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/5e53ae5b67828752b5d4a4f1ee7e7a2f.png" srcset="/img/loading.gif" lazyload alt="session与cookie">
+          <img src="https://fastly.img.kedr.cc/5e53ae5b67828752b5d4a4f1ee7e7a2f.png" srcset="/img/loading.gif" lazyload alt="session与cookie">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/3265766969/" target="_self">
           session与cookie
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/3265766969/" target="_self">
         <div>
-          session与cookie cookie 会话数据保存再客户端，不能跨浏览器。   服务端给客户端设置cookie 123456protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &amp;#123;    &#x2F;&#x2F;自定义cookie    Co
+          session与cookie cookie 会话数据保存再客户端，不能跨浏览器。   服务端给客户端设置cookie 123456protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123;    //自定义cookie    Co
         </div>
       </a>
 
@@ -550,17 +549,17 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/3236163550/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/2ddf5dd09b68cb3a7f941224655437bf.png" srcset="/img/loading.gif" lazyload alt="深入理解servlet">
+          <img src="https://fastly.img.kedr.cc/2ddf5dd09b68cb3a7f941224655437bf.png" srcset="/img/loading.gif" lazyload alt="深入理解servlet">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/3236163550/" target="_self">
           深入理解servlet
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/3236163550/" target="_self">
@@ -626,17 +625,17 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/349534411/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/6912b939b534ede5b174c06c336b1f7a.png" srcset="/img/loading.gif" lazyload alt="Java网络编程之Socket">
+          <img src="https://fastly.img.kedr.cc/6912b939b534ede5b174c06c336b1f7a.png" srcset="/img/loading.gif" lazyload alt="Java网络编程之Socket">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/349534411/" target="_self">
           Java网络编程之Socket
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/349534411/" target="_self">
@@ -702,22 +701,22 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/511749417/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/dcc21aabb258b442eb63dff6cee62e6d.png" srcset="/img/loading.gif" lazyload alt="常用设计模式">
+          <img src="https://fastly.img.kedr.cc/dcc21aabb258b442eb63dff6cee62e6d.png" srcset="/img/loading.gif" lazyload alt="常用设计模式">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/511749417/" target="_self">
           常用设计模式
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/511749417/" target="_self">
         <div>
-          常用设计模式 设计模式六大原则  开闭原则：对拓展开放，对修改关闭。（接口和抽象类） 里氏替换原则：任何基类可以出现的地方，子类一定可以出现。 依赖倒转原则：面向接口编程，依赖于抽象而不依赖与具体。 接口隔离原则：使用多个隔离的接口比使用单个接口要好，降低类之间的耦合。 迪米特原则（最少知识原则）：一个软件实体应当尽可能少的与其他实体发生相互作用。 合成复用原则：尽量采用合成&#x2F;聚合的方式，而不是使
+          常用设计模式 设计模式六大原则  开闭原则：对拓展开放，对修改关闭。（接口和抽象类） 里氏替换原则：任何基类可以出现的地方，子类一定可以出现。 依赖倒转原则：面向接口编程，依赖于抽象而不依赖与具体。 接口隔离原则：使用多个隔离的接口比使用单个接口要好，降低类之间的耦合。 迪米特原则（最少知识原则）：一个软件实体应当尽可能少的与其他实体发生相互作用。 合成复用原则：尽量采用合成/聚合的方式，而不是使
         </div>
       </a>
 
@@ -778,17 +777,17 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/839291940/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/26804dc03d2c1b584cd42f42da3b38ef.png" srcset="/img/loading.gif" lazyload alt="SpringIOC">
+          <img src="https://fastly.img.kedr.cc/26804dc03d2c1b584cd42f42da3b38ef.png" srcset="/img/loading.gif" lazyload alt="SpringIOC">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/839291940/" target="_self">
           SpringIOC
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/839291940/" target="_self">
@@ -856,17 +855,17 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/2730732825/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/efa4fcdf21ef31547dd43344c4d23ef6.png" srcset="/img/loading.gif" lazyload alt="Java多线程">
+          <img src="https://fastly.img.kedr.cc/efa4fcdf21ef31547dd43344c4d23ef6.png" srcset="/img/loading.gif" lazyload alt="Java多线程">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/2730732825/" target="_self">
           Java多线程
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/2730732825/" target="_self">
@@ -932,17 +931,17 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/2966935704/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/42db6ab21f267cf1edb872df8b8f5a01.png" srcset="/img/loading.gif" lazyload alt="JAVA基础知识回顾及查漏补缺">
+          <img src="https://fastly.img.kedr.cc/42db6ab21f267cf1edb872df8b8f5a01.png" srcset="/img/loading.gif" lazyload alt="JAVA基础知识回顾及查漏补缺">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/2966935704/" target="_self">
           JAVA基础知识回顾及查漏补缺
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/2966935704/" target="_self">

@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="https://raw.gitmirror.com/zhuweitung/picbed/main/a894a628cfd6b9bb778f156b6efeb26b.png">
-  <link rel="icon" href="https://raw.gitmirror.com/zhuweitung/picbed/main/a894a628cfd6b9bb778f156b6efeb26b.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="https://fastly.img.kedr.cc/a894a628cfd6b9bb778f156b6efeb26b.png">
+  <link rel="icon" href="https://fastly.img.kedr.cc/a894a628cfd6b9bb778f156b6efeb26b.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -62,7 +62,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"blog.kedr.cc","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#96be66","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":"f2550b082b1ec518a726847e5f27e3c4","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"Rnyy6d3kzXonmFTiXC2DM2wM-gzGzoHsz","app_key":"ItzHQLPR4iIXylU6VCqf1j4f","server_url":"https://rnyy6d3k.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"blog.kedr.cc","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#96be66","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":"f2550b082b1ec518a726847e5f27e3c4","google":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"Rnyy6d3kzXonmFTiXC2DM2wM-gzGzoHsz","app_key":"ItzHQLPR4iIXylU6VCqf1j4f","server_url":"https://rnyy6d3k.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false},"gtag":null},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -86,8 +86,6 @@
         })();
       }
     </script>
-  
-
   
 
   
@@ -136,9 +134,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/">
+              <a class="nav-link" href="/" target="_self">
                 <i class="iconfont icon-home-fill"></i>
-                首页
+                <span>首页</span>
               </a>
             </li>
           
@@ -148,9 +146,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/archives/">
+              <a class="nav-link" href="/archives/" target="_self">
                 <i class="iconfont icon-archive-fill"></i>
-                归档
+                <span>归档</span>
               </a>
             </li>
           
@@ -160,9 +158,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/categories/">
+              <a class="nav-link" href="/categories/" target="_self">
                 <i class="iconfont icon-category-fill"></i>
-                分类
+                <span>分类</span>
               </a>
             </li>
           
@@ -172,9 +170,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/tags/">
+              <a class="nav-link" href="/tags/" target="_self">
                 <i class="iconfont icon-tags-fill"></i>
-                标签
+                <span>标签</span>
               </a>
             </li>
           
@@ -184,9 +182,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/about/">
+              <a class="nav-link" href="/about/" target="_self">
                 <i class="iconfont icon-user-fill"></i>
-                关于
+                <span>关于</span>
               </a>
             </li>
           
@@ -194,15 +192,16 @@
         
           <li class="nav-item" id="search-btn">
             <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
-              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+              <i class="iconfont icon-search"></i>
             </a>
           </li>
           
         
         
           <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
-                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
           </li>
         
       </ul>
@@ -256,17 +255,17 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/1746580309/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/9dd87d5ae3efd5bb8c599e0e58be0f5e.png" srcset="/img/loading.gif" lazyload alt="RabbitMQ知识学习">
+          <img src="https://fastly.img.kedr.cc/9dd87d5ae3efd5bb8c599e0e58be0f5e.png" srcset="/img/loading.gif" lazyload alt="RabbitMQ知识学习">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/1746580309/" target="_self">
           RabbitMQ知识学习
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/1746580309/" target="_self">
@@ -332,17 +331,17 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/3827541247/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/9a35a45b5041be24c5eb5dbdfc18390f.png" srcset="/img/loading.gif" lazyload alt="SpringCloud知识学习">
+          <img src="https://fastly.img.kedr.cc/9a35a45b5041be24c5eb5dbdfc18390f.png" srcset="/img/loading.gif" lazyload alt="SpringCloud知识学习">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/3827541247/" target="_self">
           SpringCloud知识学习
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/3827541247/" target="_self">
@@ -403,17 +402,17 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/2285784166/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/dde1aa79137e2fc011dc0601a64929d9.png" srcset="/img/loading.gif" lazyload alt="JVM知识学习及查漏补缺">
+          <img src="https://fastly.img.kedr.cc/dde1aa79137e2fc011dc0601a64929d9.png" srcset="/img/loading.gif" lazyload alt="JVM知识学习及查漏补缺">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/2285784166/" target="_self">
           JVM知识学习及查漏补缺
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/2285784166/" target="_self">
@@ -472,17 +471,17 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/1896637794/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/152c5a3da5448bcfc2588baaf9bc2c9a.png" srcset="/img/loading.gif" lazyload alt="acme.sh不完全指南">
+          <img src="https://fastly.img.kedr.cc/152c5a3da5448bcfc2588baaf9bc2c9a.png" srcset="/img/loading.gif" lazyload alt="acme.sh不完全指南">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/1896637794/" target="_self">
           acme.sh不完全指南
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/1896637794/" target="_self">
@@ -541,17 +540,17 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/77324109/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/e7f5c8e37e6e370ea333715678c72ddb.png" srcset="/img/loading.gif" lazyload alt="图说设计模式笔记#3">
+          <img src="https://fastly.img.kedr.cc/e7f5c8e37e6e370ea333715678c72ddb.png" srcset="/img/loading.gif" lazyload alt="图说设计模式笔记#3">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/77324109/" target="_self">
           图说设计模式笔记#3
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/77324109/" target="_self">
@@ -610,17 +609,17 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/1939664859/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/9568321c4af24e1eb3feef33c21bed87.png" srcset="/img/loading.gif" lazyload alt="图说设计模式笔记#2">
+          <img src="https://fastly.img.kedr.cc/9568321c4af24e1eb3feef33c21bed87.png" srcset="/img/loading.gif" lazyload alt="图说设计模式笔记#2">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/1939664859/" target="_self">
           图说设计模式笔记#2
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/1939664859/" target="_self">
@@ -679,17 +678,17 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/3935682145/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/4520468c6d830532904f1312589a571d.png" srcset="/img/loading.gif" lazyload alt="图说设计模式笔记#1">
+          <img src="https://fastly.img.kedr.cc/4520468c6d830532904f1312589a571d.png" srcset="/img/loading.gif" lazyload alt="图说设计模式笔记#1">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/3935682145/" target="_self">
           图说设计模式笔记#1
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/3935682145/" target="_self">
@@ -748,17 +747,17 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/4034988835/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/c495a3ea9b85918b2bb0358331ad45d8.png" srcset="/img/loading.gif" lazyload alt="rclone+onedrive备份服务器">
+          <img src="https://fastly.img.kedr.cc/c495a3ea9b85918b2bb0358331ad45d8.png" srcset="/img/loading.gif" lazyload alt="rclone+onedrive备份服务器">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/4034988835/" target="_self">
           rclone+onedrive备份服务器
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/4034988835/" target="_self">
@@ -802,9 +801,9 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/vps/">#vps</a>
-            
               <a href="/tags/backup/">#backup</a>
+            
+              <a href="/tags/vps/">#vps</a>
             
               <a href="/tags/rclone/">#rclone</a>
             
@@ -821,17 +820,17 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/3956405114/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/5c1f7e9edb873dbd9a1d3eb049469912.png" srcset="/img/loading.gif" lazyload alt="JUC并发编程知识学习及查漏补缺">
+          <img src="https://fastly.img.kedr.cc/5c1f7e9edb873dbd9a1d3eb049469912.png" srcset="/img/loading.gif" lazyload alt="JUC并发编程知识学习及查漏补缺">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/3956405114/" target="_self">
           JUC并发编程知识学习及查漏补缺
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/3956405114/" target="_self">
@@ -890,17 +889,17 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/331375146/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/3446d73c8f309b46cd0f44f0b89311d6.png" srcset="/img/loading.gif" lazyload alt="k8s集群搭建">
+          <img src="https://fastly.img.kedr.cc/3446d73c8f309b46cd0f44f0b89311d6.png" srcset="/img/loading.gif" lazyload alt="k8s集群搭建">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/331375146/" target="_self">
           k8s集群搭建
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/331375146/" target="_self">

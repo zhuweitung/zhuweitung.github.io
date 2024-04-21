@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="https://raw.gitmirror.com/zhuweitung/picbed/main/a894a628cfd6b9bb778f156b6efeb26b.png">
-  <link rel="icon" href="https://raw.gitmirror.com/zhuweitung/picbed/main/a894a628cfd6b9bb778f156b6efeb26b.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="https://fastly.img.kedr.cc/a894a628cfd6b9bb778f156b6efeb26b.png">
+  <link rel="icon" href="https://fastly.img.kedr.cc/a894a628cfd6b9bb778f156b6efeb26b.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -23,14 +23,14 @@
 <meta property="og:site_name" content="个人随笔">
 <meta property="og:description" content="JUC并发编程知识学习及查漏补缺">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://raw.gitmirror.com/zhuweitung/picbed/main/5c1f7e9edb873dbd9a1d3eb049469912.png">
+<meta property="og:image" content="https://fastly.img.kedr.cc/5c1f7e9edb873dbd9a1d3eb049469912.png">
 <meta property="article:published_time" content="2022-03-19T09:43:48.000Z">
-<meta property="article:modified_time" content="2023-12-23T10:24:35.201Z">
+<meta property="article:modified_time" content="2024-04-21T04:23:15.083Z">
 <meta property="article:author" content="zhuweitung">
 <meta property="article:tag" content="java">
 <meta property="article:tag" content="juc">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://raw.gitmirror.com/zhuweitung/picbed/main/5c1f7e9edb873dbd9a1d3eb049469912.png">
+<meta name="twitter:image" content="https://fastly.img.kedr.cc/5c1f7e9edb873dbd9a1d3eb049469912.png">
   
   
   
@@ -76,7 +76,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"blog.kedr.cc","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#96be66","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":"f2550b082b1ec518a726847e5f27e3c4","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"Rnyy6d3kzXonmFTiXC2DM2wM-gzGzoHsz","app_key":"ItzHQLPR4iIXylU6VCqf1j4f","server_url":"https://rnyy6d3k.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"blog.kedr.cc","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#96be66","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":"f2550b082b1ec518a726847e5f27e3c4","google":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"Rnyy6d3kzXonmFTiXC2DM2wM-gzGzoHsz","app_key":"ItzHQLPR4iIXylU6VCqf1j4f","server_url":"https://rnyy6d3k.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false},"gtag":null},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -100,8 +100,6 @@
         })();
       }
     </script>
-  
-
   
 
   
@@ -150,9 +148,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/">
+              <a class="nav-link" href="/" target="_self">
                 <i class="iconfont icon-home-fill"></i>
-                首页
+                <span>首页</span>
               </a>
             </li>
           
@@ -162,9 +160,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/archives/">
+              <a class="nav-link" href="/archives/" target="_self">
                 <i class="iconfont icon-archive-fill"></i>
-                归档
+                <span>归档</span>
               </a>
             </li>
           
@@ -174,9 +172,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/categories/">
+              <a class="nav-link" href="/categories/" target="_self">
                 <i class="iconfont icon-category-fill"></i>
-                分类
+                <span>分类</span>
               </a>
             </li>
           
@@ -186,9 +184,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/tags/">
+              <a class="nav-link" href="/tags/" target="_self">
                 <i class="iconfont icon-tags-fill"></i>
-                标签
+                <span>标签</span>
               </a>
             </li>
           
@@ -198,9 +196,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/about/">
+              <a class="nav-link" href="/about/" target="_self">
                 <i class="iconfont icon-user-fill"></i>
-                关于
+                <span>关于</span>
               </a>
             </li>
           
@@ -208,15 +206,16 @@
         
           <li class="nav-item" id="search-btn">
             <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
-              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+              <i class="iconfont icon-search"></i>
             </a>
           </li>
           
         
         
           <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
-                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
           </li>
         
       </ul>
@@ -256,7 +255,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          56k 字
+          18k 字
         
       </span>
     
@@ -267,7 +266,7 @@
         
         
         
-          463 分钟
+          154 分钟
         
       </span>
     
@@ -312,8 +311,7 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <!-- SEO header -->
-            <h1 style="display: none">JUC并发编程知识学习及查漏补缺</h1>
+            <h1 id="seo-header">JUC并发编程知识学习及查漏补缺</h1>
             
             
               <div class="markdown-body">
@@ -326,7 +324,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">synchronized</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">start</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-keyword">if</span> (threadStatus != <span class="hljs-number">0</span>)<br>        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">IllegalThreadStateException</span>();<br>    group.add(<span class="hljs-built_in">this</span>);<br>    <span class="hljs-type">boolean</span> <span class="hljs-variable">started</span> <span class="hljs-operator">=</span> <span class="hljs-literal">false</span>;<br>    <span class="hljs-keyword">try</span> &#123;<br>        start0();<br>        started = <span class="hljs-literal">true</span>;<br>    &#125; <span class="hljs-keyword">finally</span> &#123;<br>        <span class="hljs-keyword">try</span> &#123;<br>            <span class="hljs-keyword">if</span> (!started) &#123;<br>                group.threadStartFailed(<span class="hljs-built_in">this</span>);<br>            &#125;<br>        &#125; <span class="hljs-keyword">catch</span> (Throwable ignore) &#123;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>openjdk写的JNI一般是一一对应的，Thread.java对应的就是<code>Thread.c</code></p>
 <p>start0对应的是<code>JVM_StartThread</code></p>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/992f6f37fd7d384ebbb2c873805d341a.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/992f6f37fd7d384ebbb2c873805d341a.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>在<code>jvm.cpp</code>中搜索JVM_StartThread，发现最终调用<code>Thread::start</code></p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">JVM_ENTRY</span>(<span class="hljs-type">void</span>, <span class="hljs-built_in">JVM_StartThread</span>(JNIEnv* env, jobject jthread))<br>  <span class="hljs-built_in">JVMWrapper</span>(<span class="hljs-string">&quot;JVM_StartThread&quot;</span>);<br>  JavaThread *native_thread = <span class="hljs-literal">NULL</span>;<br>  <span class="hljs-comment">// ...</span><br><br>  Thread::<span class="hljs-built_in">start</span>(native_thread);<br><br>JVM_END<br></code></pre></td></tr></table></figure>
 <p>在<code>thread.cpp</code>文件中找到方法，底层是调用操作系统层去开启线程</p>
@@ -351,7 +349,7 @@
 <h4 id="FutureTask"><a class="header-anchor" href="#FutureTask"></a>FutureTask</h4>
 <p>三个特点：多线程、有返回值、异步任务</p>
 <p>常用的多线程实现方式，如继承Thread、实现Runnable接口都没有返回值；实现Callable接口可以有返回值，但是又没法放到Thread的构造方法中，而FutureTask类实现了Runnable接口又包含一个注入Callable对象的构造方法，通过实现Callable接口再经过FutureTask包装后来创建Thread就可以解决此问题。</p>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/70403777916b85a3eafb1609eec6385f.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/70403777916b85a3eafb1609eec6385f.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h5 id="使用示例"><a class="header-anchor" href="#使用示例"></a>使用示例</h5>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">FutureTaskDemo</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> ExecutionException, InterruptedException &#123;<br>        FutureTask&lt;String&gt; futureTask = <span class="hljs-keyword">new</span> <span class="hljs-title class_">FutureTask</span>&lt;&gt;(<span class="hljs-keyword">new</span> <span class="hljs-title class_">BuyWaterThread</span>());<br>        <span class="hljs-type">Thread</span> <span class="hljs-variable">thread</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(futureTask);<br>        thread.start();<br>        <span class="hljs-comment">// 阻塞等待线程执行完成，获取返回值</span><br>        <span class="hljs-type">String</span> <span class="hljs-variable">s</span> <span class="hljs-operator">=</span> futureTask.get();<br>		log.info(<span class="hljs-string">&quot;喝到&#123;&#125;了&quot;</span>, s);<br>    &#125;<br>&#125;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">BuyWaterThread</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Callable</span>&lt;String&gt; &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">call</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>        Thread.sleep(TimeUnit.SECONDS.toMillis(<span class="hljs-number">10</span>));<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;水&quot;</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 <h4 id="Future优缺点"><a class="header-anchor" href="#Future优缺点"></a>Future优缺点</h4>
@@ -371,13 +369,13 @@
 <h3 id="CompletableFuture"><a class="header-anchor" href="#CompletableFuture"></a>CompletableFuture</h3>
 <p>对于Future的缺点，希望进行异步处理是可以传入回调函数，在Future结束时自动调用该回调函数，这样就不用阻塞，也不用去轮询判断了</p>
 <p>JDK8设计出CompletableFuture，提供了一种观察者模式类似的机制</p>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/7168fca955882927a379a6cf16ee8ada.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/7168fca955882927a379a6cf16ee8ada.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h4 id="CompletionStage接口"><a class="header-anchor" href="#CompletionStage接口"></a>CompletionStage接口</h4>
 <ul>
 <li>CompletionStage代表异步计算过程中的某一个阶段，一个阶段完成以后可能会触发另外一个阶段</li>
 <li>一个阶段的执行可能是被单个阶段的完成触发，也可能是由多个阶段一起触发</li>
 </ul>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/350dfe37a40571b191a6a948fdae415a.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/350dfe37a40571b191a6a948fdae415a.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h4 id="创建对象"><a class="header-anchor" href="#创建对象"></a>创建对象</h4>
 <p>一般通过核心的四个静态方法来创建</p>
 <ul>
@@ -508,27 +506,27 @@
 <p>示例代码</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">m1</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-keyword">synchronized</span> (<span class="hljs-built_in">this</span>) &#123;<br>        System.out.println(<span class="hljs-string">&quot;m1&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>编译为字节码后使用 <code>javap -c xxx.class</code>命令查看信息</p>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/ca0c2e9ae62ce3291999202fb26d4bf5.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/ca0c2e9ae62ce3291999202fb26d4bf5.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>可见同步代码块使用<code>monitorenter</code>和<code>monitorexit</code>指令实现</p>
 <p>一般情况下是1个monitorenter和2个monitorexit指令，但是当代码块内手动抛出异常时会只有1个monitorenter和1个monitorexit</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">m1</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-keyword">synchronized</span> (<span class="hljs-built_in">this</span>) &#123;<br>        System.out.println(<span class="hljs-string">&quot;m1&quot;</span>);<br>        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">RuntimeException</span>();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/7a1902b673e53309d50cbca4469a8d95.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/7a1902b673e53309d50cbca4469a8d95.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h4 id="同步方法"><a class="header-anchor" href="#同步方法"></a>同步方法</h4>
 <p>示例代码</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">synchronized</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">m2</span><span class="hljs-params">()</span> &#123;<br>    System.out.println(<span class="hljs-string">&quot;m1&quot;</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>编译为字节码后使用 <code>javap -v xxx.class</code>命令查看更详细信息</p>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/88b0cc6192a237fb4ff751e435f5de7a.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/88b0cc6192a237fb4ff751e435f5de7a.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>会加一个<code>ACC_SYNCHRONIZED</code>标志，程序执行时判断有此标志时，执行线程会先持有monitor锁，然后再执行方法，最后在方法完成（正常或异常）时释放monitor锁</p>
 <h4 id="静态同步方法"><a class="header-anchor" href="#静态同步方法"></a>静态同步方法</h4>
 <p>示例代码</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">synchronized</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">m3</span><span class="hljs-params">()</span> &#123;<br>    System.out.println(<span class="hljs-string">&quot;m1&quot;</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/8c87eaec894ff13229365797aa4544b1.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/8c87eaec894ff13229365797aa4544b1.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p><code>ACC_STATIC</code>标志将同步方法与静态同步方法区分开</p>
 <h4 id="monitor"><a class="header-anchor" href="#monitor"></a>monitor</h4>
 <p>monitor被称为管程或者监视器，是一种程序结构，结构内的多个子程序（对象或模块）形成的多个工作线程互斥访问共享资源。Java虚拟机调用方法时，将会检查方法的<code>ACC_SYNCHRONIZED</code>访问标志是否被设置，若设置了，执行线程就要求先成功持有管程，然后才能执行方法，当方法实现完成时释放管程。在方法执行期间，执行线程持有了管程，其他任何线程都无法再获取到统一个管程。</p>
 <p>Java的monitor在源码中采用ObjectMonitor实现</p>
 <p>ObjectMonitor.java -&gt; objectMonitor.cpp -&gt; objectMonitor.hpp</p>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/0ecd0438f5d12ed12c4e1f4e1d941509.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/0ecd0438f5d12ed12c4e1f4e1d941509.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>每个对象天生都带一个对象监视器，每一个被锁住的对象都会和monitor关联起来，所有任何一个对象都可以成为一个锁</p>
 <h3 id="公平锁和非公平锁"><a class="header-anchor" href="#公平锁和非公平锁"></a>公平锁和非公平锁</h3>
 <p>公平锁是指多个线程按照申请锁的顺序来获取锁，类似排队，先来的排前面，这是公平的；</p>
@@ -570,9 +568,9 @@
 <h4 id="死锁的排查"><a class="header-anchor" href="#死锁的排查"></a>死锁的排查</h4>
 <p><code>jps -l</code>命令查看java进程</p>
 <p><code>jstack 进程号</code>查看进程堆栈信息</p>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/fe48d6f9005538638722a7ab7e314861.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/fe48d6f9005538638722a7ab7e314861.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>或者使用<code>jconsole</code>可视化的方式查看</p>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/93fa907ffd6258c14ed7c3168365623d.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/93fa907ffd6258c14ed7c3168365623d.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h3 id="LockSupport与线程中断"><a class="header-anchor" href="#LockSupport与线程中断"></a>LockSupport与线程中断</h3>
 <h4 id="中断机制"><a class="header-anchor" href="#中断机制"></a>中断机制</h4>
 <p>一个线程不应该由其他线程来强制中断或停止，应该由线程自己自行停止；</p>
@@ -719,7 +717,7 @@
 <p><code>Unsafe</code>类中关于屏障的代码：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 读屏障</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">native</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">loadFence</span><span class="hljs-params">()</span>;<br><span class="hljs-comment">// 写屏障</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">native</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">storeFence</span><span class="hljs-params">()</span>;<br><span class="hljs-comment">// 全屏障，即读写屏障</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">native</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">fullFence</span><span class="hljs-params">()</span>;<br></code></pre></td></tr></table></figure>
 <p>对应jdk源码中的Unsafe.java -&gt; unsafe.cpp -&gt; orderAccess.hpp</p>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/1f7e105dc286521fe130332eaa587297.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/1f7e105dc286521fe130332eaa587297.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>细分为4种：</p>
 <table>
 <thead>
@@ -798,13 +796,13 @@
 <p>在volatile读操作后面插入一个LoadStore屏障，禁止将此volatile读与后面的普通写重排序</p>
 </li>
 </ul>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/35b6f672ebd50ce40e6ab1a02c00e1c5.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/35b6f672ebd50ce40e6ab1a02c00e1c5.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>写屏障：</p>
 <ul>
 <li>在每个volatile写操作的前面插入一个StoreStore屏障，保证在volatile写之前，其前面锁头普通写操作已经刷新到主内存中</li>
 <li>在每个volatile写操作的后面插入一个StoreLoad屏障，避免volatile写与后面可能有的volatile读/写操作重排序</li>
 </ul>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/56ec33cab6ec74fe937b37b7e679db94.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/56ec33cab6ec74fe937b37b7e679db94.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h4 id="volatile变量读写过程"><a class="header-anchor" href="#volatile变量读写过程"></a>volatile变量读写过程</h4>
 <p>Java内存模型中定义的8种工作内存与主内存之间的原子操作：</p>
 <p>read(读取) -&gt; load(加载) -&gt; use(使用)-&gt; assign(赋值) -&gt; store(存储) -&gt; write(写入) -&gt; lock(锁定)-&gt; unlock(解锁)</p>
@@ -837,7 +835,7 @@
 <p>unlock：作用于主内存，把一个处于锁定状态的变量释放，然后才能被其他线程占用</p>
 </li>
 </ul>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/a7241e267dc222660419cb845997456f.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/a7241e267dc222660419cb845997456f.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h4 id="volatile的最佳实践"><a class="header-anchor" href="#volatile的最佳实践"></a>volatile的最佳实践</h4>
 <p>volatile变量不适合参与到依赖当前值的运算，如i=i+1,；i++等</p>
 <p>依靠volatile的可见性特点，通常volatile用于保存某个状态的boolean值或int值</p>
@@ -895,7 +893,7 @@
 </li>
 </ul>
 <h3 id="原子操作类"><a class="header-anchor" href="#原子操作类"></a>原子操作类</h3>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/b7932c9b081ecb0064cc748b7c61e6b6.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/b7932c9b081ecb0064cc748b7c61e6b6.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h4 id="分类"><a class="header-anchor" href="#分类"></a>分类</h4>
 <p>基本类型原子类：</p>
 <ul>
@@ -952,10 +950,10 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Getter</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">LikeClick</span> &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-type">long</span> <span class="hljs-variable">number</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">private</span> <span class="hljs-type">AtomicLong</span> <span class="hljs-variable">atomicLong</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">AtomicLong</span>();<br>    <span class="hljs-keyword">private</span> <span class="hljs-type">LongAdder</span> <span class="hljs-variable">longAdder</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">LongAdder</span>();<br>    <span class="hljs-keyword">private</span> <span class="hljs-type">LongAccumulator</span> <span class="hljs-variable">longAccumulator</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">LongAccumulator</span>((a, b) -&gt; a + b, <span class="hljs-number">0</span>);<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">synchronized</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">clickBySynchronized</span><span class="hljs-params">()</span> &#123;<br>        number++;<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">clickByAtomicLong</span><span class="hljs-params">()</span> &#123;<br>        atomicLong.getAndIncrement();<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">clickByLongAdder</span><span class="hljs-params">()</span> &#123;<br>        longAdder.increment();<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">clickByLongAccumulator</span><span class="hljs-params">()</span> &#123;<br>        longAccumulator.accumulate(<span class="hljs-number">1</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">LikeClick</span> <span class="hljs-variable">likeClick</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">LikeClick</span>();<br><span class="hljs-type">int</span> <span class="hljs-variable">threadNum</span> <span class="hljs-operator">=</span> <span class="hljs-number">50</span>;<br><span class="hljs-type">int</span> <span class="hljs-variable">clickNum</span> <span class="hljs-operator">=</span> <span class="hljs-number">1000000</span>;<br><span class="hljs-type">ExecutorService</span> <span class="hljs-variable">threadPool</span> <span class="hljs-operator">=</span> Executors.newFixedThreadPool(<span class="hljs-number">50</span>);<br><span class="hljs-type">TimeInterval</span> <span class="hljs-variable">timer</span> <span class="hljs-operator">=</span> DateUtil.timer();<br><span class="hljs-type">CountDownLatch</span> <span class="hljs-variable">count1</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">CountDownLatch</span>(threadNum);<br><span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">50</span>; i++) &#123;<br>    threadPool.submit(() -&gt; &#123;<br>        <span class="hljs-keyword">try</span> &#123;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">j</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; j &lt; clickNum; j++) &#123;<br>                likeClick.clickBySynchronized();<br>            &#125;<br>        &#125; <span class="hljs-keyword">finally</span> &#123;<br>            count1.countDown();<br>        &#125;<br>    &#125;);<br>&#125;<br>count1.await();<br>log.info(<span class="hljs-string">&quot;clickBySynchronized 结果：&#123;&#125; 耗时&#123;&#125;ms&quot;</span>, likeClick.getNumber(), timer.intervalRestart());<br><span class="hljs-type">CountDownLatch</span> <span class="hljs-variable">count2</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">CountDownLatch</span>(threadNum);<br><span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">50</span>; i++) &#123;<br>    threadPool.submit(() -&gt; &#123;<br>        <span class="hljs-keyword">try</span> &#123;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">j</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; j &lt; clickNum; j++) &#123;<br>                likeClick.clickByAtomicLong();<br>            &#125;<br>        &#125; <span class="hljs-keyword">finally</span> &#123;<br>            count2.countDown();<br>        &#125;<br>    &#125;);<br>&#125;<br>count2.await();<br>log.info(<span class="hljs-string">&quot;clickByAtomicLong 结果：&#123;&#125; 耗时&#123;&#125;ms&quot;</span>, likeClick.getAtomicLong(), timer.intervalRestart());<br><span class="hljs-type">CountDownLatch</span> <span class="hljs-variable">count3</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">CountDownLatch</span>(threadNum);<br><span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">50</span>; i++) &#123;<br>    threadPool.submit(() -&gt; &#123;<br>        <span class="hljs-keyword">try</span> &#123;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">j</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; j &lt; clickNum; j++) &#123;<br>                likeClick.clickByLongAdder();<br>            &#125;<br>        &#125; <span class="hljs-keyword">finally</span> &#123;<br>            count3.countDown();<br>        &#125;<br>    &#125;);<br>&#125;<br>count3.await();<br>log.info(<span class="hljs-string">&quot;clickByLongAdder 结果：&#123;&#125; 耗时&#123;&#125;ms&quot;</span>, likeClick.getLongAdder(), timer.intervalRestart());<br><span class="hljs-type">CountDownLatch</span> <span class="hljs-variable">count4</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">CountDownLatch</span>(threadNum);<br><span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">50</span>; i++) &#123;<br>    threadPool.submit(() -&gt; &#123;<br>        <span class="hljs-keyword">try</span> &#123;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">j</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; j &lt; clickNum; j++) &#123;<br>                likeClick.clickByLongAccumulator();<br>            &#125;<br>        &#125; <span class="hljs-keyword">finally</span> &#123;<br>            count4.countDown();<br>        &#125;<br>    &#125;);<br>&#125;<br>count4.await();<br>log.info(<span class="hljs-string">&quot;clickByLongAccumulator 结果：&#123;&#125; 耗时&#123;&#125;ms&quot;</span>, likeClick.getLongAccumulator(), timer.intervalRestart());<br>threadPool.shutdown();<br></code></pre></td></tr></table></figure>
 <p>结果：<br>
-<img src="https://raw.gitmirror.com/zhuweitung/picbed/main/ffa48f749bfea7c80b52ead2d578ad6b.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<img src="https://fastly.img.kedr.cc/ffa48f749bfea7c80b52ead2d578ad6b.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h4 id="LongAdder类原理解析"><a class="header-anchor" href="#LongAdder类原理解析"></a>LongAdder类原理解析</h4>
 <p>继承体系图：</p>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/6f30c1fa745015694d4c7a5bfcf3cce0.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/6f30c1fa745015694d4c7a5bfcf3cce0.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>Striped64类：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">abstract</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Striped64</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Number</span> &#123;<br>    <br>    <span class="hljs-comment">/** Number of CPUS, to place bound on table size CPU数量，cells数组的最大长度  */</span><br>    <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">NCPU</span> <span class="hljs-operator">=</span> Runtime.getRuntime().availableProcessors();<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * Table of cells. When non-null, size is a power of 2.</span><br><span class="hljs-comment">     * cells数组，长度是2的幂</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">transient</span> <span class="hljs-keyword">volatile</span> Cell[] cells;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * Base value, used mainly when there is no contention, but also as</span><br><span class="hljs-comment">     * a fallback during table initialization races. Updated via CAS.</span><br><span class="hljs-comment">     * 基础value值，当并发较低时，只累加该值，主要用于没有竞争的情况，通过cas更新</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">transient</span> <span class="hljs-keyword">volatile</span> <span class="hljs-type">long</span> base;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * Spinlock (locked via CAS) used when resizing and/or creating Cells.</span><br><span class="hljs-comment">     * 在调整单元格大小和/或创建单元格时使用自旋锁（通过 CAS 锁定）</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">transient</span> <span class="hljs-keyword">volatile</span> <span class="hljs-type">int</span> cellsBusy;<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>Cell内部类：</p>
@@ -972,7 +970,7 @@
 <li>
 <p>longAccumulate方法</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">final</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">longAccumulate</span><span class="hljs-params">(<span class="hljs-type">long</span> x, LongBinaryOperator fn,</span><br><span class="hljs-params">                          <span class="hljs-type">boolean</span> wasUncontended)</span> &#123;<br>    <span class="hljs-type">int</span> h;<br>   	<span class="hljs-comment">// 随机数未初始化</span><br>    <span class="hljs-keyword">if</span> ((h = getProbe()) == <span class="hljs-number">0</span>) &#123;<br>        <span class="hljs-comment">// 强制初始化随机数</span><br>        ThreadLocalRandom.current(); <span class="hljs-comment">// force initialization</span><br>        <span class="hljs-comment">// 获取当前线程hash值</span><br>        h = getProbe();<br>        wasUncontended = <span class="hljs-literal">true</span>;<br>    &#125;<br>    <span class="hljs-comment">// 是否需要扩容的标志</span><br>    <span class="hljs-type">boolean</span> <span class="hljs-variable">collide</span> <span class="hljs-operator">=</span> <span class="hljs-literal">false</span>;                <span class="hljs-comment">// True if last slot nonempty</span><br>    <span class="hljs-keyword">for</span> (;;) &#123;<br>        Cell[] as; Cell a; <span class="hljs-type">int</span> n; <span class="hljs-type">long</span> v;<br>        <span class="hljs-comment">// cells数组已被初始化</span><br>        <span class="hljs-keyword">if</span> ((as = cells) != <span class="hljs-literal">null</span> &amp;&amp; (n = as.length) &gt; <span class="hljs-number">0</span>) &#123;<br>            <span class="hljs-comment">// 线程对应数组中的cell，cell为空，说明当前线程还没有更新过cell，需要初始化cell</span><br>            <span class="hljs-keyword">if</span> ((a = as[(n - <span class="hljs-number">1</span>) &amp; h]) == <span class="hljs-literal">null</span>) &#123;<br>                <span class="hljs-keyword">if</span> (cellsBusy == <span class="hljs-number">0</span>) &#123;       <span class="hljs-comment">// Try to attach new Cell</span><br>                    <span class="hljs-type">Cell</span> <span class="hljs-variable">r</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Cell</span>(x);   <span class="hljs-comment">// Optimistically create</span><br>                    <span class="hljs-comment">// 没有加锁并尝试加锁</span><br>                    <span class="hljs-keyword">if</span> (cellsBusy == <span class="hljs-number">0</span> &amp;&amp; casCellsBusy()) &#123;<br>                        <span class="hljs-type">boolean</span> <span class="hljs-variable">created</span> <span class="hljs-operator">=</span> <span class="hljs-literal">false</span>;<br>                        <span class="hljs-keyword">try</span> &#123;               <span class="hljs-comment">// Recheck under lock</span><br>                            Cell[] rs; <span class="hljs-type">int</span> m, j;<br>                            <span class="hljs-keyword">if</span> ((rs = cells) != <span class="hljs-literal">null</span> &amp;&amp;<br>                                (m = rs.length) &gt; <span class="hljs-number">0</span> &amp;&amp;<br>                                rs[j = (m - <span class="hljs-number">1</span>) &amp; h] == <span class="hljs-literal">null</span>) &#123;<br>                                <span class="hljs-comment">// 将刚才new的cell放到数组对应下标</span><br>                                rs[j] = r;<br>                                created = <span class="hljs-literal">true</span>;<br>                            &#125;<br>                        &#125; <span class="hljs-keyword">finally</span> &#123;<br>                            cellsBusy = <span class="hljs-number">0</span>;<br>                        &#125;<br>                        <span class="hljs-keyword">if</span> (created)<br>                            <span class="hljs-keyword">break</span>;<br>                        <span class="hljs-keyword">continue</span>;           <span class="hljs-comment">// Slot is now non-empty</span><br>                    &#125;<br>                &#125;<br>                collide = <span class="hljs-literal">false</span>;<br>            &#125;<br>            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (!wasUncontended)       <span class="hljs-comment">// CAS already known to fail</span><br>                <span class="hljs-comment">// 标记为没有竞争，重新获取hash值</span><br>                wasUncontended = <span class="hljs-literal">true</span>;      <span class="hljs-comment">// Continue after rehash</span><br>            <span class="hljs-comment">// 调用cell的cas方法进行累加</span><br>            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (a.cas(v = a.value, ((fn == <span class="hljs-literal">null</span>) ? v + x :<br>                                         fn.applyAsLong(v, x))))<br>                <span class="hljs-keyword">break</span>;<br>            <span class="hljs-comment">// 当前数组长度大于等于CPU数时不再扩容</span><br>            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (n &gt;= NCPU || cells != as)<br>                collide = <span class="hljs-literal">false</span>;            <span class="hljs-comment">// At max size or stale</span><br>            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (!collide)<br>                <span class="hljs-comment">// 设置为允许扩容</span><br>                collide = <span class="hljs-literal">true</span>;<br>            <span class="hljs-comment">// 没有加锁并尝试加锁</span><br>            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (cellsBusy == <span class="hljs-number">0</span> &amp;&amp; casCellsBusy()) &#123;<br>                <span class="hljs-keyword">try</span> &#123;<br>                    <span class="hljs-keyword">if</span> (cells == as) &#123;      <span class="hljs-comment">// Expand table unless stale</span><br>                        <span class="hljs-comment">// 左移1位，即扩容为原长度的2倍</span><br>                        Cell[] rs = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Cell</span>[n &lt;&lt; <span class="hljs-number">1</span>];<br>                        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; n; ++i)<br>                            rs[i] = as[i];<br>                        cells = rs;<br>                    &#125;<br>                &#125; <span class="hljs-keyword">finally</span> &#123;<br>                    cellsBusy = <span class="hljs-number">0</span>;<br>                &#125;<br>                collide = <span class="hljs-literal">false</span>;<br>                <span class="hljs-keyword">continue</span>;                   <span class="hljs-comment">// Retry with expanded table</span><br>            &#125;<br>			<span class="hljs-comment">// 重新计算hash值</span><br>            h = advanceProbe(h);<br>        &#125;<br>        <span class="hljs-comment">// cells没有加锁且没有初始化，尝试对它加锁，并初始化cells数组</span><br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (cellsBusy == <span class="hljs-number">0</span> &amp;&amp; cells == as &amp;&amp; casCellsBusy()) &#123;<br>            <span class="hljs-type">boolean</span> <span class="hljs-variable">init</span> <span class="hljs-operator">=</span> <span class="hljs-literal">false</span>;<br>            <span class="hljs-keyword">try</span> &#123;                           <span class="hljs-comment">// Initialize table</span><br>                <span class="hljs-keyword">if</span> (cells == as) &#123;<br>                    Cell[] rs = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Cell</span>[<span class="hljs-number">2</span>]; <span class="hljs-comment">// 创建一个长度为2的数组</span><br>                    rs[h &amp; <span class="hljs-number">1</span>] = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Cell</span>(x); <span class="hljs-comment">// 将值放到线程对应下标位置</span><br>                    cells = rs;<br>                    init = <span class="hljs-literal">true</span>;<br>                &#125;<br>            &#125; <span class="hljs-keyword">finally</span> &#123;<br>                cellsBusy = <span class="hljs-number">0</span>;<br>            &#125;<br>            <span class="hljs-keyword">if</span> (init)<br>                <span class="hljs-keyword">break</span>;<br>        &#125;<br>        <span class="hljs-comment">// cells正在进行初始化，则尝试直接在base上进行累加</span><br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (casBase(v = base, ((fn == <span class="hljs-literal">null</span>) ? v + x :<br>                                    fn.applyAsLong(v, x))))<br>            <span class="hljs-keyword">break</span>;                          <span class="hljs-comment">// Fall back on using base</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/0adc66e65a7047290078a79b07120975.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/0adc66e65a7047290078a79b07120975.png" srcset="/img/loading.gif" lazyload alt=""></p>
 </li>
 <li>
 <p>sum方法，只保证最终一致性</p>
@@ -997,7 +995,7 @@
 <p>第一层使用WeakReference&lt;ThreadLocal&lt;?&gt;&gt;将ThreadLocal对象变为一个<code>弱引用对象</code></p>
 <p>第二层是定义了一个Entry类来拓展WeakReference&lt;ThreadLocal&lt;?&gt;&gt;</p>
 <h5 id="各种引用"><a class="header-anchor" href="#各种引用"></a>各种引用</h5>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/9791e3b267cbd18f09cb173170c60c51.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/9791e3b267cbd18f09cb173170c60c51.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <ul>
 <li>
 <p>Reference：强引用</p>
@@ -1105,8 +1103,8 @@
 <li>实例数据（Instance Data）</li>
 <li>对齐填充（Padding）</li>
 </ul>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/9fb0a4668ffc630313ea7189cc68c886.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/9814df7ccdc64f8d9275d823503631b7.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/9fb0a4668ffc630313ea7189cc68c886.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/9814df7ccdc64f8d9275d823503631b7.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h4 id="对象头"><a class="header-anchor" href="#对象头"></a>对象头</h4>
 <ul>
 <li>对象头由对象标记（Mark Word）、类元信息（又叫类型指针）构成</li>
@@ -1161,7 +1159,7 @@
 <p>在64位系统中，对象标记占了<code>8个字节</code>，类型指针占了<code>8个字节</code>，对象头一共<code>16字节</code></p>
 <p>对象标记用于存储对象的hashcode、分代年龄和锁标志位等信息</p>
 <p>这些信息都是与对象自身定义无关的数据，所以对象标记被设计成一个非固定数据结构的以便在极小的空间内存储尽量多的数据，它会根据对象的状态复用自己的存储空间，即在运行期间对象标记里存储的数据会随着锁标志位的变化而变化</p>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/d3bc2d7c23f9f3c34b21ffc9641ec517.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/d3bc2d7c23f9f3c34b21ffc9641ec517.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h5 id="类型指针"><a class="header-anchor" href="#类型指针"></a>类型指针</h5>
 <p>类型指针存储的是指向该对象类元数据的首地址</p>
 <p>类型指针占了<code>8个字节</code></p>
@@ -1175,15 +1173,15 @@
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.openjdk.jol<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>jol-core<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>0.9<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
 <p>使用</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// VM的细节详细情况</span><br><span class="hljs-comment">// System.out.println(VM.current().details());</span><br><span class="hljs-comment">// 所有对象分配的字节都是8的整数倍</span><br><span class="hljs-comment">// System.out.println(VM.current().objectAlignment());</span><br><br><span class="hljs-comment">// 对象的内存布局</span><br><span class="hljs-type">Object</span> <span class="hljs-variable">o</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Object</span>();<br>System.out.println(ClassLayout.parseInstance(o).toPrintable());<br></code></pre></td></tr></table></figure>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/8450e4cd5358bb0610f5f43b88d4df79.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/8450e4cd5358bb0610f5f43b88d4df79.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">Custom</span> <span class="hljs-variable">c</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Custom</span>();<br>System.out.println(ClassLayout.parseInstance(c).toPrintable());<br></code></pre></td></tr></table></figure>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/606284664ad0d3d82382d647ab6c8891.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/606284664ad0d3d82382d647ab6c8891.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>类型指针为4字节与预期不一致是因为JVM默认开启了压缩指针</p>
 <p>加上<code>-XX:+PrintCommandLineFlags</code>参数查看JVM默认添加的参数：</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">-XX:InitialHeapSize=267278208 -XX:MaxHeapSize=4276451328 -XX:+PrintCommandLineFlags -XX:+UseCompressedClassPointers -XX:+UseCompressedOops -XX:-UseLargePagesIndividualAllocation -XX:+UseParallelGC<br></code></pre></td></tr></table></figure>
 <p>其中<code>-XX:+UseCompressedClassPointers</code>为开启了压缩指针，<code>+</code>为开启，<code>-</code>为关闭</p>
 <p>启动时加上<code>-XX:-UseCompressedClassPointers</code>参数关闭压缩指针</p>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/9b3f207bf44f7cfa4cb5070dc169c768.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/9b3f207bf44f7cfa4cb5070dc169c768.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h3 id="Synchronized与锁升级"><a class="header-anchor" href="#Synchronized与锁升级"></a>Synchronized与锁升级</h3>
 <h4 id="锁的升级过程"><a class="header-anchor" href="#锁的升级过程"></a>锁的升级过程</h4>
 <p>用锁能实现数据的安全性，但是会带来性能下降</p>
@@ -1235,7 +1233,7 @@
 <p>Java6之后，为了减少获得锁和释放锁所带来的性能消耗，引入了轻量级锁和偏向锁</p>
 <h4 id="无锁"><a class="header-anchor" href="#无锁"></a>无锁</h4>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">Object</span> <span class="hljs-variable">o</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Object</span>();<br><span class="hljs-comment">// 对象没有调用前没有生成hashcode</span><br>System.out.println(<span class="hljs-string">&quot;10进制hashcode: &quot;</span> + o.hashCode());<br>System.out.println(<span class="hljs-string">&quot;16进制hashcode: &quot;</span> + Integer.toHexString(o.hashCode()));<br>System.out.println(<span class="hljs-string">&quot;2进制hashcode: &quot;</span> + Integer.toBinaryString(o.hashCode()));<br>System.out.println(ClassLayout.parseInstance(o).toPrintable());<br></code></pre></td></tr></table></figure>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/b76a48e48ad6a73f726487b13992e4da.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/b76a48e48ad6a73f726487b13992e4da.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h4 id="偏向锁"><a class="header-anchor" href="#偏向锁"></a>偏向锁</h4>
 <p>单线程竞争</p>
 <p>当线程第一次竞争到锁时，通过操作修改对象标记中的偏向线程ID、偏向模式</p>
@@ -1250,12 +1248,12 @@
 <p>若竞争失败，这时可能需要升级为轻量锁，才能保证线程间公平竞争锁</p>
 <h5 id="偏向锁相关VM参数"><a class="header-anchor" href="#偏向锁相关VM参数"></a>偏向锁相关VM参数</h5>
 <p>使用命令<code>java -XX:+PrintFlagsInitial | grep BiasedLock*</code> 查看偏向锁相关参数</p>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/b484c8fd38c390ac642186727fcb589e.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/b484c8fd38c390ac642186727fcb589e.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>代码示例</p>
 <p>添加VM参数<code>-XX:BiasedLockingStartupDelay=0</code>，将偏向锁启动延时时间设置为0</p>
 <p>也可以不加这个参数，可以在代码里面手动延时超过4s</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">Object</span> <span class="hljs-variable">o</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Object</span>();<br><span class="hljs-keyword">synchronized</span> (o) &#123;<br>    System.out.println(ClassLayout.parseInstance(o).toPrintable());<br>&#125;<br></code></pre></td></tr></table></figure>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/7f6a79f529eb6539400b8d91f39338e1.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/7f6a79f529eb6539400b8d91f39338e1.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h5 id="偏向锁的撤销"><a class="header-anchor" href="#偏向锁的撤销"></a>偏向锁的撤销</h5>
 <p>偏向锁是一种等到竞争出现才会释放锁的机制</p>
 <p>撤销需要等待<code>全局安全点</code>（该时间点上没有字节码正在执行），同时检查持有偏向锁的线程是否还在执行</p>
@@ -1305,7 +1303,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">Object</span> <span class="hljs-variable">o</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Object</span>();<br><span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(() -&gt; &#123;<br>    <span class="hljs-keyword">synchronized</span> (o) &#123;<br>        System.out.println(ClassLayout.parseInstance(o).toPrintable());<br>    &#125;<br>&#125;).start();<br><span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(() -&gt; &#123;<br>    <span class="hljs-keyword">synchronized</span> (o) &#123;<br>        System.out.println(ClassLayout.parseInstance(o).toPrintable());<br>    &#125;<br>&#125;).start();<br></code></pre></td></tr></table></figure>
 <h4 id="总结"><a class="header-anchor" href="#总结"></a>总结</h4>
 <h5 id="完整流程图"><a class="header-anchor" href="#完整流程图"></a>完整流程图</h5>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/e32f7c934a75deec3cfbe4fdc5fa1110.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/e32f7c934a75deec3cfbe4fdc5fa1110.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h5 id="其他问题"><a class="header-anchor" href="#其他问题"></a>其他问题</h5>
 <p>无锁状态下，对象标记中记录了hashcode，为什么锁升级后就没了？</p>
 <blockquote>
@@ -1339,9 +1337,9 @@
 <h4 id="源码说明"><a class="header-anchor" href="#源码说明"></a>源码说明</h4>
 <p>AQS使用一个volatile int类型的成员变量来表示同步状态，通过内置的FIFO队列来完成资源获取的排队工作，将每条要去抢占资源的线程封装成一个Node节点来实现锁的分配，通过CAS完成对State值的修改</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AbstractQueuedSynchronizer</span><br>    <span class="hljs-keyword">extends</span> <span class="hljs-title class_">AbstractOwnableSynchronizer</span><br>    <span class="hljs-keyword">implements</span> <span class="hljs-title class_">java</span>.io.Serializable &#123;<br>    <br>    <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Node</span> &#123;<br>        <span class="hljs-comment">// 共享模式</span><br>        <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">Node</span> <span class="hljs-variable">SHARED</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Node</span>();<br>        <span class="hljs-comment">// 排他模式</span><br>        <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">Node</span> <span class="hljs-variable">EXCLUSIVE</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>        <span class="hljs-comment">/** 线程已取消 */</span><br>        <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">CANCELLED</span> <span class="hljs-operator">=</span>  <span class="hljs-number">1</span>;<br>        <span class="hljs-comment">/** 后继线程需要唤醒 */</span><br>        <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">SIGNAL</span>    <span class="hljs-operator">=</span> -<span class="hljs-number">1</span>;<br>        <span class="hljs-comment">/** 等待条件唤醒 */</span><br>        <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">CONDITION</span> <span class="hljs-operator">=</span> -<span class="hljs-number">2</span>;<br>        <span class="hljs-comment">/** 下一个acquireShared将会无条件传播下去 */</span><br>        <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">PROPAGATE</span> <span class="hljs-operator">=</span> -<span class="hljs-number">3</span>;<br>        <span class="hljs-comment">// 节点的等待状态，状态有上面4种</span><br>        <span class="hljs-keyword">volatile</span> <span class="hljs-type">int</span> waitStatus;<br>        <span class="hljs-comment">// 前驱节点</span><br>        <span class="hljs-keyword">volatile</span> Node prev;<br>        <span class="hljs-comment">// 后继节点</span><br>        <span class="hljs-keyword">volatile</span> Node next;<br>        <span class="hljs-comment">// 处于该节点的线程</span><br>        <span class="hljs-keyword">volatile</span> Thread thread;<br>        <span class="hljs-comment">// 指向下一个处于condition状态的节点</span><br>        Node nextWaiter;<br>        <span class="hljs-comment">// ...</span><br>    &#125;<br>    <br>    <span class="hljs-comment">// 队列头结点</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">transient</span> <span class="hljs-keyword">volatile</span> Node head;<br>    <span class="hljs-comment">// 队列尾结点</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">transient</span> <span class="hljs-keyword">volatile</span> Node tail;<br>    <span class="hljs-comment">// 队列同步状态</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">volatile</span> <span class="hljs-type">int</span> state;<br>    <span class="hljs-comment">// ...</span><br>    <br>&#125;<br></code></pre></td></tr></table></figure>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/a0b5cbc383da7dbf072357cbb6c76042.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/a0b5cbc383da7dbf072357cbb6c76042.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h4 id="ReentrantLock原理"><a class="header-anchor" href="#ReentrantLock原理"></a>ReentrantLock原理</h4>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/030f4a80963b24c2284c852ada08ff6b.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/030f4a80963b24c2284c852ada08ff6b.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>ReentrantLock底层也是通过AQS实现的</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 使用无参构造 默认为非公平锁</span><br><span class="hljs-keyword">public</span> <span class="hljs-title function_">ReentrantLock</span><span class="hljs-params">()</span> &#123;<br>    sync = <span class="hljs-keyword">new</span> <span class="hljs-title class_">NonfairSync</span>();<br>&#125;<br><span class="hljs-keyword">public</span> <span class="hljs-title function_">ReentrantLock</span><span class="hljs-params">(<span class="hljs-type">boolean</span> fair)</span> &#123;<br>    sync = fair ? <span class="hljs-keyword">new</span> <span class="hljs-title class_">FairSync</span>() : <span class="hljs-keyword">new</span> <span class="hljs-title class_">NonfairSync</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
 <h5 id="lock和acquire"><a class="header-anchor" href="#lock和acquire"></a>lock和acquire</h5>
@@ -1367,7 +1365,7 @@
 <li>加锁失败，线程入队列</li>
 <li>线程入队列后，进入阻塞状态</li>
 </ul>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/9a98d6fe57a26ec06102921260577fa0.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/9a98d6fe57a26ec06102921260577fa0.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h3 id="其他锁"><a class="header-anchor" href="#其他锁"></a>其他锁</h3>
 <pre><code class=" mermaid">flowchart LR
 	node1(无锁) --&gt; node2(独占锁) --&gt; node3(读写锁) --&gt; node4(邮戳锁)
@@ -1388,7 +1386,7 @@
 </ul>
 </li>
 </ul>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/00c9280c7c91bca51acfa0efae458e54.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/00c9280c7c91bca51acfa0efae458e54.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>代码示例：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>    <span class="hljs-type">ReentrantReadWriteLock</span> <span class="hljs-variable">lock</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ReentrantReadWriteLock</span>();<br>    <span class="hljs-type">Lock</span> <span class="hljs-variable">readLock</span> <span class="hljs-operator">=</span> lock.readLock();<br>    <span class="hljs-type">Lock</span> <span class="hljs-variable">writeLock</span> <span class="hljs-operator">=</span> lock.writeLock();<br>    writeLock.lock();<br>    log.info(<span class="hljs-string">&quot;写入&quot;</span>);<br>    readLock.lock();<br>    log.info(<span class="hljs-string">&quot;读取&quot;</span>);<br>    writeLock.unlock();<br>    readLock.unlock();<br>&#125;<br></code></pre></td></tr></table></figure>
 <h4 id="StampedLock"><a class="header-anchor" href="#StampedLock"></a>StampedLock</h4>
@@ -1409,11 +1407,11 @@
 </ul>
 </li>
 </ul>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/c0f4701627e1a20a8a3aa16dab8e4c99.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/c0f4701627e1a20a8a3aa16dab8e4c99.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <p>代码示例：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">tryOptimisticRead</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">long</span> <span class="hljs-variable">stamp</span> <span class="hljs-operator">=</span> lock.tryOptimisticRead();<br>    <span class="hljs-type">int</span> <span class="hljs-variable">num</span> <span class="hljs-operator">=</span> number;<br>    log.info(<span class="hljs-string">&quot;&#123;&#125; validate &#123;&#125;&quot;</span>, Thread.currentThread().getName(), lock.validate(stamp));<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">4</span>; i++) &#123;<br>        <span class="hljs-keyword">try</span> &#123;<br>            Thread.sleep(TimeUnit.SECONDS.toMillis(<span class="hljs-number">1</span>));<br>        &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>            e.printStackTrace();<br>        &#125;<br>        log.info(<span class="hljs-string">&quot;&#123;&#125; validate &#123;&#125;&quot;</span>, Thread.currentThread().getName(), lock.validate(stamp));<br>    &#125;<br>    <span class="hljs-comment">// 校验失败，升级为悲观读，重新读取</span><br>    <span class="hljs-keyword">if</span> (!lock.validate(stamp)) &#123;<br>        log.info(<span class="hljs-string">&quot;number has bean changed&quot;</span>);<br>        stamp = lock.readLock();<br>        <span class="hljs-keyword">try</span> &#123;<br>            num = number;<br>        &#125; <span class="hljs-keyword">finally</span> &#123;<br>            lock.unlockRead(stamp);<br>        &#125;<br>    &#125;<br>    log.info(<span class="hljs-string">&quot;&#123;&#125; read &#123;&#125;&quot;</span>, Thread.currentThread().getName(), num);<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>    <span class="hljs-type">StampedLockDemo</span> <span class="hljs-variable">demo</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">StampedLockDemo</span>();<br>    <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(() -&gt; &#123;<br>        demo.tryOptimisticRead();<br>    &#125;).start();<br>    <span class="hljs-keyword">try</span> &#123;<br>        Thread.sleep(TimeUnit.SECONDS.toMillis(<span class="hljs-number">2</span>));<br>    &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>        e.printStackTrace();<br>    &#125;<br>    <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(() -&gt; &#123;<br>        demo.write();<br>    &#125;).start();<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>输出：</p>
-<p><img src="https://raw.gitmirror.com/zhuweitung/picbed/main/16e4df13f167f92bd52c85352d715309.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://fastly.img.kedr.cc/16e4df13f167f92bd52c85352d715309.png" srcset="/img/loading.gif" lazyload alt=""></p>
 <h5 id="使用注意事项"><a class="header-anchor" href="#使用注意事项"></a>使用注意事项</h5>
 <ul>
 <li>不支持重入</li>
@@ -1432,7 +1430,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">final</span> V <span class="hljs-title function_">putVal</span><span class="hljs-params">(K key, V value, <span class="hljs-type">boolean</span> onlyIfAbsent)</span> &#123;<br>    <span class="hljs-keyword">if</span> (key == <span class="hljs-literal">null</span> || value == <span class="hljs-literal">null</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">NullPointerException</span>();<br>    <span class="hljs-comment">// 根据键对象的hashcode计算hash值</span><br>    <span class="hljs-type">int</span> <span class="hljs-variable">hash</span> <span class="hljs-operator">=</span> spread(key.hashCode());<br>    <span class="hljs-type">int</span> <span class="hljs-variable">binCount</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>    <span class="hljs-comment">// 不满足break条件就一直循环</span><br>    <span class="hljs-keyword">for</span> (Node&lt;K,V&gt;[] tab = table;;) &#123;<br>        Node&lt;K,V&gt; f; <span class="hljs-type">int</span> n, i, fh;<br>        <span class="hljs-comment">// 初始化数组</span><br>        <span class="hljs-keyword">if</span> (tab == <span class="hljs-literal">null</span> || (n = tab.length) == <span class="hljs-number">0</span>)<br>            tab = initTable();<br>        <span class="hljs-comment">// hash值与数组长度-1取模，获得对应的下标，且当前数组下标位置没有元素</span><br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ((f = tabAt(tab, i = (n - <span class="hljs-number">1</span>) &amp; hash)) == <span class="hljs-literal">null</span>) &#123;<br>            <span class="hljs-comment">// CAS操作，将new的节点放到数组下标位置</span><br>            <span class="hljs-keyword">if</span> (casTabAt(tab, i, <span class="hljs-literal">null</span>,<br>                         <span class="hljs-keyword">new</span> <span class="hljs-title class_">Node</span>&lt;K,V&gt;(hash, key, value, <span class="hljs-literal">null</span>)))<br>                <span class="hljs-keyword">break</span>;                   <span class="hljs-comment">// no lock when adding to empty bin</span><br>        &#125;<br>        <span class="hljs-comment">// 数组下标位置的节点正在扩容</span><br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ((fh = f.hash) == MOVED)<br>            tab = helpTransfer(tab, f);<br>        <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-type">V</span> <span class="hljs-variable">oldVal</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>            <span class="hljs-comment">// 将数组下标位置的节点加锁</span><br>            <span class="hljs-keyword">synchronized</span> (f) &#123;<br>                <span class="hljs-comment">// 再次判断是否是数组下标位置的元素</span><br>                <span class="hljs-keyword">if</span> (tabAt(tab, i) == f) &#123;<br>                    <span class="hljs-comment">// hash值大于等于0为链表节点</span><br>                    <span class="hljs-keyword">if</span> (fh &gt;= <span class="hljs-number">0</span>) &#123;<br>                        binCount = <span class="hljs-number">1</span>;<br>                        <span class="hljs-keyword">for</span> (Node&lt;K,V&gt; e = f;; ++binCount) &#123;<br>                            K ek;<br>                            <span class="hljs-comment">// hash值相等即hashcode相等且equals相等，返回旧值，更新为value</span><br>                            <span class="hljs-keyword">if</span> (e.hash == hash &amp;&amp;<br>                                ((ek = e.key) == key ||<br>                                 (ek != <span class="hljs-literal">null</span> &amp;&amp; key.equals(ek)))) &#123;<br>                                oldVal = e.val;<br>                                <span class="hljs-keyword">if</span> (!onlyIfAbsent)<br>                                    e.val = value;<br>                                <span class="hljs-keyword">break</span>;<br>                            &#125;<br>                            Node&lt;K,V&gt; pred = e;<br>                            <span class="hljs-comment">// 存在hash冲突，将节点挂到链表尾部</span><br>                            <span class="hljs-keyword">if</span> ((e = e.next) == <span class="hljs-literal">null</span>) &#123;<br>                                pred.next = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Node</span>&lt;K,V&gt;(hash, key,<br>                                                          value, <span class="hljs-literal">null</span>);<br>                                <span class="hljs-keyword">break</span>;<br>                            &#125;<br>                        &#125;<br>                    &#125;<br>                    <span class="hljs-comment">// 是树节点</span><br>                    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (f <span class="hljs-keyword">instanceof</span> TreeBin) &#123;<br>                        Node&lt;K,V&gt; p;<br>                        binCount = <span class="hljs-number">2</span>;<br>                        <span class="hljs-comment">// 将节点放到树结构中</span><br>                        <span class="hljs-keyword">if</span> ((p = ((TreeBin&lt;K,V&gt;)f).putTreeVal(hash, key,<br>                                                       value)) != <span class="hljs-literal">null</span>) &#123;<br>                            oldVal = p.val;<br>                            <span class="hljs-keyword">if</span> (!onlyIfAbsent)<br>                                p.val = value;<br>                        &#125;<br>                    &#125;<br>                &#125;<br>            &#125;<br>            <span class="hljs-keyword">if</span> (binCount != <span class="hljs-number">0</span>) &#123;<br>                <span class="hljs-comment">// 链表长度大于等于8</span><br>                <span class="hljs-keyword">if</span> (binCount &gt;= TREEIFY_THRESHOLD)<br>                    <span class="hljs-comment">// 判断是否满足树化条件（数组长度是否大于等于64），满足就将链表结构树化</span><br>                    treeifyBin(tab, i);<br>                <span class="hljs-keyword">if</span> (oldVal != <span class="hljs-literal">null</span>)<br>                    <span class="hljs-keyword">return</span> oldVal;<br>                <span class="hljs-keyword">break</span>;<br>            &#125;<br>        &#125;<br>    &#125;<br>    <span class="hljs-comment">// 长度增加（逻辑与LongAdder相似，热点分散），判断是否需要扩容</span><br>    addCount(<span class="hljs-number">1L</span>, binCount);<br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 <h4 id="initTable"><a class="header-anchor" href="#initTable"></a>initTable</h4>
 <p>初始化数组</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> Node&lt;K,V&gt;[] initTable() &#123;<br>    Node&lt;K,V&gt;[] tab; <span class="hljs-type">int</span> sc;<br>    <span class="hljs-comment">// 若数组为null或长度为0进行初始化操作</span><br>    <span class="hljs-keyword">while</span> ((tab = table) == <span class="hljs-literal">null</span> || tab.length == <span class="hljs-number">0</span>) &#123;<br>        <span class="hljs-comment">// 小于0表示当前正在进行初始化或者扩容操作</span><br>        <span class="hljs-keyword">if</span> ((sc = sizeCtl) &lt; <span class="hljs-number">0</span>)<br>            <span class="hljs-comment">// 礼让其他线程</span><br>            Thread.yield(); <span class="hljs-comment">// lost initialization race; just spin</span><br>        <span class="hljs-comment">// CAS操作，将sizeCtl变量变更为-1状态</span><br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (U.compareAndSwapInt(<span class="hljs-built_in">this</span>, SIZECTL, sc, -<span class="hljs-number">1</span>)) &#123;<br>            <span class="hljs-keyword">try</span> &#123;<br>                <span class="hljs-comment">// 竞争成功，再次判断条件是否满足</span><br>                <span class="hljs-keyword">if</span> ((tab = table) == <span class="hljs-literal">null</span> || tab.length == <span class="hljs-number">0</span>) &#123;<br>                    <span class="hljs-comment">// 使用不为0的sizeCtl作为数组长度或者使用默认长度</span><br>                    <span class="hljs-type">int</span> <span class="hljs-variable">n</span> <span class="hljs-operator">=</span> (sc &gt; <span class="hljs-number">0</span>) ? sc : DEFAULT_CAPACITY;<br>                    <span class="hljs-meta">@SuppressWarnings(&quot;unchecked&quot;)</span><br>                    Node&lt;K,V&gt;[] nt = (Node&lt;K,V&gt;[])<span class="hljs-keyword">new</span> <span class="hljs-title class_">Node</span>&lt;?,?&gt;[n];<br>                    table = tab = nt;<br>                    <span class="hljs-comment">// 设置阈值为0.75*当前长度</span><br>                    sc = n - (n &gt;&gt;&gt; <span class="hljs-number">2</span>);<br>                &#125;<br>            &#125; <span class="hljs-keyword">finally</span> &#123;<br>                sizeCtl = sc;<br>            &#125;<br>            <span class="hljs-keyword">break</span>;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> tab;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> Node&lt;K,V&gt;[] initTable() &#123;<br>    Node&lt;K,V&gt;[] tab; <span class="hljs-type">int</span> sc;<br>    <span class="hljs-comment">// 若数组为null或长度为0进行初始化操作</span><br>    <span class="hljs-keyword">while</span> ((tab = table) == <span class="hljs-literal">null</span> || tab.length == <span class="hljs-number">0</span>) &#123;<br>        <span class="hljs-comment">// 小于0表示当前正在进行初始化或者扩容操作</span><br>        <span class="hljs-keyword">if</span> ((sc = sizeCtl) &lt; <span class="hljs-number">0</span>)<br>            <span class="hljs-comment">// 礼让其他线程</span><br>            Thread.<span class="hljs-keyword">yield</span>(); <span class="hljs-comment">// lost initialization race; just spin</span><br>        <span class="hljs-comment">// CAS操作，将sizeCtl变量变更为-1状态</span><br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (U.compareAndSwapInt(<span class="hljs-built_in">this</span>, SIZECTL, sc, -<span class="hljs-number">1</span>)) &#123;<br>            <span class="hljs-keyword">try</span> &#123;<br>                <span class="hljs-comment">// 竞争成功，再次判断条件是否满足</span><br>                <span class="hljs-keyword">if</span> ((tab = table) == <span class="hljs-literal">null</span> || tab.length == <span class="hljs-number">0</span>) &#123;<br>                    <span class="hljs-comment">// 使用不为0的sizeCtl作为数组长度或者使用默认长度</span><br>                    <span class="hljs-type">int</span> <span class="hljs-variable">n</span> <span class="hljs-operator">=</span> (sc &gt; <span class="hljs-number">0</span>) ? sc : DEFAULT_CAPACITY;<br>                    <span class="hljs-meta">@SuppressWarnings(&quot;unchecked&quot;)</span><br>                    Node&lt;K,V&gt;[] nt = (Node&lt;K,V&gt;[])<span class="hljs-keyword">new</span> <span class="hljs-title class_">Node</span>&lt;?,?&gt;[n];<br>                    table = tab = nt;<br>                    <span class="hljs-comment">// 设置阈值为0.75*当前长度</span><br>                    sc = n - (n &gt;&gt;&gt; <span class="hljs-number">2</span>);<br>                &#125;<br>            &#125; <span class="hljs-keyword">finally</span> &#123;<br>                sizeCtl = sc;<br>            &#125;<br>            <span class="hljs-keyword">break</span>;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> tab;<br>&#125;<br></code></pre></td></tr></table></figure>
 <h4 id="addCount"><a class="header-anchor" href="#addCount"></a>addCount</h4>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">addCount</span><span class="hljs-params">(<span class="hljs-type">long</span> x, <span class="hljs-type">int</span> check)</span> &#123;<br>    CounterCell[] as; <span class="hljs-type">long</span> b, s;<br>    <span class="hljs-comment">// counterCells不为空或者CAS更新baseCount失败</span><br>    <span class="hljs-comment">// 逻辑与LongAdder的add()方法基本一致</span><br>    <span class="hljs-keyword">if</span> ((as = counterCells) != <span class="hljs-literal">null</span> ||<br>        !U.compareAndSwapLong(<span class="hljs-built_in">this</span>, BASECOUNT, b = baseCount, s = b + x)) &#123;<br>        CounterCell a; <span class="hljs-type">long</span> v; <span class="hljs-type">int</span> m;<br>        <span class="hljs-type">boolean</span> <span class="hljs-variable">uncontended</span> <span class="hljs-operator">=</span> <span class="hljs-literal">true</span>;<br>        <span class="hljs-keyword">if</span> (as == <span class="hljs-literal">null</span> || (m = as.length - <span class="hljs-number">1</span>) &lt; <span class="hljs-number">0</span> ||<br>            (a = as[ThreadLocalRandom.getProbe() &amp; m]) == <span class="hljs-literal">null</span> ||<br>            !(uncontended =<br>              U.compareAndSwapLong(a, CELLVALUE, v = a.value, v + x))) &#123;<br>            <span class="hljs-comment">// 逻辑与LongAdder的longAccumulate()方法基本一致</span><br>            fullAddCount(x, uncontended);<br>            <span class="hljs-keyword">return</span>;<br>        &#125;<br>        <span class="hljs-keyword">if</span> (check &lt;= <span class="hljs-number">1</span>)<br>            <span class="hljs-keyword">return</span>;<br>        s = sumCount();<br>    &#125;<br>    <span class="hljs-keyword">if</span> (check &gt;= <span class="hljs-number">0</span>) &#123;<br>        Node&lt;K,V&gt;[] tab, nt; <span class="hljs-type">int</span> n, sc;<br>        <span class="hljs-comment">// 新baseCount值大于等于扩容阈值</span><br>        <span class="hljs-comment">// 数组不为空且长度小于允许的最大容量</span><br>        <span class="hljs-keyword">while</span> (s &gt;= (<span class="hljs-type">long</span>)(sc = sizeCtl) &amp;&amp; (tab = table) != <span class="hljs-literal">null</span> &amp;&amp;<br>               (n = tab.length) &lt; MAXIMUM_CAPACITY) &#123;<br>            <span class="hljs-type">int</span> <span class="hljs-variable">rs</span> <span class="hljs-operator">=</span> resizeStamp(n);<br>            <span class="hljs-comment">// 数组正在扩容</span><br>            <span class="hljs-keyword">if</span> (sc &lt; <span class="hljs-number">0</span>) &#123;<br>                <span class="hljs-keyword">if</span> ((sc &gt;&gt;&gt; RESIZE_STAMP_SHIFT) != rs || sc == rs + <span class="hljs-number">1</span> ||<br>                    sc == rs + MAX_RESIZERS || (nt = nextTable) == <span class="hljs-literal">null</span> ||<br>                    transferIndex &lt;= <span class="hljs-number">0</span>)<br>                    <span class="hljs-keyword">break</span>;<br>                <span class="hljs-keyword">if</span> (U.compareAndSwapInt(<span class="hljs-built_in">this</span>, SIZECTL, sc, sc + <span class="hljs-number">1</span>))<br>                    transfer(tab, nt);<br>            &#125;<br>            <span class="hljs-comment">// CAS操作，更新sizeCtl</span><br>            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (U.compareAndSwapInt(<span class="hljs-built_in">this</span>, SIZECTL, sc,<br>                                         (rs &lt;&lt; RESIZE_STAMP_SHIFT) + <span class="hljs-number">2</span>))<br>                transfer(tab, <span class="hljs-literal">null</span>);<br>            s = sumCount();<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
@@ -1468,9 +1466,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/java/">#java</a>
+        <a href="/tags/java/" class="print-no-link">#java</a>
       
-        <a href="/tags/juc/">#juc</a>
+        <a href="/tags/juc/" class="print-no-link">#juc</a>
       
     </div>
   
@@ -1499,21 +1497,23 @@
         </div>
       
       
-      <div class="license-meta-item">
-        <div>许可协议</div>
-        <div>
-          
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
             
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
             
-              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
-              <span class="hint--top hint--rounded" aria-label="BY - 署名">
-                <i class="iconfont icon-by"></i>
-              </span>
-              </a>
-            
-          
+          </div>
         </div>
-      </div>
+      
     </div>
     <div class="license-icon iconfont"></div>
   </div>
@@ -1547,8 +1547,10 @@
             </div>
 
             
-  <article id="comments" lazyload>
-    
+  
+  
+    <article id="comments" lazyload>
+      
     <div id="giscus" class="giscus"></div>
     <script type="text/javascript">
       Fluid.utils.loadComments('#giscus', function() {
@@ -1585,7 +1587,8 @@
     <noscript>Please enable JavaScript to view the comments</noscript>
 
 
-  </article>
+    </article>
+  
 
 
           </article>
@@ -1597,7 +1600,10 @@
       
   <aside class="sidebar" style="margin-left: -1rem">
     <div id="toc">
-  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
   <div class="toc-body" id="toc-body"></div>
 </div>
 
@@ -1637,6 +1643,14 @@
   <script>
   Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
     mermaid.initialize({"theme":"default"});
+
+    Fluid.utils.listenDOMLoaded(function() {
+      Fluid.events.registerRefreshCallback(function() {
+        if ('mermaid' in window) {
+          mermaid.init();
+        }
+      });
+    });
   });
 </script>
 
@@ -1789,22 +1803,34 @@
     var boardCtn = jQuery('#board-ctn');
     var boardTop = boardCtn.offset().top;
 
-    window.tocbot.init({
+    window.tocbot.init(Object.assign({
       tocSelector     : '#toc-body',
       contentSelector : '.markdown-body',
-      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
       linkClass       : 'tocbot-link',
       activeLinkClass : 'tocbot-active-link',
       listClass       : 'tocbot-list',
       isCollapsedClass: 'tocbot-is-collapsed',
       collapsibleClass: 'tocbot-is-collapsible',
-      collapseDepth   : CONFIG.toc.collapseDepth || 0,
       scrollSmooth    : true,
-      headingsOffset  : -boardTop
-    });
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
     if (toc.find('.toc-list-item').length > 0) {
       toc.css('visibility', 'visible');
     }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
   });
 </script>
 
@@ -1833,6 +1859,21 @@
       window.anchors.options.class = 'anchorjs-link-left';
     }
     window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
   });
 </script>
 

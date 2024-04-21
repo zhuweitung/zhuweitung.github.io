@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="https://raw.gitmirror.com/zhuweitung/picbed/main/a894a628cfd6b9bb778f156b6efeb26b.png">
-  <link rel="icon" href="https://raw.gitmirror.com/zhuweitung/picbed/main/a894a628cfd6b9bb778f156b6efeb26b.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="https://fastly.img.kedr.cc/a894a628cfd6b9bb778f156b6efeb26b.png">
+  <link rel="icon" href="https://fastly.img.kedr.cc/a894a628cfd6b9bb778f156b6efeb26b.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -62,7 +62,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"blog.kedr.cc","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#96be66","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":"f2550b082b1ec518a726847e5f27e3c4","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"Rnyy6d3kzXonmFTiXC2DM2wM-gzGzoHsz","app_key":"ItzHQLPR4iIXylU6VCqf1j4f","server_url":"https://rnyy6d3k.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"blog.kedr.cc","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#96be66","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":"f2550b082b1ec518a726847e5f27e3c4","google":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"Rnyy6d3kzXonmFTiXC2DM2wM-gzGzoHsz","app_key":"ItzHQLPR4iIXylU6VCqf1j4f","server_url":"https://rnyy6d3k.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false},"gtag":null},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -86,8 +86,6 @@
         })();
       }
     </script>
-  
-
   
 
   
@@ -136,9 +134,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/">
+              <a class="nav-link" href="/" target="_self">
                 <i class="iconfont icon-home-fill"></i>
-                首页
+                <span>首页</span>
               </a>
             </li>
           
@@ -148,9 +146,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/archives/">
+              <a class="nav-link" href="/archives/" target="_self">
                 <i class="iconfont icon-archive-fill"></i>
-                归档
+                <span>归档</span>
               </a>
             </li>
           
@@ -160,9 +158,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/categories/">
+              <a class="nav-link" href="/categories/" target="_self">
                 <i class="iconfont icon-category-fill"></i>
-                分类
+                <span>分类</span>
               </a>
             </li>
           
@@ -172,9 +170,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/tags/">
+              <a class="nav-link" href="/tags/" target="_self">
                 <i class="iconfont icon-tags-fill"></i>
-                标签
+                <span>标签</span>
               </a>
             </li>
           
@@ -184,9 +182,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/about/">
+              <a class="nav-link" href="/about/" target="_self">
                 <i class="iconfont icon-user-fill"></i>
-                关于
+                <span>关于</span>
               </a>
             </li>
           
@@ -194,15 +192,16 @@
         
           <li class="nav-item" id="search-btn">
             <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
-              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+              <i class="iconfont icon-search"></i>
             </a>
           </li>
           
         
         
           <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
-                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
           </li>
         
       </ul>
@@ -256,17 +255,17 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/2373592892/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/203fbf7b1853305f34e3e6773dccc49c.png" srcset="/img/loading.gif" lazyload alt="JVM学习一">
+          <img src="https://fastly.img.kedr.cc/203fbf7b1853305f34e3e6773dccc49c.png" srcset="/img/loading.gif" lazyload alt="JVM学习一">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/2373592892/" target="_self">
           JVM学习一
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/2373592892/" target="_self">
@@ -325,17 +324,17 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/449031110/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/c4185ad790017d2521ef500c0134c420.png" srcset="/img/loading.gif" lazyload alt="Linux知识分享">
+          <img src="https://fastly.img.kedr.cc/c4185ad790017d2521ef500c0134c420.png" srcset="/img/loading.gif" lazyload alt="Linux知识分享">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/449031110/" target="_self">
           Linux知识分享
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/449031110/" target="_self">
@@ -396,17 +395,17 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/1545079908/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/0c778e1a85f46e8f25ff1fe82a4f6a49.png" srcset="/img/loading.gif" lazyload alt="MYSQL学习笔记（一）">
+          <img src="https://fastly.img.kedr.cc/0c778e1a85f46e8f25ff1fe82a4f6a49.png" srcset="/img/loading.gif" lazyload alt="MYSQL学习笔记（一）">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/1545079908/" target="_self">
           MYSQL学习笔记（一）
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/1545079908/" target="_self">
@@ -465,22 +464,22 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/1827970956/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/64f37b6f799a687762274fcbe644e304.png" srcset="/img/loading.gif" lazyload alt="hexo博客部署到私有服务器">
+          <img src="https://fastly.img.kedr.cc/64f37b6f799a687762274fcbe644e304.png" srcset="/img/loading.gif" lazyload alt="hexo博客部署到私有服务器">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/1827970956/" target="_self">
           hexo博客部署到私有服务器
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/1827970956/" target="_self">
         <div>
-          上次搭了个v2ray后发现服务器就这么放着有点浪费，于是打算把之前托管到github，码云的hexo博客部署到服务器上。也就是在本地使用hexo写博客后，使用&#96;hexo deploy&#96;命令将静态网站push到服务上。
+          上次搭了个v2ray后发现服务器就这么放着有点浪费，于是打算把之前托管到github，码云的hexo博客部署到服务器上。也就是在本地使用hexo写博客后，使用`hexo deploy`命令将静态网站push到服务上。
         </div>
       </a>
 
@@ -538,17 +537,17 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/4243927841/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/8fa756fee5e18d3beedbc195d775b892.jpg" srcset="/img/loading.gif" lazyload alt="中级软考知识点六">
+          <img src="https://fastly.img.kedr.cc/8fa756fee5e18d3beedbc195d775b892.jpg" srcset="/img/loading.gif" lazyload alt="中级软考知识点六">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/4243927841/" target="_self">
           中级软考知识点六
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/4243927841/" target="_self">
@@ -605,17 +604,17 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/4209834786/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/8fa756fee5e18d3beedbc195d775b892.jpg" srcset="/img/loading.gif" lazyload alt="中级软考知识点五">
+          <img src="https://fastly.img.kedr.cc/8fa756fee5e18d3beedbc195d775b892.jpg" srcset="/img/loading.gif" lazyload alt="中级软考知识点五">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/4209834786/" target="_self">
           中级软考知识点五
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/4209834786/" target="_self">
@@ -672,17 +671,17 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/3876493671/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/8fa756fee5e18d3beedbc195d775b892.jpg" srcset="/img/loading.gif" lazyload alt="中级软考知识点四">
+          <img src="https://fastly.img.kedr.cc/8fa756fee5e18d3beedbc195d775b892.jpg" srcset="/img/loading.gif" lazyload alt="中级软考知识点四">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/3876493671/" target="_self">
           中级软考知识点四
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/3876493671/" target="_self">
@@ -739,22 +738,22 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/2883384697/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/8fa756fee5e18d3beedbc195d775b892.jpg" srcset="/img/loading.gif" lazyload alt="中级软考知识点三">
+          <img src="https://fastly.img.kedr.cc/8fa756fee5e18d3beedbc195d775b892.jpg" srcset="/img/loading.gif" lazyload alt="中级软考知识点三">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/2883384697/" target="_self">
           中级软考知识点三
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/2883384697/" target="_self">
         <div>
-          中级软考知识点三 计算机网络  OSI七层模型  应用层 表示层 会话层 传输层：TCP，UDP 网络层：路由器，三层交换机 数据链路层：网桥，交换机，网卡 物理层：中继器，集线器（Hub）   TCP&#x2F;IP模型  应用层：对应应用层，表示层和会话层 传输层：对应传输层 网际层：对应网络层 网络接口层：对应数据链路层和物理层   UDP  SNMP DNS DHCP TFTP   TCP  Tel
+          中级软考知识点三 计算机网络  OSI七层模型  应用层 表示层 会话层 传输层：TCP，UDP 网络层：路由器，三层交换机 数据链路层：网桥，交换机，网卡 物理层：中继器，集线器（Hub）   TCP/IP模型  应用层：对应应用层，表示层和会话层 传输层：对应传输层 网际层：对应网络层 网络接口层：对应数据链路层和物理层   UDP  SNMP DNS DHCP TFTP   TCP  Tel
         </div>
       </a>
 
@@ -806,17 +805,17 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/3917505396/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/8fa756fee5e18d3beedbc195d775b892.jpg" srcset="/img/loading.gif" lazyload alt="中级软考知识点二">
+          <img src="https://fastly.img.kedr.cc/8fa756fee5e18d3beedbc195d775b892.jpg" srcset="/img/loading.gif" lazyload alt="中级软考知识点二">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/3917505396/" target="_self">
           中级软考知识点二
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/3917505396/" target="_self">
@@ -873,17 +872,17 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/3523235293/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/8fa756fee5e18d3beedbc195d775b892.jpg" srcset="/img/loading.gif" lazyload alt="中级软考知识点一">
+          <img src="https://fastly.img.kedr.cc/8fa756fee5e18d3beedbc195d775b892.jpg" srcset="/img/loading.gif" lazyload alt="中级软考知识点一">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/3523235293/" target="_self">
           中级软考知识点一
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/3523235293/" target="_self">

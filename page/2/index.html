@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="https://raw.gitmirror.com/zhuweitung/picbed/main/a894a628cfd6b9bb778f156b6efeb26b.png">
-  <link rel="icon" href="https://raw.gitmirror.com/zhuweitung/picbed/main/a894a628cfd6b9bb778f156b6efeb26b.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="https://fastly.img.kedr.cc/a894a628cfd6b9bb778f156b6efeb26b.png">
+  <link rel="icon" href="https://fastly.img.kedr.cc/a894a628cfd6b9bb778f156b6efeb26b.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -62,7 +62,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"blog.kedr.cc","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#96be66","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":"f2550b082b1ec518a726847e5f27e3c4","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"Rnyy6d3kzXonmFTiXC2DM2wM-gzGzoHsz","app_key":"ItzHQLPR4iIXylU6VCqf1j4f","server_url":"https://rnyy6d3k.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"blog.kedr.cc","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"always","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#96be66","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":2},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":"f2550b082b1ec518a726847e5f27e3c4","google":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"Rnyy6d3kzXonmFTiXC2DM2wM-gzGzoHsz","app_key":"ItzHQLPR4iIXylU6VCqf1j4f","server_url":"https://rnyy6d3k.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false},"gtag":null},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -86,8 +86,6 @@
         })();
       }
     </script>
-  
-
   
 
   
@@ -136,9 +134,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/">
+              <a class="nav-link" href="/" target="_self">
                 <i class="iconfont icon-home-fill"></i>
-                首页
+                <span>首页</span>
               </a>
             </li>
           
@@ -148,9 +146,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/archives/">
+              <a class="nav-link" href="/archives/" target="_self">
                 <i class="iconfont icon-archive-fill"></i>
-                归档
+                <span>归档</span>
               </a>
             </li>
           
@@ -160,9 +158,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/categories/">
+              <a class="nav-link" href="/categories/" target="_self">
                 <i class="iconfont icon-category-fill"></i>
-                分类
+                <span>分类</span>
               </a>
             </li>
           
@@ -172,9 +170,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/tags/">
+              <a class="nav-link" href="/tags/" target="_self">
                 <i class="iconfont icon-tags-fill"></i>
-                标签
+                <span>标签</span>
               </a>
             </li>
           
@@ -184,9 +182,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/about/">
+              <a class="nav-link" href="/about/" target="_self">
                 <i class="iconfont icon-user-fill"></i>
-                关于
+                <span>关于</span>
               </a>
             </li>
           
@@ -194,15 +192,16 @@
         
           <li class="nav-item" id="search-btn">
             <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
-              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+              <i class="iconfont icon-search"></i>
             </a>
           </li>
           
         
         
           <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
-                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
           </li>
         
       </ul>
@@ -256,17 +255,17 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/794273428/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/6cbbd6616ea587ef1b3abb974a797048.png" srcset="/img/loading.gif" lazyload alt="极客时间《正则表达式入门课》笔记">
+          <img src="https://fastly.img.kedr.cc/6cbbd6616ea587ef1b3abb974a797048.png" srcset="/img/loading.gif" lazyload alt="极客时间《正则表达式入门课》笔记">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/794273428/" target="_self">
           极客时间《正则表达式入门课》笔记
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/794273428/" target="_self">
@@ -323,17 +322,17 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/1292434261/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/46a7ac4e17fd8f2dd0876a95502faf5e.png" srcset="/img/loading.gif" lazyload alt="SpringBoot2知识学习及查漏补缺">
+          <img src="https://fastly.img.kedr.cc/46a7ac4e17fd8f2dd0876a95502faf5e.png" srcset="/img/loading.gif" lazyload alt="SpringBoot2知识学习及查漏补缺">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/1292434261/" target="_self">
           SpringBoot2知识学习及查漏补缺
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/1292434261/" target="_self">
@@ -392,17 +391,17 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/2685019757/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/7253298a29c17a3a1a71bd033bb625df.png" srcset="/img/loading.gif" lazyload alt="MybatisPlus知识查漏补缺">
+          <img src="https://fastly.img.kedr.cc/7253298a29c17a3a1a71bd033bb625df.png" srcset="/img/loading.gif" lazyload alt="MybatisPlus知识查漏补缺">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/2685019757/" target="_self">
           MybatisPlus知识查漏补缺
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/2685019757/" target="_self">
@@ -461,17 +460,17 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/3535759969/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/73f6eae433c2a501b66ec501584cc222.png" srcset="/img/loading.gif" lazyload alt="Mybatis知识回顾及查漏补缺">
+          <img src="https://fastly.img.kedr.cc/73f6eae433c2a501b66ec501584cc222.png" srcset="/img/loading.gif" lazyload alt="Mybatis知识回顾及查漏补缺">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/3535759969/" target="_self">
           Mybatis知识回顾及查漏补缺
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/3535759969/" target="_self">
@@ -530,17 +529,17 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/3657735712/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/05b41a7151c6d810822d9249d885aa8d.png" srcset="/img/loading.gif" lazyload alt="浅尝ES6">
+          <img src="https://fastly.img.kedr.cc/05b41a7151c6d810822d9249d885aa8d.png" srcset="/img/loading.gif" lazyload alt="浅尝ES6">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/3657735712/" target="_self">
           浅尝ES6
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/3657735712/" target="_self">
@@ -599,17 +598,17 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/15731478/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/d8241ee3ded7d2e650bda1e1cae2e4a5.png" srcset="/img/loading.gif" lazyload alt="java实现给word文件添加水印">
+          <img src="https://fastly.img.kedr.cc/d8241ee3ded7d2e650bda1e1cae2e4a5.png" srcset="/img/loading.gif" lazyload alt="java实现给word文件添加水印">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/15731478/" target="_self">
           java实现给word文件添加水印
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/15731478/" target="_self">
@@ -670,17 +669,17 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/2820324998/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/0cf04d67f0f2be57c4cced1ce32c8c41.png" srcset="/img/loading.gif" lazyload alt="Windows Terminal及Powershell安装和美化">
+          <img src="https://fastly.img.kedr.cc/0cf04d67f0f2be57c4cced1ce32c8c41.png" srcset="/img/loading.gif" lazyload alt="Windows Terminal及Powershell安装和美化">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/2820324998/" target="_self">
           Windows Terminal及Powershell安装和美化
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/2820324998/" target="_self">
@@ -741,17 +740,17 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/3646286038/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/8a7182695976d44c7372949799fb8b4e.png" srcset="/img/loading.gif" lazyload alt="各Json序列化反序列化工具比较">
+          <img src="https://fastly.img.kedr.cc/8a7182695976d44c7372949799fb8b4e.png" srcset="/img/loading.gif" lazyload alt="各Json序列化反序列化工具比较">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/3646286038/" target="_self">
           各Json序列化反序列化工具比较
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/3646286038/" target="_self">
@@ -816,22 +815,22 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/1518701644/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/748aaeb8fad80b0f5d036d8b302a7f50.png" srcset="/img/loading.gif" lazyload alt="redis主从+哨兵模式搭建">
+          <img src="https://fastly.img.kedr.cc/748aaeb8fad80b0f5d036d8b302a7f50.png" srcset="/img/loading.gif" lazyload alt="redis主从+哨兵模式搭建">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/1518701644/" target="_self">
           redis主从+哨兵模式搭建
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/1518701644/" target="_self">
         <div>
-          redis安装 rpm或deb包安装 略 源码安装 1234567891011121314151617181920#加压缩tar -zxvf redis-5.0.10.tar.gz#编译和编译安装cd redis-5.0.10make &amp;&amp; make install#移动编译结果和配置文件到&#x2F;usr&#x2F;local&#x2F;redis目录下mkdir -p &#x2F;usr&#x2F;local&#x2F;rediscp
+          redis安装 rpm或deb包安装 略 源码安装 1234567891011121314151617181920#加压缩tar -zxvf redis-5.0.10.tar.gz#编译和编译安装cd redis-5.0.10make &amp;&amp; make install#移动编译结果和配置文件到/usr/local/redis目录下mkdir -p /usr/local/rediscp
         </div>
       </a>
 
@@ -885,17 +884,17 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/3435866348/" target="_self">
-          <img src="https://raw.gitmirror.com/zhuweitung/picbed/main/b4f082141cf197e6e6e8f2093f5a4ef6.png" srcset="/img/loading.gif" lazyload alt="SpringMVC知识回顾及查漏补缺">
+          <img src="https://fastly.img.kedr.cc/b4f082141cf197e6e6e8f2093f5a4ef6.png" srcset="/img/loading.gif" lazyload alt="SpringMVC知识回顾及查漏补缺">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/posts/3435866348/" target="_self">
           SpringMVC知识回顾及查漏补缺
         </a>
-      </h1>
+      </h2>
 
       
       <a class="index-excerpt " href="/posts/3435866348/" target="_self">
